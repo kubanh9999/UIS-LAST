@@ -1,0 +1,22 @@
+.container {
+    max-width: 1200px !important;
+}
+
+.pagination .page-item .page-link {
+    color: #222 !important;
+    font-weight: 600 !important;
+}
+
+.pagination .page-item .page-link:hover {
+    color: #319f25 !important;
+}
+
+.bg-white {
+    border: 1px solid #e5e7eb;
+    background-color: white;
+    border-radius: 8px;
+}
+
+.border-r {
+    border-right: 5px solid #e5e7eb;
+}

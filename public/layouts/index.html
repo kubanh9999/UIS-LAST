@@ -1,0 +1,736 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <title>UIS FRUITS</title>
+    <!-- Required meta tags -->
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/global.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+    <!-- Bootstrap CSS v5.2.1 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous" />
+    <!-- Slick Slider CSS -->
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css" />
+    <link rel="stylesheet" type="text/css"
+        href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick-theme.css" />
+</head>
+
+<body>
+
+    <header>
+        <div class="top-bar" id="topBar">
+            <div class="container">
+                <div class="d-flex justify-content-between align-items-center">
+                    <ul class="contact-info nav">
+                        <li class="nav-item d-flex align-items-center">
+                            <i class='fa fa-phone'></i>
+                            <a href="#" class="nav-link">0168216201</a>
+                        </li>
+                        <li class="nav-item d-flex align-items-center">
+                            <i class="fa-solid fa-envelope"></i>
+                            <a href="#" class="nav-link">contact@uis.com </a>
+                        </li>
+                    </ul>
+                    <div class="auth-links nav justify-content-center align-items-center">
+                        <li class="nav-item d-flex align-items-center">
+                            <a href="#" class="nav-link">Đăng nhập</a>
+                        </li>
+                        <li class="nav-item">|</li>
+                        <li class="nav-item d-flex align-items-center">
+                            <a href="#" class="nav-link">Đăng ký </a>
+                        </li>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="nav-bar">
+            <div class="container">
+                <div class="row align-items-center justify-content-between">
+                    <!-- Logo -->
+                    <div class="logo col-lg-2  col-5">
+                        <a href="#" class="text-decoration-none">
+                            <h2 class="m-0">UIS <span>Fruits</span></h2>
+                        </a>
+                    </div>
+
+                    <!-- Search Bar -->
+                    <div class="search col-lg-4">
+                        <input type="text" placeholder="Tìm kiếm sản phẩm">
+                        <button><i class="fa-solid fa-magnifying-glass"></i></button>
+                    </div>
+
+                    <!-- Navigation Menu -->
+                    <ul class="menu nav col-lg-5">
+                        <li class="nav-item"><a href="index.html" class="nav-link">Trang chủ</a></li>
+                        <li class="nav-item"><a href="about.html" class="nav-link">Giới thiệu</a></li>
+                        <li class="nav-item"><a href="shop.html" class="nav-link">Sản phẩm</a></li>
+                        <li class="nav-item"><a href="news.html" class="nav-link">Tin tức</a></li>
+                        <li class="nav-item"><a href="contact.html" class="nav-link">Liên hệ</a></li>
+                    </ul>
+
+                    <!-- Cart Icon -->
+                    <div class="cart col-lg-1">
+                        <a href="#">
+                            <img src="./img/cart-icon.svg" alt="Giỏ hàng">
+                            <span class="badge bg-danger translate-middle">0</span>
+                        </a>
+                    </div>
+
+                    <!-- Mobile & Tablet Menu -->
+                    <div class="mobile-menu col-5">
+                        <button><i class="fa-solid fa-magnifying-glass"></i></button>
+                        <button><i class="fa-solid fa-user"></i></button>
+                        <button><i class="fa-solid fa-cart-shopping"></i></button>
+                        <button type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvas-menu">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <section class="category-carousel mb-4">
+            <div class="container p-0">
+                <div class="d-flex justify-content-between gap-4">
+                    <!-- Categories Section -->
+                    <div class="category-swaper d-md-block d-none">
+                        <div class="category-menu">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                style="fill: rgb(255, 255, 255); margin: 0px 5px;">
+                                <path d="M4 6h16v2H4zm0 5h16v2H4zm0 5h16v2H4z"></path>
+                            </svg>
+                            <span>Danh mục</span>
+                        </div>
+                        <ul class="category-list list-unstyled mb-0">
+                            <li class="category-item"><a href="">Khuyến mãi hot</a></li>
+                            <li class="category-item"><a href="">Trái cây & hoa</a></li>
+                            <li class="category-item"><a href="">Giỏ trái cây</a></li>
+                            <li class="category-item"><a href="">Quà tặng</a></li>
+                            <li class="category-item"><a href="">Thịt cá, trứng & hải sản</a></li>
+                            <li class="category-item"><a href="">Rau củ & nấm</a></li>
+                        </ul>
+                    </div>
+                    <!-- Carousel -->
+                    <div class="carousel-slider p-0">
+                        <div id="categoryCarousel" class="carousel slide" data-bs-ride="carousel">
+                            <!-- Indicators -->
+                            <div class="carousel-indicators">
+                                <button type="button" data-bs-target="#categoryCarousel" data-bs-slide-to="0"
+                                    class="active"></button>
+                                <button type="button" data-bs-target="#categoryCarousel" data-bs-slide-to="1"></button>
+                            </div>
+
+                            <!-- Slides -->
+                            <div class="carousel-inner">
+                                <div class="carousel-item active">
+                                    <img src="img/banner-01.png" alt="Slide 1" class="d-block w-100 rounded">
+                                </div>
+                                <div class="carousel-item">
+                                    <img src="img/banner-02.png" alt="Slide 2" class="d-block w-100 rounded">
+                                </div>
+                            </div>
+
+                            <!-- Controls -->
+                            <button class="carousel-control-prev" type="button" data-bs-target="#categoryCarousel"
+                                data-bs-slide="prev">
+                                <span class="carousel-control-prev-icon"></span>
+                            </button>
+                            <button class="carousel-control-next" type="button" data-bs-target="#categoryCarousel"
+                                data-bs-slide="next">
+                                <span class="carousel-control-next-icon"></span>
+                            </button>
+                        </div>
+                        <div class="services">
+                            <div class="service-item">
+                                <div class="service-content">
+                                    <h2 class="service-title">Hỗ trợ 24/7</h2>
+                                    <span class="service-text">Liên hệ chúng tôi 24h</span>
+                                </div>
+                                <div class="service-icon">
+                                    <img src="img/service_1.svg" alt="Service 1">
+                                </div>
+                            </div>
+                            <div class="service-item">
+                                <div class="service-content">
+                                    <h2 class="service-title">Thanh toán</h2>
+                                    <span class="service-text">Bảo mật thanh toán</span>
+                                </div>
+                                <div class="service-icon">
+                                    <img src="img/service_2.svg" alt="Service 2">
+                                </div>
+                            </div>
+                            <div class="service-item">
+                                <div class="service-content">
+                                    <h2 class="service-title">Giao hàng</h2>
+                                    <span class="service-text">Giao hàng tận nơi</span>
+                                </div>
+                                <div class="service-icon">
+                                    <img src="img/service_3.svg" alt="Service 3">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <section class="recommended-products mb-4">
+            <div class="bg-white container position-relative p-3 p-md-4">
+                <h2 class="section-title mb-3">Chỉ dành cho bạn</h2>
+                <div class="recommended product-grid">
+                    <div class="product-card">
+                        <div class="new-badge">New</div>
+                        <img src="https://product.hstatic.net/1000141988/product/nho_xanh_autumn_crisp_my_7ae52124f8474603bf8aeee5313abd08_large.png"
+                            alt="Red Amaranth">
+                        <h5>Red Amaranth</h5>
+                        <div class="price">
+                            $100.00 <span class="old-price">$120.00</span>
+                        </div>
+                        <div class="add-to-cart">
+                            <i class="fa-solid fa-basket-shopping"></i>
+                            <span class="cart-text">Thêm giỏ hàng</span>
+                        </div>
+                    </div>
+
+                    <div class="product-card">
+                        <div class="new-badge">New</div>
+                        <img src="https://product.hstatic.net/1000141988/product/nho_xanh_autumn_crisp_my_7ae52124f8474603bf8aeee5313abd08_large.png"
+                            alt="Red Amaranth">
+                        <h5>Red Amaranth</h5>
+                        <div class="price">
+                            $100.00 <span class="old-price">$120.00</span>
+                        </div>
+                        <div class="add-to-cart">
+                            <i class="fa-solid fa-basket-shopping"></i>
+                            <span class="cart-text">Thêm giỏ hàng</span>
+                        </div>
+                    </div>
+                    <div class="product-card">
+                        <div class="new-badge">New</div>
+                        <img src="https://product.hstatic.net/1000141988/product/nho_xanh_autumn_crisp_my_7ae52124f8474603bf8aeee5313abd08_large.png"
+                            alt="Red Amaranth">
+                        <h5>Red Amaranth</h5>
+                        <div class="price">
+                            $100.00 <span class="old-price">$120.00</span>
+                        </div>
+                        <div class="add-to-cart">
+                            <i class="fa-solid fa-basket-shopping"></i>
+                            <span class="cart-text">Thêm giỏ hàng</span>
+                        </div>
+                    </div>
+                    <div class="product-card">
+                        <div class="new-badge">New</div>
+                        <img src="https://product.hstatic.net/1000141988/product/nho_xanh_autumn_crisp_my_7ae52124f8474603bf8aeee5313abd08_large.png"
+                            alt="Red Amaranth">
+                        <h5>Red Amaranth</h5>
+                        <div class="price">
+                            $100.00 <span class="old-price">$120.00</span>
+                        </div>
+                        <div class="add-to-cart">
+                            <i class="fa-solid fa-basket-shopping"></i>
+                            <span class="cart-text">Thêm giỏ hàng</span>
+                        </div>
+                    </div>
+                    <div class="product-card">
+                        <div class="new-badge">New</div>
+                        <img src="https://product.hstatic.net/1000141988/product/nho_xanh_autumn_crisp_my_7ae52124f8474603bf8aeee5313abd08_large.png"
+                            alt="Red Amaranth">
+                        <h5>Red Amaranth</h5>
+                        <div class="price">
+                            $100.00 <span class="old-price">$120.00</span>
+                        </div>
+                        <div class="add-to-cart">
+                            <i class="fa-solid fa-basket-shopping"></i>
+                            <span class="cart-text">Thêm giỏ hàng</span>
+                        </div>
+                    </div>
+                    <div class="product-card">
+                        <div class="new-badge">New</div>
+                        <img src="https://product.hstatic.net/1000141988/product/nho_xanh_autumn_crisp_my_7ae52124f8474603bf8aeee5313abd08_large.png"
+                            alt="Red Amaranth">
+                        <h5>Red Amaranth</h5>
+                        <div class="price">
+                            $100.00 <span class="old-price">$120.00</span>
+                        </div>
+                        <div class="add-to-cart">
+                            <i class="fa-solid fa-basket-shopping"></i>
+                            <span class="cart-text">Thêm giỏ hàng</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section class="best-sellers mb-4">
+            <div class="container p-3 p-md-4 bg-white">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h2 class="section-title">Sản phẩm bán chạy</h2>
+                    <ul class="category-title mb-0">
+                        <li><a href="">Trái cây</a></li>
+                        <li><a href="">Trái cây</a></li>
+                    </ul>
+                    <div class="category-title-mb">
+                        <i class="fa-solid fa-bars"></i>
+                    </div>
+                </div>
+                <div class="product-grid">
+
+                    <div class="product-card">
+                        <div class="new-badge">New</div>
+                        <img src="https://product.hstatic.net/1000141988/product/nho_xanh_autumn_crisp_my_7ae52124f8474603bf8aeee5313abd08_large.png"
+                            alt="Red Amaranth">
+                        <h5>Red Amaranth</h5>
+                        <div class="price">
+                            $100.00 <span class="old-price">$120.00</span>
+                        </div>
+                        <div class="add-to-cart">
+                            <i class="fa-solid fa-basket-shopping"></i>
+                            <span class="cart-text">Thêm giỏ hàng</span>
+                        </div>
+                    </div>
+
+                    <div class="product-card">
+                        <div class="new-badge">New</div>
+                        <img src="https://product.hstatic.net/1000141988/product/nho_xanh_autumn_crisp_my_7ae52124f8474603bf8aeee5313abd08_large.png"
+                            alt="Red Amaranth">
+                        <h5>Red Amaranth</h5>
+                        <div class="price">
+                            $100.00 <span class="old-price">$120.00</span>
+                        </div>
+                        <div class="add-to-cart">
+                            <i class="fa-solid fa-basket-shopping"></i>
+                            <span class="cart-text">Thêm giỏ hàng</span>
+                        </div>
+                    </div>
+                    <div class="product-card">
+                        <div class="new-badge">New</div>
+                        <img src="https://product.hstatic.net/1000141988/product/nho_xanh_autumn_crisp_my_7ae52124f8474603bf8aeee5313abd08_large.png"
+                            alt="Red Amaranth">
+                        <h5>Red Amaranth</h5>
+                        <div class="price">
+                            $100.00 <span class="old-price">$120.00</span>
+                        </div>
+                        <div class="add-to-cart">
+                            <i class="fa-solid fa-basket-shopping"></i>
+                            <span class="cart-text">Thêm giỏ hàng</span>
+                        </div>
+                    </div>
+                    <div class="product-card">
+                        <div class="new-badge">New</div>
+                        <img src="https://product.hstatic.net/1000141988/product/nho_xanh_autumn_crisp_my_7ae52124f8474603bf8aeee5313abd08_large.png"
+                            alt="Red Amaranth">
+                        <h5>Red Amaranth</h5>
+                        <div class="price">
+                            $100.00 <span class="old-price">$120.00</span>
+                        </div>
+                        <div class="add-to-cart">
+                            <i class="fa-solid fa-basket-shopping"></i>
+                            <span class="cart-text">Thêm giỏ hàng</span>
+                        </div>
+                    </div>
+                    <div class="product-card">
+                        <div class="new-badge">New</div>
+                        <img src="https://product.hstatic.net/1000141988/product/nho_xanh_autumn_crisp_my_7ae52124f8474603bf8aeee5313abd08_large.png"
+                            alt="Red Amaranth">
+                        <h5>Red Amaranth</h5>
+                        <div class="price">
+                            $100.00 <span class="old-price">$120.00</span>
+                        </div>
+                        <div class="add-to-cart">
+                            <i class="fa-solid fa-basket-shopping"></i>
+                            <span class="cart-text">Thêm giỏ hàng</span>
+                        </div>
+                    </div>
+                    <div class="product-card">
+                        <div class="new-badge">New</div>
+                        <img src="https://product.hstatic.net/1000141988/product/nho_xanh_autumn_crisp_my_7ae52124f8474603bf8aeee5313abd08_large.png"
+                            alt="Red Amaranth">
+                        <h5>Red Amaranth</h5>
+                        <div class="price">
+                            $100.00 <span class="old-price">$120.00</span>
+                        </div>
+                        <div class="add-to-cart">
+                            <i class="fa-solid fa-basket-shopping"></i>
+                            <span class="cart-text">Thêm giỏ hàng</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="view-all ">
+                    <a class="btn" href="#">Xem tất cả <i class="fa-solid fa-chevron-right"></i></a>
+                </div>
+            </div>
+        </section>
+
+        <section class="banner-section-1 mb-4">
+            <div class="box container p-0">
+                <a href="#"><img src="img/banner-section-1.webp" alt="Banner Section"></a>
+            </div>
+        </section>
+
+        <section class="new-arrivals mb-4">
+            <div class="container p-3 p-md-4 bg-white">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h2 class="section-title">Sản phẩm mới</h2>
+                    <ul class="category-title mb-0">
+                        <li><a href="">Trái cây</a></li>
+
+                        <li><a href="">Trái cây</a></li>
+                    </ul>
+                    <div class="category-title-mb">
+                        <i class="fa-solid fa-bars"></i>
+                    </div>
+                </div>
+                <div class="product-grid ">
+
+                    <div class="product-card">
+                        <img src="https://product.hstatic.net/1000141988/product/nho_xanh_autumn_crisp_my_7ae52124f8474603bf8aeee5313abd08_large.png"
+                            alt="Red Amaranth">
+                        <h5>Red Amaranth</h5>
+                        <div class="price">
+                            $100.00 <span class="old-price">$120.00</span>
+                        </div>
+                        <div class="add-to-cart">
+                            <i class="fa-solid fa-basket-shopping"></i>
+                            <span class="cart-text">Thêm giỏ hàng</span>
+                        </div>
+                    </div>
+
+                    <div class="product-card">
+                        <img src="https://product.hstatic.net/1000141988/product/nho_xanh_autumn_crisp_my_7ae52124f8474603bf8aeee5313abd08_large.png"
+                            alt="Red Amaranth">
+                        <h5>Red Amaranth</h5>
+                        <div class="price">
+                            $100.00 <span class="old-price">$120.00</span>
+                        </div>
+                        <div class="add-to-cart">
+                            <i class="fa-solid fa-basket-shopping"></i>
+                            <span class="cart-text">Thêm giỏ hàng</span>
+                        </div>
+                    </div>
+
+                    <div class="product-card">
+                        <img src="https://product.hstatic.net/1000141988/product/nho_xanh_autumn_crisp_my_7ae52124f8474603bf8aeee5313abd08_large.png"
+                            alt="Red Amaranth">
+                        <h5>Red Amaranth</h5>
+                        <div class="price">
+                            $100.00 <span class="old-price">$120.00</span>
+                        </div>
+                        <div class="add-to-cart">
+                            <i class="fa-solid fa-basket-shopping"></i>
+                            <span class="cart-text">Thêm giỏ hàng</span>
+                        </div>
+                    </div>
+
+                    <div class="product-card">
+                        <img src="https://product.hstatic.net/1000141988/product/nho_xanh_autumn_crisp_my_7ae52124f8474603bf8aeee5313abd08_large.png"
+                            alt="Red Amaranth">
+                        <h5>Red Amaranth</h5>
+                        <div class="price">
+                            $100.00 <span class="old-price">$120.00</span>
+                        </div>
+                        <div class="add-to-cart">
+                            <i class="fa-solid fa-basket-shopping"></i>
+                            <span class="cart-text">Thêm giỏ hàng</span>
+                        </div>
+                    </div>
+
+                    <div class="product-card">
+                        <img src="https://product.hstatic.net/1000141988/product/nho_xanh_autumn_crisp_my_7ae52124f8474603bf8aeee5313abd08_large.png"
+                            alt="Red Amaranth">
+                        <h5>Red Amaranth</h5>
+                        <div class="price">
+                            $100.00 <span class="old-price">$120.00</span>
+                        </div>
+                        <div class="add-to-cart">
+                            <i class="fa-solid fa-basket-shopping"></i>
+                            <span class="cart-text">Thêm giỏ hàng</span>
+                        </div>
+                    </div>
+
+                    <div class="product-card">
+                        <img src="https://product.hstatic.net/1000141988/product/nho_xanh_autumn_crisp_my_7ae52124f8474603bf8aeee5313abd08_large.png"
+                            alt="Red Amaranth">
+                        <h5>Red Amaranth</h5>
+                        <div class="price">
+                            $100.00 <span class="old-price">$120.00</span>
+                        </div>
+                        <div class="add-to-cart">
+                            <i class="fa-solid fa-basket-shopping"></i>
+                            <span class="cart-text">Thêm giỏ hàng</span>
+                        </div>
+                    </div>
+
+                    <div class="product-card">
+                        <img src="https://product.hstatic.net/1000141988/product/nho_xanh_autumn_crisp_my_7ae52124f8474603bf8aeee5313abd08_large.png"
+                            alt="Red Amaranth">
+                        <h5>Red Amaranth</h5>
+                        <div class="price">
+                            $100.00 <span class="old-price">$120.00</span>
+                        </div>
+                        <div class="add-to-cart">
+                            <i class="fa-solid fa-basket-shopping"></i>
+                            <span class="cart-text">Thêm giỏ hàng</span>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="view-all ">
+                    <a class="btn" href="#">Xem tất cả <i class="fa-solid fa-chevron-right"></i></a>
+                </div>
+            </div>
+
+        </section>
+
+        <section class="banner-section-2 mb-4">
+            <div class="container p-0">
+                <div class="row">
+                    <div class="col-md-3 d-md-block d-none">
+                        <img src="img/banner-section-2.webp" alt="Banner Section 2" class="banner-image">
+                    </div>
+                    <div class="col-md-6 d-block">
+                        <img src="img/banner-section-3.webp" alt="Banner Section 3" class="banner-image">
+                    </div>
+                    <div class="col-md-3 d-md-block d-none">
+                        <img src="img/banner-section-4.webp" alt="Banner Section 4" class="banner-image">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+        <section class="latest-news">
+            <div class="container p-3 p-md-4 bg-white">
+                <div class="news-header">
+                    <h2 class="section-title">Tin tức mới nhất</h2>
+                    <a class="btn" href="#">Xem tất cả <i class="fa-solid fa-chevron-right"></i></a>
+                </div>
+                <div class="row py-3">
+                    <!-- Featured News -->
+                    <div class="col-md-5">
+                        <div class="featured-news">
+                            <div class="news-image">
+                                <a href="">
+                                    <img src="https://file.hstatic.net/1000141988/article/3_cc570ca6564f448280671cb67a8461aa.jpg"
+                                        alt="Cherry">
+                                </a>
+                            </div>
+                            <div class="news-details">
+                                <h3 class="news-title">Bí quyết lựa chọn & bảo quản Cherry Mỹ ngon nhất!</h3>
+                                <div class="news-meta">
+                                    <span class="author">Phạm Hạ Tuyên</span>
+                                    <small class="date">Th 2 06/05/2024</small>
+                                </div>
+                                <p class="news-summary">
+                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent vehicula elit ac
+                                    quam elementum, ac hendrerit nunc aliquet...
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Additional News -->
+                    <div class="col-md-7">
+                        <div class="additional-news">
+                            <!-- News Item 1 -->
+                            <div class="news-item">
+                                <div class="news-image">
+                                    <a href="">
+                                        <img src="https://file.hstatic.net/1000141988/article/mat_ong_manuka_novafarms_29e3abc63689432d9f4c634e95f36a73.jpeg"
+                                            alt="Mật Ong Manuka">
+                                    </a>
+                                </div>
+                                <div class="news-details">
+                                    <h3 class="news-title">Tại Sao Mật Ong Manuka Lại Đặc Biệt?</h3>
+                                    <div class="news-meta">
+                                        <span class="author">Phạm Hạ Tuyên</span>
+                                        <span class="date">Th 2 06/05/2024</span>
+                                    </div>
+                                    <p class="news-summary">
+                                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent vehicula...
+                                    </p>
+                                </div>
+                            </div>
+                            <!-- Repeat for additional news items -->
+                            <div class="news-item">
+                                <div class="news-image">
+                                    <a href="">
+                                        <img src="https://file.hstatic.net/1000141988/article/mat_ong_manuka_novafarms_29e3abc63689432d9f4c634e95f36a73.jpeg"
+                                            alt="Mật Ong Manuka">
+                                    </a>
+                                </div>
+                                <div class="news-details">
+                                    <h3 class="news-title">Tại Sao Mật Ong Manuka Lại Đặc Biệt?</h3>
+                                    <div class="news-meta">
+                                        <span class="author">Phạm Hạ Tuyên</span>
+                                        <span class="date">Th 2 06/05/2024</span>
+                                    </div>
+                                    <p class="news-summary">
+                                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent vehicula...
+                                    </p>
+                                </div>
+                            </div>
+                            <!-- Additional news items can be added here -->
+                            <div class="news-item">
+                                <div class="news-image">
+                                    <a href="">
+                                        <img src="https://file.hstatic.net/1000141988/article/mat_ong_manuka_novafarms_29e3abc63689432d9f4c634e95f36a73.jpeg"
+                                            alt="Mật Ong Manuka">
+                                    </a>
+                                </div>
+                                <div class="news-details">
+                                    <h3 class="news-title">Tại Sao Mật Ong Manuka Lại Đặc Biệt?</h3>
+                                    <div class="news-meta">
+                                        <span class="author">Phạm Hạ Tuyên</span>
+                                        <span class="date">Th 2 06/05/2024</span>
+                                    </div>
+                                    <p class="news-summary">
+                                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent vehicula...
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+
+    <footer class="container-fluid p-0">
+        <div class="container p-3 p-md-3 p-lg-0">
+            <div class="row pt-5 pb-3">
+                <!-- Logo and description -->
+                <div class="col-lg-4 col-md-6 mb-4">
+                    <div class="footer-logo">
+                        <a href="" class="text-decoration-none">
+                            <h2 class="logo-title">UIS <span>FRUITS</span></h2>
+                        </a>
+                    </div>
+                    <p class="mt-3">
+                        Cửa hàng <span class="fw-bold">uis</span> là một website cung cấp thực phẩm an toàn,
+                        nông sản sạch cho người dân.
+                    </p>
+                    <ul class="list-unstyled">
+                        <li><i class="fas fa-map-marker-alt"></i> Gò vấp, Hồ Chí Minh</li>
+                        <li><i class="fas fa-phone"></i> 1900 6750</li>
+                    </ul>
+                </div>
+
+                <!-- Company Links -->
+                <div class="col-lg-2 col-md-6 mb-4">
+                    <h5 class="text-uppercase">Về chúng tôi</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="#" class="text-dark nav-link">Trang chủ</a></li>
+                        <li><a href="#" class="text-dark nav-link">Giới thiệu</a></li>
+                        <li><a href="#" class="text-dark nav-link">Sản phẩm</a></li>
+                        <li><a href="#" class="text-dark nav-link">Liên hệ</a></li>
+                    </ul>
+                </div>
+
+                <!-- Customer Support Links -->
+                <div class="col-lg-2 col-md-6 mb-4">
+                    <h5 class="text-uppercase">Hỗ trợ khách hàng</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="#" class="text-dark nav-link">Trang chủ</a></li>
+                        <li><a href="#" class="text-dark nav-link">Giới thiệu</a></li>
+                        <li><a href="#" class="text-dark nav-link">Sản phẩm</a></li>
+                    </ul>
+                </div>
+
+                <!-- Newsletter Signup -->
+                <div class="col-lg-4 col-md-6 mb-4">
+                    <h5 class="text-uppercase">Đăng ký</h5>
+                    <p>Nhận thông tin khuyến mãi</p>
+                    <form class="input-group">
+                        <input type="email" class="form-control" placeholder="Email">
+                        <button class="btn btn-success" type="submit">Đăng ký</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Copyright Section -->
+        <div class="copyright bg-green">
+            <div class="container text-center py-3">
+                <h4>© Bản quyền thuộc về Uis Team</h4>
+            </div>
+        </div>
+    </footer>
+
+
+    <!-- Offcanvas Sidebar for Mobile Navigation -->
+    <div class="offcanvas offcanvas-start" id="offcanvas-menu">
+        <div class="offcanvas-header">
+            <div class="offcanvas-title">
+                <a href="#" class="text-decoration-none">
+                    <h2 class="m-0">UIS <span>Fruits</span></h2>
+                </a>
+            </div>
+            <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas"></button>
+        </div>
+        <div class="offcanvas-body">
+            <ul class="menu-offcanvas list-unstyled">
+                <li class="nav-item"><a href="#">Trang chủ</a></li>
+                <li class="nav-item"><a href="#">Giới thiệu</a></li>
+                <li class="nav-item"><a href="#">Sản phẩm</a></li>
+                <li class="nav-item"><a href="#">Tin tức</a></li>
+                <li class="nav-item"><a href="#">Liên hệ</a></li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="offcanvas offcanvas-end" id="category-shop">
+        <div class="offcanvas-header">
+            <h3 class="offcanvas-title">Danh mục sản phẩm</h3>
+            <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas"></button>
+        </div>
+        <ul class="category-list list-unstyled mb-0">
+            <li class="category-item"><a href="#">Khuyến mãi hot</a></li>
+            <li class="category-item"><a href="#">Trái cây & hoa</a></li>
+            <li class="category-item"><a href="#">Giỏ trái cây</a></li>
+            <li class="category-item"><a href="#">Quà tặng</a></li>
+            <li class="category-item"><a href="#">Thịt cá, trứng & hải sản</a></li>
+            <li class="category-item"><a href="#">Rau củ & nấm</a></li>
+        </ul>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var textContent = document.getElementById('text-content');
+            var toggleButton = document.getElementById('toggle-button-content');
+
+            // Kiểm tra nếu nội dung dài hơn 250 ký tự
+            if (textContent.textContent.length > 900) {
+                toggleButton.style.display = 'block'; // Hiển thị nút "Xem thêm"
+            }
+
+            toggleButton.addEventListener('click', function () {
+                if (textContent.classList.contains('expanded')) {
+                    textContent.classList.remove('expanded');
+                    this.textContent = 'Xem thêm';
+                } else {
+                    textContent.classList.add('expanded');
+                    this.textContent = 'Thu gọn ';
+                }
+            });
+        });
+    </script>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script type="text/javascript" src="js/main.js"></script>
+    <!-- Slick Slider JS -->
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js"></script>
+
+</body>
+
+</html>
