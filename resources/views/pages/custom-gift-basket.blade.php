@@ -20,16 +20,16 @@
             </div>
         </section>
         @if (session('error'))
-            <div class="alert alert-danger">
-                {{ session('error') }}
-            </div>
-        @endif
+    <script>
+        toastr.error('{{ session('error') }}');
+    </script>
+@endif
 
-        @if (session('success'))
-            <div class="alert alert-success">
-                {{ session('success') }}
-            </div>
-        @endif
+@if (session('success'))
+    <script>
+        toastr.success('{{ session('success') }}');
+    </script>
+@endif
         {{-- gift-basket class --}}
         <section class=" mb-4">
 
@@ -53,13 +53,19 @@
                             <input type="text" id="search" placeholder="Tìm kiếm trái cây..." class="form-control mb-3">
                         
                             @foreach ($fruits as $fruit)
-                            <div class="product-item d-flex align-items-center mb-3" data-name="Apple">
-                                <input type="checkbox" name="fruits[1]" value="1" id="fruit_1" class="form-check-input" data-price="15000">
-                                <label for="fruit_1" class="form-label d-flex align-items-center">
-                                    <img src="path_to_image/apple.jpg" alt="Apple" style="max-width: 50px;" class="me-2">
-                                    <span><strong>Apple</strong> - <span class="dynamic-price" data-price="15000">15,000</span> VND</span>
+                            <div class="product-item d-flex align-items-center mb-3">
+                                <input type="checkbox" name="fruits[{{ $fruit->id }}]" value="1"
+                                    id="fruit_{{ $fruit->id }}" class="form-check-input"
+                                    data-price="{{ $fruit->price }}">
+                                <label for="fruit_{{ $fruit->id }}" class="form-label d-flex align-items-center">
+                                    <img src="{{ asset('layouts/img/' . $fruit->image) }}" alt="{{ $fruit->name }}"
+                                        style="max-width: 50px;" class="me-2">
+                                        <span><strong>{{ $fruit->name }}</strong> - <span class="dynamic-price"
+                                            data-price="{{ $fruit->price }}">
+                                            {{ number_format($fruit->price, 0) }}
+                                        </span> VND</span>
                                 </label>
-                                <select name="quantities[1]" class="ms-auto" style="width: 130px;">
+                                <select name="quantities[{{ $fruit->id }}]" class="ms-auto" style="width: 130px;">
                                     <option value="100" selected>100g</option>
                                     <option value="200">200g</option>
                                     <option value="300">300g</option>
@@ -68,7 +74,7 @@
                                     <option value="1000">1kg</option>
                                 </select>
                             </div>
-                            @endforeach
+                        @endforeach
                         </div>
                         
                     </div>
