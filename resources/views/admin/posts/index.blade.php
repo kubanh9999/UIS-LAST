@@ -4,8 +4,8 @@
         <div class="content">
             <div class="page-header">
                 <div class="page-title">
-                   {{--  <h4>DANH MỤC SẢN PHẨM </h4>
-                    <h6>View/Search product Category</h6> --}}
+                    <h4>BÀI VIẾT</h4>
+
                 </div>
                 <div class="page-btn">
                     <a href="{{route('admin.post.create')}}" class="btn btn-success">
