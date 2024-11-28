@@ -7,6 +7,18 @@
                 <h4>QUẢN LÝ BANNER</h4>
                 <h6>Danh sách banner</h6>
             </div>
+            @if(session('success'))
+            <script>
+                console.log("Success message:", "{{ session('success') }}");  // In thông báo ra console
+                Swal.fire({
+                    title: 'Thành công!',
+                    text: "{{ session('success') }}",  // Dữ liệu thông báo từ session
+                    icon: 'success',
+                    confirmButtonText: 'Đóng'
+                });
+            </script>
+        @endif
+        
             <div class="page-btn">
                 <a href="{{ route('admin.banners.create') }}" class="btn btn-success">
                     <i class="fa-solid fa-plus"></i> Thêm Banner

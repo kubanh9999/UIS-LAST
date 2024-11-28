@@ -4,13 +4,13 @@
         <div class="content">
             <div class="page-header">
                 <div class="page-title">
-                    <h4>CHỈNH SỬA DANH MỤC SẢN PHẨM</h4>
+                    <h4>CHỈNH SỬA DANH MỤC BÀI VIẾT</h4>
                   
                 </div>
             </div>
 
             <div class="card">
-                <form action="{{ route('admin.categories.update', $category->id) }}" method="POST">
+                <form action="{{ route('admin.post.updateCategory', $category->id) }}" method="POST">
                     @csrf
                     @method('PUT')
                     
@@ -26,7 +26,7 @@
                                 </div>
                                 
                                 <!-- Submit and Cancel Buttons -->
-                              
+                             
                                 <div class="col-lg-12">
                                 
                                     <!-- Sử dụng button thay vì a -->

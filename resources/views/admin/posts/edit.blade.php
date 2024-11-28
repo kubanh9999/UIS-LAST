@@ -4,10 +4,21 @@
         <div class="content">
             <div class="page-header">
                 <div class="page-title">
-                    <h4>Chỉnh sửa bài viết</h4>
+                    <h4>CHỈNH SỬA BÀI VIẾT</h4>
                 </div>
             </div>
-
+            @if(session('success'))
+            <script>
+                console.log("Success message:", "{{ session('success') }}");  // In thông báo ra console
+                Swal.fire({
+                    title: 'Thành công!',
+                    text: "{{ session('success') }}",  // Dữ liệu thông báo từ session
+                    icon: 'success',
+                    confirmButtonText: 'Đóng'
+                });
+            </script>
+        @endif
+        
             <div class="card">
                 <form action="{{ route('admin.post.update', $post->id) }}" method="POST" enctype="multipart/form-data">
                     @csrf
