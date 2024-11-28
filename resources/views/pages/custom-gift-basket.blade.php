@@ -1,7 +1,11 @@
 @extends('layouts.master')
 @section('title', 'Tùy chọn giỏ quà')
 @section('content')
-
+<style>
+    .product-item {
+    display: flex; /* Hoặc bạn có thể cần điều chỉnh tùy thuộc vào cấu trúc HTML của bạn */
+}
+</style>
     <main class="main-content">
 
         <section class="breadcrumb">
@@ -46,30 +50,27 @@
                         </div>
                         <div class="gift-basket-right col-md-7">
                             <h5>Chọn trái cây:</h5>
+                            <input type="text" id="search" placeholder="Tìm kiếm trái cây..." class="form-control mb-3">
+                        
                             @foreach ($fruits as $fruit)
-                                <div class="product-item d-flex align-items-center mb-3">
-                                    <input type="checkbox" name="fruits[{{ $fruit->id }}]" value="1"
-                                        id="fruit_{{ $fruit->id }}" class="form-check-input"
-                                        data-price="{{ $fruit->price }}">
-                                    <label for="fruit_{{ $fruit->id }}" class="form-label d-flex align-items-center">
-                                        <img src="{{ asset('layouts/img/' . $fruit->image) }}" alt="{{ $fruit->name }}"
-                                            style="max-width: 50px;" class="me-2">
-                                            <span><strong>{{ $fruit->name }}</strong> - <span class="dynamic-price"
-                                                data-price="{{ $fruit->price }}">
-                                                {{ number_format($fruit->price, 0) }}
-                                            </span> VND</span>
-                                    </label>
-                                    <select name="quantities[{{ $fruit->id }}]" class="ms-auto" style="width: 130px;">
-                                        <option value="100" selected>100g</option>
-                                        <option value="200">200g</option>
-                                        <option value="300">300g</option>
-                                        <option value="400">400g</option>
-                                        <option value="500">500g</option>
-                                        <option value="1000">1kg</option>
-                                    </select>
-                                </div>
+                            <div class="product-item d-flex align-items-center mb-3" data-name="Apple">
+                                <input type="checkbox" name="fruits[1]" value="1" id="fruit_1" class="form-check-input" data-price="15000">
+                                <label for="fruit_1" class="form-label d-flex align-items-center">
+                                    <img src="path_to_image/apple.jpg" alt="Apple" style="max-width: 50px;" class="me-2">
+                                    <span><strong>Apple</strong> - <span class="dynamic-price" data-price="15000">15,000</span> VND</span>
+                                </label>
+                                <select name="quantities[1]" class="ms-auto" style="width: 130px;">
+                                    <option value="100" selected>100g</option>
+                                    <option value="200">200g</option>
+                                    <option value="300">300g</option>
+                                    <option value="400">400g</option>
+                                    <option value="500">500g</option>
+                                    <option value="1000">1kg</option>
+                                </select>
+                            </div>
                             @endforeach
                         </div>
+                        
                     </div>
                 </form>
             </div>
@@ -78,6 +79,24 @@
     </main>
 
     <script>
+
+document.addEventListener('DOMContentLoaded', function() {
+    document.getElementById('search').addEventListener('input', function() {
+        var searchQuery = this.value.toLowerCase(); // Lấy từ khóa tìm kiếm và chuyển thành chữ thường
+        var products = document.querySelectorAll('.product-item'); // Lấy tất cả các sản phẩm
+        
+        products.forEach(function(product) {
+            var productName = product.getAttribute('data-name').toLowerCase(); // Lấy tên sản phẩm và chuyển thành chữ thường
+
+            if (productName.includes(searchQuery)) {
+                product.style.display = 'flex'; // Hiển thị sản phẩm nếu tên chứa từ khóa tìm kiếm
+            } else {
+                product.style.display = 'none'; // Ẩn sản phẩm nếu tên không chứa từ khóa tìm kiếm
+            }
+        });
+    });
+});
+
         document.getElementById('giftBasketForm').addEventListener('submit', function(event) {
             // Lấy tất cả các checkbox trong form
             const checkboxes = document.querySelectorAll('input[name^="fruits"]:checked');
