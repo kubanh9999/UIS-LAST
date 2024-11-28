@@ -138,9 +138,15 @@
                                         <td>{{ $item->id }}</td>
                                         <td contenteditable="true" class="editable-field" data-id="{{ $item->id }}" data-field="name">{{ $item->name }}</td>
                                         <td>
-                                            <img src="{{ asset('layouts/img/' . $item->image) }}" alt="Ảnh sản phẩm" width="100">
-{{--                                            <img src="{{ asset('storage/' . $item->image) }}" alt="Ảnh sản phẩm" width="100">--}}
-{{--                                                php artisan storage:link--}}
+                                            @php
+                                                $imagePath = public_path($item->image);
+                                            @endphp
+
+                                            @if (file_exists($imagePath))
+                                                <img src="{{ asset($item->image) }}" alt="Ảnh sản phẩm" width="100">
+                                            @else
+                                                <img src="{{ asset('layouts/img/'.$item->image) }}" alt="Ảnh sản phẩm" width="100">
+                                            @endif
                                         </td>
                                         <td>{{ $item->category_id }}</td>
                                         <td contenteditable="true" class="editable-field" data-id="{{ $item->id }}" data-field="price">{{ number_format($item->price, 0) }} VND</td>

@@ -243,47 +243,47 @@
                 @else
                 <li><a href="">Chưa có danh mục</a></li>
                 @endif
-            </ul>
-            <div class="category-title-mb">
-                <i class="fa-solid fa-bars"></i>
-            </div>
-        </div>
-
-        <div class="product-grid" id="best-sellers">
-            @foreach ($topProducts as $item)
-            <div class="product-card">
-                <a href="{{ route('product.detail', $item->id) }}">
-                    <img src="{{ asset('layouts/img/' . $item->image) }}" alt="{{ $item->name }}">
-                </a>
-                <h5 class="product-name">
-                    <a href="{{ route('product.detail', $item->id) }}">{{ $item->name }}</a>
-                </h5>
-                <div class="price">
-                    {{ number_format($item->price, 0) }} VND
+                </ul>
+                <div class="category-title-mb">
+                    <i class="fa-solid fa-bars"></i>
                 </div>
-                <div class="add-to-cart">
-                    <i class="fa-solid fa-basket-shopping"></i>
-                    <form action="{{ route('cart.add', ['id' => $item->id]) }}" method="post" style="display: inline;">
-                        @csrf
-                        <input type="hidden" name="product[id]" value="{{ $item->id }}">
-                        <input type="hidden" name="product[name]" value="{{ $item->name }}">
-                        <input type="hidden" name="product[image]" value="{{ $item->image }}">
-                        <input type="hidden" name="product[price]" value="{{ $item->price }}">
-                        <input type="hidden" name="quantity" value="1">
-                        <a href="#" onclick="this.closest('form').submit();" class="cart-text" style="display: inline-flex; align-items: center;">
-                            <span style="margin-left: 5px;">Thêm giỏ hàng</span>
+            </div>
+    
+            <div class="product-grid">
+                @foreach ($topProducts as $item)
+                    <div class="product-card">
+                        <a href="{{ route('product.detail', $item->id) }}">
+                            <img src="{{ asset('layouts/img/' . $item->image) }}" alt="{{ $item->name }}">
                         </a>
-                    </form>
-                </div>
+                        <h5 class="product-name">
+                            <a href="{{ route('product.detail', $item->id) }}">{{ $item->name }}</a>
+                        </h5>
+                        <div class="price">
+                            {{ number_format($item->price, 0) }} VND
+                        </div>      
+                        <div class="add-to-cart">
+                            <i class="fa-solid fa-basket-shopping"></i>
+                            <form action="{{ route('cart.add', ['id' => $item->id]) }}" method="post" style="display: inline;">
+                                @csrf
+                                <input type="hidden" name="product[id]" value="{{ $item->id }}">
+                                <input type="hidden" name="product[name]" value="{{ $item->name }}">
+                                <input type="hidden" name="product[image]" value="{{ $item->image }}">
+                                <input type="hidden" name="product[price]" value="{{ $item->price }}">
+                                <input type="hidden" name="quantity" value="1">
+                                <a href="#" onclick="this.closest('form').submit();" class="cart-text" style="display: inline-flex; align-items: center;">
+                                    <span style="margin-left: 5px;">Thêm giỏ hàng</span>
+                                </a>
+                            </form>
+                        </div>     
+                    </div>
+                @endforeach
             </div>
-            @endforeach
+    
+            <div class="view-all">
+                <a class="btn" href="/product">Xem tất cả <i class="fa-solid fa-chevron-right"></i></a>
+            </div>
         </div>
-
-        <div class="view-all">
-            <a class="btn" href="/product">Xem tất cả <i class="fa-solid fa-chevron-right"></i></a>
-        </div>
-    </div>
-</section>
+    </section>
     
 
     <section class="banner-section-1 mb-4">
@@ -320,34 +320,34 @@
                 </div>
             </div>
     
-            <div class="product-grid" id="new-arrivals">
-                @foreach ($newProducts as $item)
-                <div class="product-card">
-                    <div class="new-badge">New</div>
-                    <a href="{{ route('product.detail', $item->id) }}">
+                @foreach ($newProducts  as $item)
+                    <div class="product-card">
+                        <div class="new-badge">New</div>
+                        <a href="{{ route('product.detail', $item->id) }}">
                         <img src="{{ asset('layouts/img/' . $item->image) }}" alt="{{ $item->name }}">
-                    </a>
-                    <h5 class="product-name">
-                        <a href="{{ route('product.detail', $item->id) }}">{{ $item->name }}</a>
-                    </h5>
-                    <div class="price">
-                        {{ number_format($item->price, 0) }} VND
+                        </a>
+                        <h5 class="product-name">
+                            <a href="{{ route('product.detail', $item->id) }}">{{ $item->name }}</a>
+                        </h5>
+                        <div class="price">
+                            {{ number_format($item->price, 0) }} VND
+                        </div>   
+                        <div class="add-to-cart">
+                            <i class="fa-solid fa-basket-shopping"></i>
+                            <form action="{{ route('cart.add', ['id' => $item->id]) }}" method="post" style="display: inline;">
+                                @csrf
+                                <input type="hidden" name="product[id]" value="{{ $item->id }}">
+                                <input type="hidden" name="product[name]" value="{{ $item->name }}">
+                                <input type="hidden" name="product[image]" value="{{ $item->image }}">
+                                <input type="hidden" name="product[price]" value="{{ $item->price }}">
+                                <input type="hidden" name="quantity" value="1">
+                                <a href="#" onclick="this.closest('form').submit();" class="cart-text" style="display: inline-flex; align-items: center;">
+                                    <span style="margin-left: 5px;">Thêm giỏ hàng</span>
+                                </a>
+                            </form>
+                        </div>     
                     </div>
-                    <div class="add-to-cart">
-                        <i class="fa-solid fa-basket-shopping"></i>
-                        <form action="{{ route('cart.add', ['id' => $item->id]) }}" method="post" style="display: inline;">
-                            @csrf
-                            <input type="hidden" name="product[id]" value="{{ $item->id }}">
-                            <input type="hidden" name="product[name]" value="{{ $item->name }}">
-                            <input type="hidden" name="product[image]" value="{{ $item->image }}">
-                            <input type="hidden" name="product[price]" value="{{ $item->price }}">
-                            <input type="hidden" name="quantity" value="1">
-                            <a href="#" onclick="this.closest('form').submit();" class="cart-text" style="display: inline-flex; align-items: center;">
-                                <span style="margin-left: 5px;">Thêm giỏ hàng</span>
-                            </a>
-                        </form>
-                    </div>
-                </div>
+                    
                 @endforeach
             </div>
     
@@ -390,7 +390,6 @@
         </div>
     </section>
     
-
     <section class="latest-news">
         <div class="container p-3 p-md-4 bg-white">
             <div class="news-header">
@@ -400,64 +399,68 @@
             <div class="row py-3">
                 <!-- Featured News -->
                 <div class="col-md-5" style="text-decoration: none;">
-                    <div class="featured-news"  >
+                    <div class="featured-news">
                         <div class="news-image w-100">
-                            <a href="{{route('post.show', ['id' => $latestPost->id])}}">
-                                 <img src="{{ asset('layouts/img/' . $latestPost->image) }}">
+                            <a href="{{ route('post.show', ['id' => $latestPost->id]) }}">
+                                @php
+                                    $imagePath = $latestPost->image;
+                                    // Nếu đường dẫn ảnh chứa 'uploads/posts', không cần thêm 'layouts/img'
+                                    if (strpos($imagePath, 'uploads/posts') === false) {
+                                        $imagePath = 'layouts/img/' . $imagePath; // Nếu không chứa, thêm 'layouts/img'
+                                    }
+                                @endphp
+                                <img src="{{ asset($imagePath) }}" alt="Ảnh sản phẩm" width="100">
                             </a>
                         </div>
-                        <div class="news-details" style="  text-decoration: none;">
-                            <div style="width: 550px; max-width: 100%;  padding: 10px;">
-                                <a href="{{route('post.show', ['id' => $latestPost->id])}}" class="bold">
-                                <h3 class="news-title">{{ $latestPost->title }}</h3>
+                        <div class="news-details">
+                            <div style="width: 550px; max-width: 100%; padding: 10px;">
+                                <a href="{{ route('post.show', ['id' => $latestPost->id]) }}" class="bold">
+                                    <h3 class="news-title">{{ $latestPost->title }}</h3>
                                 </a>
                             </div>
                             <div>
                                 <p class="news-summary">
                                     <a href="{{ route('post.show', ['id' => $latestPost->id]) }}" style="color: black; text-decoration: none; font-size: 15px;">
                                         @php
-                                       
-                                        
-                                        $clearBreakLineArrStr = Str::replace('&nbsp;',"", $latestPost->content);
-                                        
-                                        $clearImgArrStr = preg_replace("<img([\w\W]+?)/>", "", $clearBreakLineArrStr);
- 
+                                            $clearBreakLineArrStr = Str::replace('&nbsp;', '', $latestPost->content);
+                                            $clearImgArrStr = preg_replace("<img([\w\W]+?)/>", "", $clearBreakLineArrStr);
                                         @endphp
-                                        @foreach (explode("\n",
-                                               $clearImgArrStr
-                                            ) as $key => $item)
+                                        @foreach (explode("\n", $clearImgArrStr) as $key => $item)
                                             {!! $item !!}
                                             @if ($key === 3)
                                                 @break
                                             @endif
                                         @endforeach
-                                        
                                     </a>
                                 </p>
                             </div>
-                           
                         </div>
-                    </div>
+                    </div>                  
                 </div>
 
                 <!-- Additional News -->
                 <div class="col-md-7">
                     <div class="additional-news">
                  @foreach($nextPosts  as $post)
-    <!-- News Item -->
-    <div class="news-item">
-        <div class="news-image">
-            <a href="{{route('post.show', ['id' => $post->id])}}">
-                <img src="{{ asset('layouts/img/' . $post->image) }}"
-                    alt="">
-            </a>
-        </div>
-        <div class="news-details" style="  text-decoration: none;">
-            <div style="width: 550px; max-width: 100%;  padding: 10px;">
-                <a href="{{route('post.show', ['id' => $post->id])}}" class="bold">
-                <h3 class="news-title">{{ $post->title }}</h3>
-                </a>
-            </div>
+                <!-- News Item -->
+                <div class="news-item">
+                    <div class="news-image">
+                        <a href="{{route('post.show', ['id' => $post->id])}}">
+                            @php 
+                                $imagePath = $post->image;
+                                if(strpos($imagePath, 'uploads/posts') === false ){
+                                    $imagePath = 'layouts/img/' . $imagePath;
+                                }
+                            @endphp
+                            <img src="{{ asset($imagePath) }}" alt="Ảnh sản phẩm" width="100">
+                        </a>
+                    </div>
+                    <div class="news-details" style="  text-decoration: none;">
+                        <div style="width: 550px; max-width: 100%;  padding: 10px;">
+                            <a href="{{route('post.show', ['id' => $post->id])}}" class="bold">
+                            <h3 class="news-title">{{ $post->title }}</h3>
+                        </a>
+                    </div>
            
             <div style="width: 550px; max-width: 100%; padding: 10px; color: black;">
             <p class="news-summary" >

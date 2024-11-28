@@ -89,7 +89,21 @@
                             @elseif (isset($cart) )
                                 <tr class="cart-body">
                                     <th scope="row">{{ $loop->iteration }}</th>
-                                    <td><img src="{{ asset('layouts/img/' . $item['image']) }}" alt="Gift Basket" style="width: 100px; height: auto; border-radius: 5px;"></td>
+                                    <td>
+                                        @php
+                                            // Đường dẫn vật lý của file
+                                            $imagePath = public_path($item['image']);
+                                        @endphp
+                                    
+                                        @if (file_exists($imagePath))
+                                            {{-- Nếu file tồn tại, hiển thị ảnh chính --}}
+                                            <img src="{{ asset($item['image']) }}" alt="Ảnh sản phẩm" style="width: 100px; height: auto; border-radius: 5px;">
+                                        @else
+                                            {{-- Nếu file không tồn tại, hiển thị ảnh dự phòng --}}
+                                            <img src="{{ asset('layouts/img/'.$item['image']) }}" alt="Ảnh mặc định" style="width: 100px; height: auto; border-radius: 5px;">
+                                        @endif
+                                    </td>                                    
+                                    
                                     <td><strong>{{ $item['name'] }}</strong></td>
                                     <td><input type="number" class="update-cart" name="quantity[{{ $item['id'] }}]" value="{{ $item['quantity'] ?? 1 }}" min="1" data-id="{{ $item['id'] }}"></td>
                                     <td><span>{{ number_format($item['price_gift'] ?? $item['price']) }} VND</span> </td>

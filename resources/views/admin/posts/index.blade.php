@@ -113,7 +113,15 @@
                                     </td>
                                     <td>{{ $item->id }}</td>
                                     <td>
-                                        <img src="{{ asset('layouts/img/' . $item->image) }}" alt="Ảnh sản phẩm" width="100">
+                                        @php
+                                            $imagePath = public_path($item->image);
+                                        @endphp
+
+                                        @if (file_exists($imagePath))
+                                            <img src="{{ asset($item->image) }}" alt="Ảnh sản phẩm" width="100">
+                                        @else
+                                            <img src="{{ asset('layouts/img/'.$item->image) }}" alt="Ảnh sản phẩm" width="100">
+                                        @endif
                                     </td>
                                     <td>{{ $item->title }}</td>
                                     <td>{{ $item->category_id }}</td>

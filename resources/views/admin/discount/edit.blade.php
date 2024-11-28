@@ -4,7 +4,7 @@
         <div class="content">
             <div class="page-header">
                 <div class="page-title">
-                    <h4>Chỉnh sửa danh mục</h4>
+                    <h4>Chỉnh sửa mã giảm giá</h4>
                 </div>
             </div>
 
