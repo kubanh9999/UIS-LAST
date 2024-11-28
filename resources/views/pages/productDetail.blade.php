@@ -270,7 +270,14 @@
                     <div class="product-card">
                         <div class="new-badge">New</div>
                         <a href="{{ route('product.detail', $relatedProduct->id) }}">
-                            <img src="{{ asset('layouts/img/' . $relatedProduct->image) }}" alt="{{ $relatedProduct->name }}">
+                            @php
+                            $imagePath = $relatedProduct->image;
+                            // Nếu đường dẫn ảnh chứa 'uploads/products', không cần thêm 'layouts/img'
+                            if (strpos($imagePath, 'uploads/products') === false) {
+                                $imagePath = 'layouts/img/' . $relatedProduct->image; // Nếu không chứa, thêm 'layouts/img'
+                            }
+                        @endphp
+                            <img src="{{ asset($imagePath) }}" alt="{{ $relatedProduct->name }}">
                         </a>
                         <a href="{{ route('product.detail', $relatedProduct->id) }}" style="text-decoration:none;color: black" >
                             <h5>{{ $relatedProduct->name }}</h5>

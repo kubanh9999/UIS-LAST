@@ -62,7 +62,14 @@
                                     id="fruit_{{ $fruit->id }}" class="form-check-input"
                                     data-price="{{ $fruit->price }}">
                                 <label for="fruit_{{ $fruit->id }}" class="form-label d-flex align-items-center">
-                                    <img src="{{ asset('layouts/img/' . $fruit->image) }}" alt="{{ $fruit->name }}"
+                                    @php
+                                        $imagePath = $fruit->image;
+                                        // Nếu đường dẫn ảnh chứa 'uploads/posts', không cần thêm 'layouts/img'
+                                        if (strpos($imagePath, 'uploads/products') === false) {
+                                            $imagePath = 'layouts/img/' . $fruit->image; // Nếu không chứa, thêm 'layouts/img'
+                                        }
+                                    @endphp
+                                    <img src="{{ asset($imagePath) }}" alt="{{ $fruit->name }}"
                                         style="max-width: 50px;" class="me-2">
                                         <span><strong>{{ $fruit->name }}</strong> - <span class="dynamic-price"
                                             data-price="{{ $fruit->price }}">
