@@ -34,6 +34,7 @@
         <section class=" mb-4">
 
             <div class="container bg-white p-4">
+                <input type="text" id="search" placeholder="Tìm kiếm trái cây..." class="form-control mb-3">
                 <form id="giftBasketForm" action="{{ route('cart.addGiftBasketToCart', $basket->id) }}" method="POST">
                     @csrf
                     <div class="row">
@@ -44,13 +45,16 @@
                             <h4 class="gift-basket-name">{{ $basket->name }}</h4>
                             <div class="gift-basket-price">Tổng: <span id="totalPrice">0</span> VND</div>
                             <div class="acction-container mt-5">
-                                <button type="submit" class="btn btn-primary mx-2">Thêm giỏ hàng</button>
+                               
                                 <a href="{{ route('home.index') }}" class="btn btn-danger mx-2">Quay lại giỏ quà</a>
+                                <button type="submit" class="btn btn-primary mx-2">Thêm giỏ hàng</button>
                             </div>
+
                         </div>
+                      
                         <div class="gift-basket-right col-md-7">
                             <h5>Chọn trái cây:</h5>
-                            <input type="text" id="search" placeholder="Tìm kiếm trái cây..." class="form-control mb-3">
+                          
                         
                             @foreach ($fruits as $fruit)
                             <div class="product-item d-flex align-items-center mb-3">
@@ -85,23 +89,40 @@
     </main>
 
     <script>
+   document.getElementById("search").addEventListener("input", function () {
+    const searchTerm = this.value; // Lấy từ khóa tìm kiếm
 
-document.addEventListener('DOMContentLoaded', function() {
-    document.getElementById('search').addEventListener('input', function() {
-        var searchQuery = this.value.toLowerCase(); // Lấy từ khóa tìm kiếm và chuyển thành chữ thường
-        var products = document.querySelectorAll('.product-item'); // Lấy tất cả các sản phẩm
-        
-        products.forEach(function(product) {
-            var productName = product.getAttribute('data-name').toLowerCase(); // Lấy tên sản phẩm và chuyển thành chữ thường
+    fetch(`/search-fruits?query=${encodeURIComponent(searchTerm)}`)
+        .then(response => response.json())
+        .then(data => {
+            const productContainer = document.querySelector(".gift-basket-right"); // Lấy container hiển thị sản phẩm
+            productContainer.innerHTML = ""; // Xóa nội dung cũ
 
-            if (productName.includes(searchQuery)) {
-                product.style.display = 'flex'; // Hiển thị sản phẩm nếu tên chứa từ khóa tìm kiếm
-            } else {
-                product.style.display = 'none'; // Ẩn sản phẩm nếu tên không chứa từ khóa tìm kiếm
-            }
-        });
-    });
+            // Duyệt qua danh sách kết quả và render HTML
+            data.forEach(fruit => {
+                productContainer.innerHTML += `
+                    <div class="product-item d-flex align-items-center mb-3">
+                        <input type="checkbox" name="fruits[${fruit.id}]" value="1" id="fruit_${fruit.id}" class="form-check-input" data-price="${fruit.price}">
+                        <label for="fruit_${fruit.id}" class="form-label d-flex align-items-center">
+                            <img src="${fruit.image}" alt="${fruit.name}" style="max-width: 50px;" class="me-2">
+                            <span>
+                                <strong>${fruit.name}</strong> - <span class="dynamic-price" data-price="${fruit.price}">${fruit.price_formatted}</span> VND
+                            </span>
+                        </label>
+                        <select name="quantities[${fruit.id}]" class="ms-auto" style="width: 130px;">
+                            <option value="100" selected>100g</option>
+                            <option value="200">200g</option>
+                            <option value="300">300g</option>
+                            <option value="500">500g</option>
+                        </select>
+                    </div>
+                `;
+            });
+        })
+        .catch(error => console.error("Error:", error)); // Xử lý lỗi
 });
+
+
 
         document.getElementById('giftBasketForm').addEventListener('submit', function(event) {
             // Lấy tất cả các checkbox trong form
@@ -110,7 +131,17 @@ document.addEventListener('DOMContentLoaded', function() {
             // Kiểm tra nếu không có checkbox nào được chọn
             if (checkboxes.length === 0) {
                 event.preventDefault(); // Ngăn không cho form submit
-                alert('Vui lòng chọn ít nhất một loại trái cây trước khi thêm vào giỏ hàng.');
+                Swal.fire({
+    title: 'Chưa chọn trái cây!',
+    text: 'Vui lòng chọn ít nhất một loại trái cây trước khi thêm vào giỏ hàng.',
+    icon: 'warning',
+    showClass: {
+        popup: 'animate__animated animate__fadeInDown'
+    },
+    hideClass: {
+        popup: 'animate__animated animate__fadeOutUp'
+    }
+});
             }
         });
 
