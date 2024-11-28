@@ -23,7 +23,7 @@
                         </div>
 
                         <!-- Danh mục bài viết -->
-                        <div class="col-lg-6 col-sm-6 col-12">
+                      {{--   <div class="col-lg-6 col-sm-6 col-12">
                             <div class="form-group">
                                 <label>Danh mục</label>
                                 <select name="category_id" required class="form-control">
@@ -34,7 +34,7 @@
                                     @endforeach
                                 </select>
                             </div>
-                        </div>
+                        </div> --}}
 
                         <!-- Nội dung bài viết -->
                         <div class="col-lg-12 col-sm-12 col-12">
@@ -53,7 +53,7 @@
                         </div>
 
                         <!-- Trạng thái -->
-                        <div class="col-lg-6 col-sm-6 col-12">
+                        {{-- <div class="col-lg-6 col-sm-6 col-12">
                             <div class="form-group">
                                 <label>Trạng thái</label>
                                 <select name="status" required class="form-control">
@@ -61,7 +61,7 @@
                                     <option value="0">Ẩn</option>
                                 </select>
                             </div>
-                        </div>
+                        </div> --}}
 
                         <!-- Ngày đăng -->
                         <div class="col-lg-6 col-sm-6 col-12">

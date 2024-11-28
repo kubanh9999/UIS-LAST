@@ -57,6 +57,7 @@ class AuthController extends Controller
     // Xử lý đăng nhập
     public function login(Request $request)
     {
+        
         // Validate dữ liệu từ form
         $request->validate([
             'email' => 'required|email',
@@ -66,10 +67,15 @@ class AuthController extends Controller
         if (Auth::attempt($request->only('email', 'password'))) {
             // Lấy thông tin người dùng đã đăng nhập
             $user = Auth::user();
+            if ($user->status == 'bị khóa') {
+                return redirect()->back()->with('error', 'Tài khoản của bạn đã bị khóa. Vui lòng liên hệ với admin.');
+            }
             if ($user->role == 1) {
                 return redirect('/admin'); // Điều hướng đến trang admin nếu role = 1
             }
             return redirect()->route('home.index'); // Điều hướng đến trang dashboard nếu không phải admin
+           
+    
         }
         return back()->withErrors([
             'email' => 'Email hoặc mật khẩu không chính xác.',
