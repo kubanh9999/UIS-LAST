@@ -22,7 +22,7 @@ use App\Http\Controllers\Admins\BannerController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\OrderController;
-
+Route::get('/search-fruits', [ProductController::class, 'searchFruits'])->name('search.fruits');
 Route::get('/orders/print/{id}', [OrderController::class, 'printInvoice'])->name('order.print');
 
 Route::get('/products/category/{categoryName}', [HomeController::class, 'getProductsByCategory'])->name('products.category.name');
