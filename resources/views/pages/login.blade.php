@@ -2,6 +2,8 @@
 @section('title', 'Đăng nhập')
 
 @section('content')
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 <style>
     body {
         background-color: #f0f2f5; /* Màu nền nhẹ nhàng cho trang */
@@ -84,21 +86,42 @@
     font-size: small;
 }
 </style>
-@if (session('error'))
-    <div class="alert alert-danger">
-        {{ session('error') }}
-    </div>
+
+
+@if(session('error'))
+    <script>
+        Swal.fire({
+            icon: 'error',
+            title: "{{ session('error') }}", // Bọc giá trị PHP trong chuỗi
+            text: "{{ $errors->first('error', '') }}", // Sử dụng giá trị mặc định nếu không có lỗi
+            confirmButtonText: 'Đóng'
+        });
+    </script>
+@endif
+
+
+@if ($errors->any())
+    <script>
+        Swal.fire({
+            icon: 'error',
+            title: 'Tài khoản hoặc mật khẩu không chính xác!',
+            text: "{{ $errors->first('error') }}",
+            confirmButtonText: 'Đóng'
+        });
+    </script>
 @endif
 
 <form id="login-form" action="{{ route('login') }}" method="POST" onsubmit="return validateForm()">
 
     @csrf
     <h1 class="h1-login">Đăng Nhập</h1> <!-- Tiêu đề cho form -->
-    @if ($errors->any())
+   {{--  @if ($errors->any())
         <div class="error-message">
             {{ $errors->first() }} 
         </div>
-    @endif
+    @endif --}}
+   
+
     <div>
         <label for="email">Email:</label>
         <input type="email" name="email" id="email" required>
@@ -115,6 +138,7 @@
         <a href="{{ route('login.google') }}" class="btn btn-google"><img class="logo_google" src="{{ asset('layouts/img/google_logo.png') }}" alt="">Google</a>
     </div>
 </form>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 <script>
     function validateForm() {
@@ -155,4 +179,5 @@
         return isValid; // Trả về kết quả kiểm tra
     }
 </script>
+
 @endsection

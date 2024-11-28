@@ -163,7 +163,7 @@ Route::prefix('admin')->middleware('checkAdmin')->group(function () {
         'destroy' => 'admin.categories.destroy',
     ]);
 
-    Route::post('/users/toggle-status', [AdminUserController::class, 'toggleStatus'])->name('users.toggleStatus');
+    Route::post('/admin/users/toggle-status', [AdminUserController::class, 'toggleStatusq'])->name('users.toggleStatus');
     Route::resource('users', AdminUserController::class)->names([
         'index' => 'admin.users.index',
         'create' => 'admin.users.create',
