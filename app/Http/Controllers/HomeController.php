@@ -20,10 +20,7 @@ class HomeController extends Controller
         $giftBaskets = ProductType::orderBy('created_at', 'desc')->limit(5)->get();
         $orders = Order::orderBy('created_at', 'desc')->get();
         $userId = Auth::id();
-        $topProducts = Product::where('stock', '>', 0)
-                       ->orderBy('sales', 'desc')
-                       ->take(4)
-                       ->get();
+       
         $purchasedProductIds = Order::where('user_id', $userId)
             ->join('order_details', 'orders.id', '=', 'order_details.order_id')
             ->pluck('order_details.product_id')->toArray();
@@ -40,14 +37,23 @@ class HomeController extends Controller
         /*    dd($recommendedProducts); */
         $newProducts = Product::select('products.id', 'products.name', 'products.price', 'products.image', 'products.stock', 'products.discount', 'categories.name as category_name')
         ->join('categories', 'products.category_id', '=', 'categories.id')
-        ->where('products.created_at', '>=', now()->subDays(30)) // Chọn sản phẩm được tạo trong 30 ngày qua
+        ->where('products.created_at', '>=', now()->subDays(15)) // Chọn sản phẩm được tạo trong 30 ngày qua
         ->where('products.stock', '>', 0) // Chỉ lấy sản phẩm có số lượng tồn kho > 0
         ->orderBy('products.created_at', 'desc')
         ->take(5) // Lấy 5 sản phẩm mới nhất
         ->get();
     
     $newProductsGrouped = $newProducts->groupBy('category_name');
-            
+    $topProducts = Product::select('products.id', 'products.name', 'products.price', 'products.image', 'products.stock', 'products.discount', 'products.sales', 'categories.name as category_name')
+    ->join('categories', 'products.category_id', '=', 'categories.id')
+    ->where('products.sales', '>', 0)
+    ->where('products.stock', '>', 0) // Chỉ lấy sản phẩm còn tồn kho
+    ->orderBy('products.sales', 'desc') // Sắp xếp theo số lượng bán giảm dần
+    ->take(5) // Lấy 5 sản phẩm bán chạy nhất
+    ->get();
+
+$topProductsGrouped = $topProducts->groupBy('category_name');
+
          /*    dd($newProducts); */
         // Sản phẩm bán chạy nhất (dựa trên số lượng bán từ bảng order_items)
         $topSellingProducts = Product::select(
@@ -100,7 +106,7 @@ $secondaryBanners = DB::table('banners')->where('type', 'secondary')->orderBy('p
 // Lấy banner thứ 3 (1 ảnh)
 $tertiaryBanner = DB::table('banners')->where('type', 'third')->orderBy('position')->get();
 
-        return view('pages.home', compact('newProducts', 'topSellingProducts', 'recommendedProducts', 'orders', 'giftBaskets', 'categories','latestPost','nextPosts','limitedContent','mainBanners','secondaryBanners','tertiaryBanner', 'topProducts','newProductsGrouped'));
+        return view('pages.home', compact('newProducts', 'topSellingProducts', 'recommendedProducts', 'orders', 'giftBaskets', 'categories','latestPost','nextPosts','limitedContent','mainBanners','secondaryBanners','tertiaryBanner', 'topProducts','newProductsGrouped','topProductsGrouped'));
     }
     public function markAsRead($id)
     {

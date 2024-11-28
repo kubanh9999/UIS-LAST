@@ -17,8 +17,29 @@
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css" />
     <link rel="stylesheet" type="text/css"
         href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick-theme.css" />
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" rel="stylesheet">
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
 </head>
+<style>
+    /* Đặt màu cho thông báo lỗi */
+    .toast-error {
+        background-color: #f44336 !important; /* Màu đỏ */
+        color: white !important;
+    }
+    
+    /* Đặt màu cho thông báo thành công */
+    .toast-success {
+        background-color: #4CAF50 !important; /* Màu xanh */
+        color: white !important;
+    }
 
+    /* Tùy chỉnh thêm cho kích thước và kiểu chữ của thông báo */
+    .toast {
+        font-size: 16px;
+        border-radius: 8px;
+    }
+</style>
 <body>
     <div id="fb-root"></div>
 <script async defer crossorigin="anonymous" src="https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v12.0"></script>
