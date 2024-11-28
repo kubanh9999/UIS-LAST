@@ -13,7 +13,16 @@
                     </a>
                 </div>
             </div>
-
+            <script>
+                @if(session('success'))
+                    Swal.fire({
+                        title: 'Thành công!',
+                        text: "{{ session('success') }}",
+                        icon: 'success',
+                        confirmButtonText: 'Đóng'
+                    });
+                @endif
+            </script>
             <div class="card">
                 <div class="card-body">
                     <div class="table-top">
