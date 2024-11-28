@@ -62,7 +62,7 @@
                 <div class="col-lg-2 col-5">
                     <a href="{{ route('home.index') }}" class="text-decoration-none">
                         <div class="imagess m-0">
-                            <img src="{{ asset('layouts/img/5.png') }}" alt="" class="img-fluid" style="width: 90%;"> <!-- Ảnh sẽ chiếm 90% chiều rộng của container -->
+                            <img src="{{ asset('layouts/img/logota.png') }}" alt="" class="img-fluid" style="width: 90%;"> <!-- Ảnh sẽ chiếm 90% chiều rộng của container -->   
                         </div>
                     </a>
                 </div>

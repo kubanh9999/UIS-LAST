@@ -96,14 +96,26 @@ class AdminUserController extends Controller
 
     // UserController.php
 
-    public function toggleStatus(Request $request)
-    {
-        $user = User::find($request->id);
-        $user->status = $request->status; // Cập nhật trạng thái
-        $user->save();
-
-        return response()->json(['success' => true]);
-    }
+    public function toggleStatusq(Request $request)
+{
+    $user = User::find($request->id);
     
+    if (!$user) {
+        return response()->json(['success' => false, 'message' => 'Người dùng không tồn tại']);
+    }
 
+    // Log trạng thái hiện tại và mới
+    \Log::info("User ID: " . $user->id);
+    \Log::info("Current Status: " . $user->status);
+    \Log::info("New Status: " . $request->status);
+
+    // Cập nhật trạng thái
+    $user->status = $request->status;
+    $user->save();
+
+    return response()->json(['success' => true]);
 }
+
+    
+    
+}    
