@@ -75,8 +75,15 @@
                                         <ul style="list-style: none; padding: 0;">
                                             @foreach ($item['fruits'] as $fruit_id => $fruit_details)
                                                 @if (is_array($fruit_details))
+                                                @php
+                                                    $imagePath =  $fruit_details['image'];
+                                                    // Nếu đường dẫn ảnh chứa 'uploads/posts', không cần thêm 'layouts/img'
+                                                    if (strpos($imagePath, 'uploads/products') === false) {
+                                                        $imagePath = 'layouts/img/' .  $fruit_details['image']; // Nếu không chứa, thêm 'layouts/img'
+                                                    }
+                                                @endphp
                                                     <li> 
-                                                        <img style="width: 40px; height: 40px;" src="{{ asset('layouts/img/' . $fruit_details['image']) }}" alt=""> {{ $fruit_details['quantity'] }}kg
+                                                        <img style="width: 40px; height: 40px;" src="{{ asset($imagePath) }}" alt=""> {{ $fruit_details['quantity'] }}kg
                                                     </li>
                                                 @endif
                                             @endforeach

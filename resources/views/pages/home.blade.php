@@ -253,7 +253,14 @@
                 @foreach ($topProducts as $item)
                     <div class="product-card">
                         <a href="{{ route('product.detail', $item->id) }}">
-                            <img src="{{ asset('layouts/img/' . $item->image) }}" alt="{{ $item->name }}">
+                            @php
+                                $imagePath = $item->image;
+                                // Nếu đường dẫn ảnh chứa 'uploads/posts', không cần thêm 'layouts/img'
+                                if (strpos($imagePath, 'uploads/products') === false) {
+                                    $imagePath = 'layouts/img/' . $item->image; // Nếu không chứa, thêm 'layouts/img'
+                                }
+                            @endphp
+                            <img src="{{ asset($imagePath) }}" alt="{{ $item->name }}">
                         </a>
                         <h5 class="product-name">
                             <a href="{{ route('product.detail', $item->id) }}">{{ $item->name }}</a>
@@ -324,7 +331,14 @@
                     <div class="product-card">
                         <div class="new-badge">New</div>
                         <a href="{{ route('product.detail', $item->id) }}">
-                        <img src="{{ asset('layouts/img/' . $item->image) }}" alt="{{ $item->name }}">
+                            @php
+                                $imagePath = $item->image;
+                                // Nếu đường dẫn ảnh chứa 'uploads/posts', không cần thêm 'layouts/img'
+                                if (strpos($imagePath, 'uploads/products') === false) {
+                                    $imagePath = 'layouts/img/' . $item->image; // Nếu không chứa, thêm 'layouts/img'
+                                }
+                            @endphp
+                        <img src="{{ asset($imagePath) }}" alt="{{ $item->name }}">
                         </a>
                         <h5 class="product-name">
                             <a href="{{ route('product.detail', $item->id) }}">{{ $item->name }}</a>

@@ -218,7 +218,14 @@
                             </tr>
                             <tr class="">
                                 <td><strong>Hình ảnh sản phẩm:</strong></td>
-                                <td><img src="{{ asset('layouts/img/' . $item->gift->image) }}" class="img-thumbnail" style="width: 50px"></td>
+                                 @php
+                                    $imagePath = $item->gift->image;
+                                    // Nếu đường dẫn ảnh chứa 'uploads/products', không cần thêm 'layouts/img'
+                                    if (strpos($imagePath, 'uploads/products') === false) {
+                                        $imagePath = 'layouts/img/' . $item->gift->image; // Nếu không chứa, thêm 'layouts/img'
+                                    }
+                                @endphp
+                                <td><img src="{{ asset($imagePath) }}" class="img-thumbnail" style="width: 50px"></td>
                                 
                             </tr>
                             <tr>
@@ -234,10 +241,17 @@
                                 </tr>
                                 <tr>
                                     <td><strong>Hình ảnh:</strong></td>
-                                    <td><img src="{{ asset('layouts/img/' . $item->product->image) }}"
+                                    @php
+                                        $imagePath = $item->product->image;
+                                        // Nếu đường dẫn ảnh chứa 'uploads/products', không cần thêm 'layouts/img'
+                                        if (strpos($imagePath, 'uploads/products') === false) {
+                                            $imagePath = 'layouts/img/' . $item->product->image; // Nếu không chứa, thêm 'layouts/img'
+                                        }
+                                    @endphp
+                                    <td>
+                                        <img src="{{ asset($imagePath) }}"
                                             class="img-thumbnail" style="width: 50px;"></td>
-
-                                </tr>
+                                    </tr>
 
                                 <tr>
                                     <td><strong>Số lượng:</strong></td>
