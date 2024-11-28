@@ -8,6 +8,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\DB;
 
 class AdminPostController extends Controller
 {
@@ -158,4 +159,74 @@ class AdminPostController extends Controller
         // Quay lại trang danh sách bài viết và thông báo thành công
         return redirect()->route('admin.post.index')->with('success', 'Bài viết đã được xóa thành công!');
     }
+
+function index_categories(){
+    $postCategories = DB::table('post_categories')->get();
+    return view('admin.posts.index_categories',compact('postCategories'));
+}
+    function createCategory(){
+        return view('admin.posts.createPost');
+    }
+    public function storeCategory(Request $request)
+    {
+        // Xác thực dữ liệu
+        $request->validate([
+            'name' => 'required|string|max:255',
+        ]);
+    
+        // Tạo danh mục mới
+        DB::table('post_categories')->insert([
+            'name' => $request->name,
+            'description' => $request->description ?? null, // Nếu không có giá trị description thì dùng giá trị mặc định
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
+        return redirect()->route('admin.indexCategory.post')->with('success', 'Danh mục đã được thêm thành công!');
+    }
+    public function editCategory($id)
+{
+    // Lấy danh mục theo ID
+    $category = DB::table('post_categories')->where('id', $id)->first();
+
+    // Kiểm tra nếu không tìm thấy danh mục
+    if (!$category) {
+        return redirect()->route('admin.indexCategory.post')->with('error', 'Danh mục không tồn tại!');
+    }
+
+    // Trả về view với dữ liệu danh mục
+    return view('admin.posts.editCategory', compact('category'));
+}
+
+public function updateCategory(Request $request, $id)
+{
+    // Xác thực dữ liệu
+    $request->validate([
+        'name' => 'required|string|max:255',
+    ]);
+
+    // Tìm danh mục theo ID
+    $category = DB::table('post_categories')->where('id', $id)->first();
+
+    // Kiểm tra nếu không tìm thấy danh mục
+    if (!$category) {
+        return redirect()->route('admin.indexCategory.post')->with('error', 'Danh mục không tồn tại!');
+    }
+
+    // Cập nhật các thông tin danh mục
+    DB::table('post_categories')
+        ->where('id', $id)
+        ->update([
+            'name' => $request->name,
+            'description' => $request->description ?? null, // Nếu có description thì update, nếu không có thì giữ null
+            'updated_at' => now(), // Cập nhật thời gian sửa
+        ]);
+
+    // Quay lại trang danh mục với thông báo thành công
+    return redirect()->route('admin.indexCategory.post')->with('success', 'Danh mục đã được cập nhật thành công!');
+}
+
+
+
+
+
 }

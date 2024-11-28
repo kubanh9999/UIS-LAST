@@ -22,6 +22,15 @@ use App\Http\Controllers\Admins\BannerController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\OrderController;
+
+
+Route::put('/admin/updateCategory/{id}', [AdminPostController::class, 'updateCategory'])->name('admin.post.updateCategory');
+Route::get('/post/{id}/editCategory', [AdminPostController::class, 'editCategory'])->name('admin.post.editCategory');
+Route::get('admin/index/post', [AdminPostController::class, 'index_categories'])->name('admin.indexCategory.post');
+
+Route::post('admin/index/store', [AdminPostController::class, 'storeCategory'])->name('admin.storeCategory.post');
+
+Route::get('admin/create/post', [AdminPostController::class, 'createCategory'])->name('admin.createCategory.post');
 Route::get('/search-fruits', [ProductController::class, 'searchFruits'])->name('search.fruits');
 Route::get('/orders/print/{id}', [OrderController::class, 'printInvoice'])->name('order.print');
 
