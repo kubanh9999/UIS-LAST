@@ -118,12 +118,15 @@
                                         <td>{{ $item->name }}</td>
                                         <td>{{ $item->email }}</td>
                                         <td>{{ $item->phone }}</td>
-                                        <td class="status">{{ $item->status == 0 ? 'Hoạt động' : 'Bị khóa' }}</td>
+                                        <td class="status">{{ $item->status }}</td>
                                         <td class="action-cell">
                                             <div class="action-icons">
-                                                <button type="button" class="btn status-btn" data-toggle="modal" data-target="#myModal" data-id="{{ $item->id }}" data-status="{{ $item->status }}">
-                                                    <i class="fa-solid {{ $item->status == 0 ? 'fa-lock' : 'fa-unlock' }}"></i>
+                                                <button type="button" class="btn status-btn" data-id="{{ $item->id }}" data-status="{{ $item->status }}" onclick="toggleStatusq(this)">
+                                                    <i class="fa-solid {{ $item->status == 'hoạt động' ? 'fa-unlock' : 'fa-lock' }}"></i>
                                                 </button>
+                                            </div>
+                                            
+                                                
                                                 <a class="action-icon" href="{{ route('admin.users.edit', $item->id) }}">
                                                     <i class="fa-solid fa-pen-to-square"></i>
                                                 </a>
@@ -150,54 +153,13 @@
     </div>
 
 
-    <div class="modal" id="myModal">
-        <div class="modal-dialog">
-          <div class="modal-content">
-      
+    
             <!-- Modal Header -->
-            <div class="modal-header">
-              <h4 class="modal-title">Xác nhận</h4>
-              <button type="button" class="close" data-dismiss="modal">&times;</button>
-            </div>
-      
+
             <!-- Modal body -->
-            <div class="modal-body">
-              <form action="">
-                <h2 style="font-size: 13px; margin: 8px 0px ">Bạn có muốn khóa tài khoản này:</h2>
-                <div class="mb-1">
-                    <label for="day">
-                        <input type="radio" id="day" name="box"> Trong 1 ngày
-                    </label>
-                </div>
-                
-                <div class="mb-1">
-                    <label for="month">
-                        <input type="radio" id="month"  name="box"> Trong 1 tháng
-                    </label>
-                </div>
-                <div class="mb-1">
-                    <label for="year">
-                        <input type="radio" id="year" name="box"> Trong 1 năm
-                    </label>
-                </div>
-                <div class="mb-1">
-                    <label for="vinhvien">
-                        <input type="radio" id="vinhvien" name="box"> Vĩnh biệt cụ
-                    </label>
-                </div>
-                
-              </form>
-            </div>
-      
-            <!-- Modal footer -->
-            <div class="modal-footer" >
-              <button type="button" class=" btn-muted" data-dismiss="modal">Close</button>
-              <button type="button" class=" btn-primary" data-dismiss="modal">Xác nhận</button>
-            </div>
-      
-          </div>
-        </div>
-      </div>
+          
+<!-- SweetAlert2 CSS -->
+<link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.6.16/dist/sweetalert2.min.css" rel="stylesheet">
 
   <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
@@ -226,4 +188,65 @@
             }
         }
     </script>
+   
+    <script>
+ function toggleStatusq(button) {
+    const userId = $(button).data('id'); // Lấy userId từ data-id
+    let currentStatus = $(button).data('status'); // Lấy trạng thái hiện tại từ data-status
+    const newStatus = currentStatus === 'hoạt động' ? 'bị khóa' : 'hoạt động'; // Chuyển trạng thái
+
+    console.log('Current userId:', userId);
+    console.log('Current Status:', currentStatus);
+    console.log('New Status:', newStatus);
+
+    // Gửi yêu cầu AJAX
+    $.ajax({
+        url: '/admin/users/toggle-status',
+        method: 'POST',
+        data: {
+            id: userId,
+            status: newStatus,
+            _token: '{{ csrf_token() }}'  // Thêm token bảo mật
+        },
+        success: function(response) {
+            if (response.success) {
+                const button = $('button[data-id="' + userId + '"]');
+                const icon = button.find('i');
+
+                // Cập nhật lại biểu tượng
+                icon.removeClass('fa-lock fa-unlock')
+                    .addClass(newStatus === 'bị khóa' ? 'fa-lock' : 'fa-unlock');
+
+                // Cập nhật trạng thái của người dùng
+                button.attr('data-status', newStatus);
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Cập nhật trạng thái thành công!',
+                    showConfirmButton: false,
+                    timer: 1500  // Thời gian tự động đóng thông báo (1.5s)
+                });
+            } else {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Đã xảy ra lỗi!',
+                    text: 'Không thể cập nhật trạng thái.',
+                    confirmButtonText: 'Thử lại'
+                });
+            }
+        },
+        error: function() {
+            Swal.fire({
+                icon: 'error',
+                title: 'Không thể kết nối với máy chủ!',
+                text: 'Vui lòng kiểm tra lại kết nối.',
+                confirmButtonText: 'Đóng'
+            });
+        }
+    });
+}
+
+
+    </script>
+    
+
 @endsection

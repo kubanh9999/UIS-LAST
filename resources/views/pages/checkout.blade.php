@@ -100,13 +100,20 @@
                                                 : ($item['quantity'] ?? 0);
                             @endphp
                             @php
-                                // Xử lý đường dẫn hình ảnh
-                                $imagePath = isset($item['fruits']) 
-                                    ? asset('layouts/img/' . $item['basket_image']) 
-                                    : (is_array($item) && isset($item['image']) 
-                                        ? asset('layouts/img/' . $item['image']) 
-                                        : asset('layouts/img/default-image.jpg')); // Đảm bảo có hình ảnh mặc định
-                            @endphp
+                            // Xử lý đường dẫn hình ảnh
+                            $imagePath = isset($item['fruits']) 
+                                ? (strpos($item['basket_image'], 'uploads/products/') === 0 
+                                    ? asset($item['basket_image']) // Nếu đường dẫn bắt đầu bằng 'uploads/products/', không thêm 'layouts/img/'
+                                    : asset('layouts/img/' . $item['basket_image'])
+                                ) 
+                                : (is_array($item) && isset($item['image']) 
+                                    ? (strpos($item['image'], 'uploads/products/') === 0 
+                                        ? asset($item['image']) // Nếu đường dẫn bắt đầu bằng 'uploads/products/', không thêm 'layouts/img/'
+                                        : asset('layouts/img/' . $item['image'])
+                                    ) 
+                                    : asset('layouts/img/default-image.jpg')); // Đảm bảo có hình ảnh mặc định
+                        @endphp
+                        
 
                             <div class="info-order-product d-flex align-items-center mb-3 border p-2 rounded shadow-sm">
                               <img 

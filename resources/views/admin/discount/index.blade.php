@@ -123,14 +123,14 @@
                                         </a>
                         
                                         <!-- Delete Form -->
-                                        <form id="delete-form-{{ $item->id }}" action="{{ route('admin.discount.destroy', $item->id) }}" method="POST" style="display:inline;">
+                                       {{--  <form id="delete-form-{{ $item->id }}" action="{{ route('admin.discount.destroy', $item->id) }}" method="POST" style="display:inline;">
                                             @csrf
                                             @method('DELETE')
                                             <!-- Delete Button -->
                                             <button type="button" class="btn" onclick="confirmDelete({{ $item->id }})" title="Delete">
                                                 <i class="fa-solid fa-trash"></i>
                                             </button>
-                                        </form>
+                                        </form> --}}
                                     </td>
                                 </tr>
                                 @endforeach
