@@ -1,14 +1,17 @@
 @extends('admin.layout')
 @section('content')
+<!-- Thêm CSS của SweetAlert2 -->
+
+
     <div class="page-wrapper">
         <div class="content">
             <div class="page-header">
                 <div class="page-title">
-                    <h4>DANH MỤC SẢN PHẨM</h4>
-                    <h6></h6>
+                    <h4>DANH MỤC BÀI VIẾT</h4>
+              
                 </div>
                 <div class="page-btn">
-                    <a href="{{ route('admin.categories.create') }}" class="btn btn-success">
+                    <a href="{{ route('admin.createCategory.post') }}" class="btn btn-success">
                         <i class="fa-solid fa-plus"></i>THÊM DANH MỤC
                     </a>
                 </div>
@@ -18,7 +21,7 @@
                 <ul>
                     
                     <li>
-                        <a href="{{route('admin.indexCategory.post')}}" class="btn btn-success" style="text-decoration: none; color: white; float: right">xem trang danh mục bài viết</a>
+                        <a href="{{route('admin.categories.index')}}" class="btn btn-success" style="text-decoration: none; color: white; float: right">Quay lại trang danh mục sản phẩm</a>
                     </li>
                 </ul>
             </div>
@@ -33,6 +36,8 @@
                 });
             @endif
         </script>
+        
+        
             <div class="card">
                 <div class="card-body">
                     <div class="table-responsive">
@@ -51,7 +56,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach($category as $item)
+                                @foreach($postCategories as $item)
                                 <tr id="category-{{ $item->id }}">
                                     <td>
                                         <label class="checkboxs">
@@ -68,7 +73,7 @@
                                     <td>{{ $item->created_at }}</td>
                                     <td>
                                         <!-- Edit Button (Optional if using inline editing) -->
-                                        <a class="me-3" href="{{ route('admin.categories.edit', $item->id) }}">
+                                        <a class="me-3" href="{{ route('admin.post.editCategory', $item->id) }}">
                                             <i class="fa-solid fa-pen-to-square"></i>
                                         </a>
                                         <!-- Delete Button -->
@@ -121,6 +126,8 @@
             </div>
         </div>
     </div>
+<!-- Thêm CSS của Toastr -->
+
 
 @endsection
 
@@ -171,4 +178,5 @@
         });
     });
 </script>
+
 @endpush

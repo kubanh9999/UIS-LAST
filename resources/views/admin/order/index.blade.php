@@ -10,7 +10,16 @@
                 </div>
              
             </div>
-
+            <script>
+                @if(session('success'))
+                    Swal.fire({
+                        title: 'Thành công!',
+                        text: "{{ session('success') }}",
+                        icon: 'success',
+                        confirmButtonText: 'Đóng'
+                    });
+                @endif
+            </script>
             <div class="card">
                 <div class="card-body">
                     <div class="table-top">
@@ -183,9 +192,20 @@
         .then(response => response.json())
         .then(data => {
             if (data.success) {
-                alert('Trạng thái đơn hàng đã được cập nhật.');
+                Swal.fire({
+            icon: 'success',
+            title: 'Thành công!',
+            text: 'Trạng thái đơn hàng đã được cập nhật.',
+            showConfirmButton: false,
+            timer: 1500
+        });
             } else {
-                alert('Có lỗi xảy ra khi cập nhật trạng thái.');
+                Swal.fire({
+            icon: 'error',
+            title: 'Lỗi!',
+            text: 'Có lỗi xảy ra khi cập nhật trạng thái.',
+            showConfirmButton: true
+        });
             }
         })
         .catch(error => {
