@@ -42,7 +42,15 @@
                             <div class="col-md-6 mb-4">
                                 <div class="card">
                                     <!-- Thêm lớp ảnh Bootstrap với chiều cao cố định -->
-                                    <a href="{{ route('post.show', $post->id) }}"><img src="{{ asset('layouts/img/' . $post->image) }}" class="card-img-top" alt="{{ $post->title }}" style="height: 200px; object-fit: cover;"></a>
+                                    <a href="{{ route('post.show', $post->id) }}">
+                                        @php 
+                                            $imagePath = $post->image;
+                                            if(strpos($imagePath, 'uploads/posts') === false ){
+                                                $imagePath = 'layouts/img/' . $imagePath;
+                                            }
+                                        @endphp
+                                        <img src="{{ asset($imagePath) }}" 
+                                        class="card-img-top" alt="{{ $post->title }}" style="height: 200px; object-fit: cover;"></a>
                                     
                                     <div class="card-body d-flex flex-column" style="height: 300px;">
                                         <h5 class="card-title">

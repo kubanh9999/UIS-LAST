@@ -9,6 +9,7 @@ use App\Models\Order;
 use App\Models\Category;
 use App\Models\ProductType;
 use App\Models\ProductImage;
+
 class AdminProductController extends Controller
 {
     /**
@@ -17,15 +18,16 @@ class AdminProductController extends Controller
     public function index()
     {
         $products = Product::orderBy('id', 'desc')->get();
-        return view('admin.products.index',compact('products'));
+        return view('admin.products.index', compact('products'));
     }
 
     /**
      * Show the form for creating a new resource.
      */
     public function create()
-    { $categories = Category::all();
-        return view('admin.products.create',compact('categories'));
+    {
+        $categories = Category::all();
+        return view('admin.products.create', compact('categories'));
     }
 
     /**
@@ -41,25 +43,32 @@ class AdminProductController extends Controller
             'discount' => 'nullable|numeric|min:0',
             'stock' => 'required|integer|min:0',
             'description' => 'required|string',
-           'product_image' => 'required|image|max:2048', // No trailing comma
-    'child_images' => 'required|array|min:1', // Kiểm tra có ít nhất 1 ảnh con
-    'child_images.*' => 'image|max:2048',
-            'product_type' => 'required|string' // Kiểm tra loại sản phẩm (trái cây, giỏ quà)
+            'product_image' => 'required|image|max:2048',
+            'child_images' => 'required|array|min:1',
+            'child_images.*' => 'image|max:2048',
+            'product_type' => 'required|string',
+            'upload_folder' => 'nullable|string', // Thêm tùy chọn để xác định thư mục
         ]);
+
+        // Thư mục lưu trữ mặc định (nếu không được chỉ định)
+        $uploadFolder = $request->input('upload_folder', 'uploads/products');
 
         // Lưu ảnh sản phẩm chính
         $productImage = null;
         if ($request->hasFile('product_image')) {
-            // Lấy tên ảnh gốc
-            $originalName = $request->file('product_image')->getClientOriginalName();
-        
-            // Lưu ảnh vào thư mục 'uploads/products' với tên gốc
-            $productImage = $request->file('product_image')->storeAs('', $originalName, 'public');
+            // Lấy tên file gốc
+            $fileName = $request->file('product_image')->getClientOriginalName();
+
+            // Di chuyển file đến thư mục chỉ định
+            $request->file('product_image')->move(public_path($uploadFolder), $fileName);
+
+            // Đường dẫn tương đối để lưu vào DB
+            $productImage = $uploadFolder . '/' . $fileName;
         }
+
         // Nếu là giỏ quà, lưu vào bảng product_types
         if ($request->product_type === 'gift_basket') {
             try {
-                // Lưu giỏ quà vào bảng product_types
                 $giftBasket = ProductType::create([
                     'name' => $request->name,
                     'category_id' => $request->category_id,
@@ -83,7 +92,6 @@ class AdminProductController extends Controller
                 'stock' => $request->stock,
                 'description' => $request->description,
                 'image' => $productImage,
-               // Trái cây không có product_type_id
             ]);
         } catch (\Exception $e) {
             return redirect()->back()->withErrors(['error' => 'Thêm sản phẩm thất bại: ' . $e->getMessage()]);
@@ -92,17 +100,25 @@ class AdminProductController extends Controller
         // Lưu ảnh con cho sản phẩm trái cây
         if ($request->hasFile('child_images')) {
             foreach ($request->file('child_images') as $image) {
-                $childImage = $image->store('uploads/products/child', 'public');
+                // Lấy tên file ảnh con
+                $childFileName = $image->getClientOriginalName();
+
+                // Di chuyển ảnh con đến thư mục con
+                $image->move(public_path($uploadFolder . '/child'), $childFileName);
+
+                // Đường dẫn tương đối để lưu vào DB
+                $childImagePath = $uploadFolder . '/child/' . $childFileName;
+
+                // Lưu ảnh con vào cơ sở dữ liệu
                 ProductImage::create([
                     'product_id' => $product->id,
-                    'image' => $childImage,
+                    'image' => $childImagePath,
                 ]);
             }
         }
 
         return redirect()->route('admin.products.index')->with('success', 'Trái cây đã được thêm thành công!');
     }
-
 
 
     public function edit($id)
@@ -116,7 +132,8 @@ class AdminProductController extends Controller
         // Trả về view với sản phẩm và danh sách danh mục
         return view('admin.products.edit', compact('product', 'categories'));
     }
-    public function updateField(Request $request){
+    public function updateField(Request $request)
+    {
         $product = Product::find($request->id);
         // Lấy tên trường và giá trị mới từ yêu cầu
         $field = $request->field;
@@ -143,11 +160,12 @@ class AdminProductController extends Controller
             'stock' => 'required|integer|min:0',
             'description' => 'required|string',
             'product_image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-            'child_images' => 'nullable|array|size:3',
+            'child_images' => 'nullable|array|min:1',
             'child_images.*' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'upload_folder' => 'nullable|string', // Tùy chọn thư mục lưu trữ
         ]);
 
-        // Cập nhật sản phẩm
+        // Cập nhật thông tin sản phẩm
         $product->name = $request->name;
         $product->category_id = $request->category_id;
         $product->price = $request->price;
@@ -155,24 +173,44 @@ class AdminProductController extends Controller
         $product->stock = $request->stock;
         $product->description = $request->description;
 
-        // Kiểm tra và lưu ảnh sản phẩm chính
+        // Lấy thư mục upload, mặc định là 'uploads/products'
+        $uploadFolder = $request->input('upload_folder', 'uploads/products');
+
+        // Kiểm tra và cập nhật ảnh sản phẩm chính
         if ($request->hasFile('product_image')) {
-            $productImage = $request->file('product_image')->store('upload', 'public');
-            $product->image = $productImage;
+            // Xóa ảnh cũ nếu có
+            if ($product->image && file_exists(public_path($product->image))) {
+                unlink(public_path($product->image));
+            }
+
+            // Lưu ảnh mới
+            $fileName = $request->file('product_image')->getClientOriginalName();
+            $request->file('product_image')->move(public_path($uploadFolder), $fileName);
+            $product->image = $uploadFolder . '/' . $fileName;
         }
 
         $product->save();
 
-        // Cập nhật ảnh con
+        // Xử lý ảnh con
         if ($request->hasFile('child_images')) {
-            // Xóa ảnh cũ nếu cần
+            // Xóa ảnh con cũ
+            $oldChildImages = ProductImage::where('product_id', $product->id)->get();
+            foreach ($oldChildImages as $oldImage) {
+                if (file_exists(public_path($oldImage->image))) {
+                    unlink(public_path($oldImage->image));
+                }
+            }
             ProductImage::where('product_id', $product->id)->delete();
 
+            // Lưu ảnh con mới
             foreach ($request->file('child_images') as $image) {
-                $childImage = $image->store('upload', 'public');
+                $childFileName = $image->getClientOriginalName();
+                $image->move(public_path($uploadFolder . '/child'), $childFileName);
+                $childImagePath = $uploadFolder . '/child/' . $childFileName;
+
                 ProductImage::create([
                     'product_id' => $product->id,
-                    'image' => $childImage,
+                    'image' => $childImagePath,
                 ]);
             }
         }
@@ -180,20 +218,16 @@ class AdminProductController extends Controller
         return redirect()->route('admin.products.index')->with('success', 'Sản phẩm đã được cập nhật thành công!');
     }
 
-
     /**
      * Display the specified resource.
      */
-    /**
- * Display the specified resource.
- */
-public function show($id)
-{
-    // Eager load the productImages relationship
-    $product = Product::with('productImages')->findOrFail($id);
+    public function show($id)
+    {
+        // Eager load the productImages relationship
+        $product = Product::with('productImages')->findOrFail($id);
 
-    return view('admin.products.show', compact('product'));
-}
+        return view('admin.products.show', compact('product'));
+    }
 
 
 
@@ -209,33 +243,58 @@ public function show($id)
     /**
      * Remove the specified resource from storage.
      */
-public function destroy($id){
-    try {
-        $product = Product::findOrFail($id);
+    public function destroy($id)
+    {
+        try {
+            // Tìm sản phẩm theo ID
+            $product = Product::findOrFail($id);
 
-        $product->delete();
+            // Xử lý ảnh chính của sản phẩm
+            $imagePath = $product->image; // Ảnh chính
+            if ($imagePath && file_exists(public_path($imagePath))) {
+                unlink(public_path($imagePath)); // Xóa ảnh chính
+            }
 
-        return redirect()->route('admin.products.index')->with('success', 'Sản phẩm đã được xóa thành công.');
-    } catch (\Exception $e) {
+            // Xử lý ảnh con của sản phẩm (giả sử bạn có bảng `product_images` lưu ảnh con)
+            $childImages = $product->images; // Quan hệ tới bảng ảnh con
+            if ($childImages) {
+                foreach ($childImages as $childImage) {
+                    $childImagePath = $childImage->path; // Đường dẫn của ảnh con
+                    if ($childImagePath && file_exists(public_path($childImagePath))) {
+                        unlink(public_path($childImagePath)); // Xóa ảnh con
+                    }
+                    // Xóa bản ghi ảnh con trong cơ sở dữ liệu
+                    $childImage->delete();
+                }
+            }
 
-        return redirect()->route('admin.products.index')->with('error', 'Không thể xóa sản phẩm.');
+            // Xóa sản phẩm khỏi cơ sở dữ liệu
+            $product->delete();
+
+            // Quay lại trang danh sách sản phẩm với thông báo thành công
+            return redirect()->route('admin.products.index')->with('success', 'Sản phẩm và các ảnh liên quan đã được xóa thành công.');
+        } catch (\Exception $e) {
+            // Trường hợp có lỗi, quay lại với thông báo lỗi
+            return redirect()->route('admin.products.index')->with('error', 'Không thể xóa sản phẩm.');
+        }
     }
-}
-public function updateStatus(Request $request)
-{
-    $order = Order::find($request->id);
-    if ($order) {
-        $order->status = $request->status;
-        $order->save();
 
-        return response()->json(['success' => true]);
+
+    public function updateStatus(Request $request)
+    {
+        $order = Order::find($request->id);
+        if ($order) {
+            $order->status = $request->status;
+            $order->save();
+
+            return response()->json(['success' => true]);
+        }
+        return response()->json(['success' => false]);
     }
-    return response()->json(['success' => false]);
-}
-function gift(){
-    $ProductType = ProductType::orderBy('id', 'desc')->get();
-    /* dd($ProductType); */
-return view('admin.products.show_gift' ,compact('ProductType'));
-}
-
+    function gift()
+    {
+        $ProductType = ProductType::orderBy('id', 'desc')->get();
+        /* dd($ProductType); */
+        return view('admin.products.show_gift', compact('ProductType'));
+    }
 }
