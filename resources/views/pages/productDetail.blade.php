@@ -53,7 +53,15 @@
             <div class="col-md-5">
                 <div class="product-images">
                     <div class="main-image">
-                        <img id="main-image" src="{{ asset('layouts/img/' . $product_detail->image) }}" alt="{{ $product_detail->name }}">
+                        @php
+                            $imagePath = public_path($product_detail->image);
+                        @endphp
+
+                        @if (file_exists($imagePath))
+                            <img src="{{ asset($product_detail->image) }}" alt="Ảnh sản phẩm" width="100">
+                        @else
+                            <img src="{{ asset('layouts/img/'.$product_detail->image) }}" alt="Ảnh sản phẩm" width="100">
+                        @endif
                     </div>
                     {{-- <div class="thumbnail-images">
                         @foreach ($product_detail->images as $item)

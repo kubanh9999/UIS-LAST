@@ -32,77 +32,91 @@ class AdminProductController extends Controller
      * Store a newly created resource in storage.
      */
     public function store(Request $request)
-    {
-        // Xác thực dữ liệu đầu vào
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'category_id' => 'required|integer',
-            'price' => 'required|numeric|min:0',
-            'discount' => 'nullable|numeric|min:0',
-            'stock' => 'required|integer|min:0',
-            'description' => 'required|string',
-           'product_image' => 'required|image|max:2048', // No trailing comma
-    'child_images' => 'required|array|min:1', // Kiểm tra có ít nhất 1 ảnh con
-    'child_images.*' => 'image|max:2048',
-            'product_type' => 'required|string' // Kiểm tra loại sản phẩm (trái cây, giỏ quà)
-        ]);
+{
+    // Xác thực dữ liệu đầu vào
+    $request->validate([
+        'name' => 'required|string|max:255',
+        'category_id' => 'required|integer',
+        'price' => 'required|numeric|min:0',
+        'discount' => 'nullable|numeric|min:0',
+        'stock' => 'required|integer|min:0',
+        'description' => 'required|string',
+        'product_image' => 'required|image|max:2048',
+        'child_images' => 'required|array|min:1',
+        'child_images.*' => 'image|max:2048',
+        'product_type' => 'required|string',
+        'upload_folder' => 'nullable|string', // Thêm tùy chọn để xác định thư mục
+    ]);
 
-        // Lưu ảnh sản phẩm chính
-        $productImage = null;
-        if ($request->hasFile('product_image')) {
-            // Lấy tên ảnh gốc
-            $originalName = $request->file('product_image')->getClientOriginalName();
-        
-            // Lưu ảnh vào thư mục 'uploads/products' với tên gốc
-            $productImage = $request->file('product_image')->storeAs('', $originalName, 'public');
-        }
-        // Nếu là giỏ quà, lưu vào bảng product_types
-        if ($request->product_type === 'gift_basket') {
-            try {
-                // Lưu giỏ quà vào bảng product_types
-                $giftBasket = ProductType::create([
-                    'name' => $request->name,
-                    'category_id' => $request->category_id,
-                    'price_gift' => $request->price,
-                    'description' => $request->description,
-                    'image' => $productImage,
-                ]);
-            } catch (\Exception $e) {
-                return redirect()->back()->withErrors(['error' => 'Lỗi khi thêm giỏ quà vào product_types: ' . $e->getMessage()]);
-            }
-            return redirect()->route('admin.products.index')->with('success', 'Giỏ quà đã được thêm thành công!');
-        }
+    // Thư mục lưu trữ mặc định (nếu không được chỉ định)
+    $uploadFolder = $request->input('upload_folder', 'uploads/products');
 
-        // Nếu là trái cây, lưu vào bảng products
-        try {
-            $product = Product::create([
-                'name' => $request->name,
-                'category_id' => $request->category_id,
-                'price' => $request->price,
-                'discount' => $request->discount,
-                'stock' => $request->stock,
-                'description' => $request->description,
-                'image' => $productImage,
-               // Trái cây không có product_type_id
-            ]);
-        } catch (\Exception $e) {
-            return redirect()->back()->withErrors(['error' => 'Thêm sản phẩm thất bại: ' . $e->getMessage()]);
-        }
+    // Lưu ảnh sản phẩm chính
+    $productImage = null;
+    if ($request->hasFile('product_image')) {
+        // Lấy tên file gốc
+        $fileName = $request->file('product_image')->getClientOriginalName();
 
-        // Lưu ảnh con cho sản phẩm trái cây
-        if ($request->hasFile('child_images')) {
-            foreach ($request->file('child_images') as $image) {
-                $childImage = $image->store('uploads/products/child', 'public');
-                ProductImage::create([
-                    'product_id' => $product->id,
-                    'image' => $childImage,
-                ]);
-            }
-        }
+        // Di chuyển file đến thư mục chỉ định
+        $request->file('product_image')->move(public_path($uploadFolder), $fileName);
 
-        return redirect()->route('admin.products.index')->with('success', 'Trái cây đã được thêm thành công!');
+        // Đường dẫn tương đối để lưu vào DB
+        $productImage = $uploadFolder . '/' . $fileName;
     }
 
+    // Nếu là giỏ quà, lưu vào bảng product_types
+    if ($request->product_type === 'gift_basket') {
+        try {
+            $giftBasket = ProductType::create([
+                'name' => $request->name,
+                'category_id' => $request->category_id,
+                'price_gift' => $request->price,
+                'description' => $request->description,
+                'image' => $productImage,
+            ]);
+        } catch (\Exception $e) {
+            return redirect()->back()->withErrors(['error' => 'Lỗi khi thêm giỏ quà vào product_types: ' . $e->getMessage()]);
+        }
+        return redirect()->route('admin.products.index')->with('success', 'Giỏ quà đã được thêm thành công!');
+    }
+
+    // Nếu là trái cây, lưu vào bảng products
+    try {
+        $product = Product::create([
+            'name' => $request->name,
+            'category_id' => $request->category_id,
+            'price' => $request->price,
+            'discount' => $request->discount,
+            'stock' => $request->stock,
+            'description' => $request->description,
+            'image' => $productImage,
+        ]);
+    } catch (\Exception $e) {
+        return redirect()->back()->withErrors(['error' => 'Thêm sản phẩm thất bại: ' . $e->getMessage()]);
+    }
+
+    // Lưu ảnh con cho sản phẩm trái cây
+    if ($request->hasFile('child_images')) {
+        foreach ($request->file('child_images') as $image) {
+            // Lấy tên file ảnh con
+            $childFileName = $image->getClientOriginalName();
+
+            // Di chuyển ảnh con đến thư mục con
+            $image->move(public_path($uploadFolder . '/child'), $childFileName);
+
+            // Đường dẫn tương đối để lưu vào DB
+            $childImagePath = $uploadFolder . '/child/' . $childFileName;
+
+            // Lưu ảnh con vào cơ sở dữ liệu
+            ProductImage::create([
+                'product_id' => $product->id,
+                'image' => $childImagePath,
+            ]);
+        }
+    }
+
+    return redirect()->route('admin.products.index')->with('success', 'Trái cây đã được thêm thành công!');
+}
 
 
     public function edit($id)

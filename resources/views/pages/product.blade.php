@@ -88,7 +88,15 @@
                                     @endif --}}
                                     
                                     <a href="{{ route('product.detail', $product->id) }}">
-                                        <img src="{{ asset('layouts/img/' . $product->image) }}" alt="{{ $product->name }}">
+                                        @php
+                                            $imagePath = public_path($product->image);
+                                        @endphp
+
+                                        @if (file_exists($imagePath))
+                                            <img src="{{ asset($product->image) }}" alt="Ảnh sản phẩm" width="100">
+                                        @else
+                                            <img src="{{ asset('layouts/img/'.$product->image) }}" alt="Ảnh sản phẩm" width="100">
+                                        @endif
                                     </a>
                                     <h5 class="product-name">
                                         <a href="{{ route('product.detail', $product->id) }}">
