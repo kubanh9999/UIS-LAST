@@ -169,14 +169,23 @@ class CheckoutController extends Controller
                     'total_price' => $fruit['price'] * $fruit['quantity'],
                 ]);
 
-                
+                $product = Product::find($fruit['product_id']);
+                if ($product) {
+                    // Chuyển đổi quantity (giả sử quantity là gram)
+                    $quantityInKg = $fruit['quantity'] / 1000; // Chuyển đổi từ gram sang kg (hoặc đơn vị thập phân như yêu cầu)
+                    
+                    // Kiểm tra tồn kho và giảm số lượng
+                    if ($product->stock >= $quantityInKg) {
+                        $product->stock -= $quantityInKg; // Giảm số lượng tồn kho
+                        $product->sales += $quantityInKg; // Tăng số lượng đã bán
+                        $product->save();
+                    } else {
+                        // Nếu không đủ tồn kho
+                        return redirect()->back()->with('error', 'Số lượng yêu cầu vượt quá tồn kho!');
+                    }
+                }
             }
-            $product = Product::find($fruit['product_id']);
-            if ($product) {
-                $product->stock -= $fruit['quantity'];
-                $product->sales += $fruit['quantity']; // Giảm số lượng tồn kho
-                $product->save();
-            }
+          
             
         } elseif (isset($item['price_gift'])) { // Trường hợp giỏ quà có sẵn
             // Chỉ thêm gift_id, không thêm product_id
@@ -433,7 +442,23 @@ class CheckoutController extends Controller
                         'price' => $fruit['price'],
                         'total_price' => $fruit['price'] * $fruit['quantity'],
                     ]);
+                    $product = Product::find($fruit['product_id']);
+                    if ($product) {
+                        // Chuyển đổi quantity (giả sử quantity là gram)
+                        $quantityInKg = $fruit['quantity'] / 1000; // Chuyển đổi từ gram sang kg (hoặc đơn vị thập phân như yêu cầu)
+                        
+                        // Kiểm tra tồn kho và giảm số lượng
+                        if ($product->stock >= $quantityInKg) {
+                            $product->stock -= $quantityInKg; // Giảm số lượng tồn kho
+                            $product->sales += $quantityInKg; // Tăng số lượng đã bán
+                            $product->save();
+                        } else {
+                            // Nếu không đủ tồn kho
+                            return redirect()->back()->with('error', 'Số lượng yêu cầu vượt quá tồn kho!');
+                        }
+                    }
                 }
+               
             } elseif (isset($item['price_gift'])) { // Trường hợp giỏ quà có sẵn
                 OrderDetail::create([
                     'order_id' => $order->id,
@@ -583,13 +608,25 @@ class CheckoutController extends Controller
                                 'price' => $fruit['price'],
                                 'total_price' => $fruit['price'] * $fruit['quantity'],
                             ]);
+                            $product = Product::find($fruit['product_id']);
+                            if ($product) {
+                                // Chuyển đổi quantity (giả sử quantity là gram)
+                                $quantityInKg = $fruit['quantity'] / 1000; // Chuyển đổi từ gram sang kg (hoặc đơn vị thập phân như yêu cầu)
+                                
+                                // Kiểm tra tồn kho và giảm số lượng
+                                if ($product->stock >= $quantityInKg) {
+                                    $product->stock -= $quantityInKg; // Giảm số lượng tồn kho
+                                    $product->sales += $quantityInKg; // Tăng số lượng đã bán
+                                    $product->save();
+                                } else {
+                                    // Nếu không đủ tồn kho
+                                    return redirect()->back()->with('error', 'Số lượng yêu cầu vượt quá tồn kho!');
+                                }
+                            }
                         }
-                        $product = Product::find($fruit['product_id']);
-                        if ($product) {
-                            $product->stock -= $fruit['quantity'];
-                            $product->sales += $fruit['quantity']; // Giảm số lượng tồn kho
-                            $product->save();
-                        }
+                    /* dd(number_format($product->stock, 2)); */
+                        
+                      
                     } elseif (isset($item['price_gift'])) { // Trường hợp giỏ quà có sẵn
                         // Chỉ thêm gift_id, không thêm product_id
                         OrderDetail::create([
