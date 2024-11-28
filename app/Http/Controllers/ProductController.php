@@ -10,9 +10,25 @@ use App\Models\ProductType;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+
 class ProductController extends Controller
 {
-
+    public function searchFruits(Request $request)
+    {
+        $query = $request->get('query');
+        $fruits = Product::where('name', 'LIKE', "%{$query}%")->get();
+    
+        // Trả về JSON dữ liệu
+        return response()->json($fruits->map(function ($fruit) {
+            return [
+                'id' => $fruit->id,
+                'name' => $fruit->name,
+                'price' => $fruit->price,
+                'price_formatted' => number_format($fruit->price, 0),
+                'image' => asset('layouts/img/' . $fruit->image),
+            ];
+        }));
+    }
     public function index(Request $request)
 {
     $categories = Category::all();
