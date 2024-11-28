@@ -1,6 +1,24 @@
 @extends('layouts.master')
 @section('title', 'Chi tiết sản phẩm')
+<style>
+     /* Đặt màu cho thông báo lỗi */
+     .toast-error {
+        background-color: #f44336 !important; /* Màu đỏ */
+        color: white !important;
+    }
+    
+    /* Đặt màu cho thông báo thành công */
+    .toast-success {
+        background-color: #4CAF50 !important; /* Màu xanh */
+        color: white !important;
+    }
 
+    /* Tùy chỉnh thêm cho kích thước và kiểu chữ của thông báo */
+    .toast {
+        font-size: 16px;
+        border-radius: 8px;
+    }
+</style>
 @section('content')
 
     <section class="breadcrumb">
@@ -17,17 +35,17 @@
 
     <section class="product-detail mb-4">
         <div class="container bg-white p-4">
-            @if (session('error'))
-                <div class="alert alert-danger">
-                    {{ session('error') }}
-                </div>
-            @endif
-
             @if (session('success'))
-                <div class="alert alert-success">
-                    {{ session('success') }}
-                </div>
-            @endif
+            <script>
+                toastr.success('{{ session('success') }}');  // Hiển thị thông báo thành công
+            </script>
+        @endif
+        
+        @if (session('error'))
+            <script>
+                toastr.error('{{ session('error') }}');  // Hiển thị thông báo lỗi nếu có
+            </script>
+        @endif
             <div class="row">
                 <!-- Product Image Section -->
                 <div class="col-md-5">

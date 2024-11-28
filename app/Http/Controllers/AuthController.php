@@ -68,6 +68,7 @@ class AuthController extends Controller
             // Lấy thông tin người dùng đã đăng nhập
             $user = Auth::user();
             if ($user->status == 'bị khóa') {
+                auth()->logout();
                 return redirect()->back()->with('error', 'Tài khoản của bạn đã bị khóa. Vui lòng liên hệ với admin.');
             }
             if ($user->role == 1) {
