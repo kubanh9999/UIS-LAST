@@ -48,8 +48,9 @@
                             </div>
                             <!-- Submit and Cancel Buttons -->
                             <div class="col-lg-12">
-                                <button type="submit" class="btn btn-success me-2">Submit</button> <!-- Sử dụng button thay vì a -->
+                          
                                 <a href="{{ route('admin.discount.create') }}" class="btn btn-secondary">Cancel</a> <!-- Cập nhật link đến route -->
+                                <button type="submit" class="btn btn-success me-2">Submit</button> <!-- Sử dụng button thay vì a -->
                             </div>
                         </div>
                     </div>

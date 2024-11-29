@@ -87,11 +87,12 @@
                         </div>
                     </div>
                 </div>
-
-                <div class="col-lg-12 text-center">
-                    <button type="submit" class="btn btn-submit me-2">Đồng ý</button>
-                    <a href="{{ route('admin.products.index') }}" class="btn btn-cancel">Hủy</a>
-                </div>
+                <div class="col-lg-12">
+                          
+                <a href="{{ route('admin.products.index') }}" class="btn btn-secondary">Hủy</a> <!-- Cập nhật link đến route -->
+                <button type="submit" class="btn btn-success me-2">Đồng ý</button> <!-- Sử dụng button thay vì a -->
+            </div>
+                
             </div>
         </div>
     </div>

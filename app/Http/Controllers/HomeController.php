@@ -131,7 +131,7 @@ $tertiaryBanner = DB::table('banners')->where('type', 'third')->orderBy('positio
     }
     public function giftDetail($id)
     {
-        $basket = ProductType::findOrFail($id);
+        $basket = DB::table('product_types')->where('id', $id)->first();
         $comments = Comment::with(['user', 'replies.user'])
         ->where('product_id', $id)
         ->where('status', '!=', 2 ) 
