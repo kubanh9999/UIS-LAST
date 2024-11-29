@@ -32,6 +32,9 @@
     .close-button:hover {
         background-color: #d32f2f; /* Màu đỏ đậm khi hover */
     }
+    .white{
+        color: aliceblue;
+    }
 </style>
 
 @section('content')
@@ -49,18 +52,18 @@
             
                 @foreach ($dashboardItems as $item)
                     <div class="col-lg-3 col-sm-6 col-12 d-flex">
-                        <div class="dash-count" style="background: #45a049">
+                        <div class="dash-count" style="background: #45a049;color: aliceblue">
                             <div class="dash-counts">
                                 <h4>{{ $item['count'] }}</h4>
-                                <h5>
+                                <h5 style="color: white;">
                                     @if (isset($item['route']))
-                                        <a href="{{ $item['route'] }}">{{ $item['label'] }}</a>
+                                        <a href="{{ $item['route'] }}" style="color: white;">{{ $item['label'] }}</a>
                                     @else
                                         {{ $item['label'] }}
                                     @endif
                                 </h5>
                             </div>
-                            <div onclick="loadData('{{ $item['type'] }}')" class="dash-imgs">
+                            <div onclick="loadData('{{ $item['type'] }}')" class="white">
                                 <i data-feather="{{ $item['icon'] }}"></i>
                             </div>
                         </div>
@@ -298,12 +301,23 @@ console.log(data);
                                 </tr>`;
                             break;
                         case 'order':
+                        let statusClass = '';
+    let statusText = item.status; // Mặc định hiển thị status như bình thường
+
+    // Xử lý trạng thái nếu status = 0
+    if (item.status == 0) {
+        statusText = 'Đang xử lý';
+        statusClass = 'text-warning'; // Thêm lớp CSS để đổi màu
+    } else if (item.status == 1) {
+        statusText = 'Đã hoàn thành';
+        statusClass = 'text-success'; // Thêm lớp CSS để đổi màu
+    }
                             row = `
                                 <tr>
                                     <td>${item.id}</td>
                                     <td>${item.name}</td>
                                     <td>${item.phone}</td>
-                                    <td>${item.status}</td>
+                                    <td>${statusText}</td>
                                     <td>${item.payment_method}</td>
                                     <td>${item.total_amount}</td>
                                     <td>${item.created_at}</td>

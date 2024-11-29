@@ -49,7 +49,7 @@
                                     <input type="email" name="address" value="{{ old('email', $user->email) }}" class="form-control" required>
                                 </div>
                             </div>
-                            <div class="col-lg-3 col-sm-6 col-12">
+                            {{-- <div class="col-lg-3 col-sm-6 col-12">
                                 <div class="form-group">
                                     <label>Role</label>
                                     <select name="role" class="select form-control" required>
@@ -57,12 +57,13 @@
                                         <option value="User" {{ $user->role == 'User' ? 'selected' : '' }}>User</option>
                                     </select>
                                 </div>
-                            </div>
-                           
+                            </div> --}}
                             <div class="col-lg-12">
-                                <button type="submit" class="btn btn-submit me-2">Update</button>
-                                <a href="{{ route('admin.users.index') }}" class="btn btn-cancel">Cancel</a>
+                          
+                                <a href="{{ route('admin.users.index') }}" class="btn btn-secondary">Hủy</a> <!-- Cập nhật link đến route -->
+                                <button type="submit" class="btn btn-success me-2">Đồng ý</button> <!-- Sử dụng button thay vì a -->
                             </div>
+                          
                         </div>
                     </div>
                 </form>
