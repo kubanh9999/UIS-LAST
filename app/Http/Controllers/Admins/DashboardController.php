@@ -26,7 +26,7 @@ class DashboardController extends Controller
             ->whereDate('valid_end', '<=', Carbon::now()->addDays(7))
             ->count();
 
-        $orderCount = Order::where('status', 'đang xử lý')->count();
+        $orderCount = Order::where('status', 0)->count();
 
         // Biểu đồ doanh thu hàng tháng
         $monthlySales = [];
@@ -125,7 +125,7 @@ class DashboardController extends Controller
     }
     public function getOrder()
     {
-        $Orders = Order::where('status', 'đang xử lý')->paginate(10);
+        $Orders = Order::where('status', 0)->paginate(10);
         return response()->json($Orders);
     }
     public function getDiscounts()

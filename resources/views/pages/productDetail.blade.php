@@ -93,7 +93,7 @@
                     <h2 class="product-title">{{ $product_detail->name }}</h2>
                     <ul class="product-status">
                         <li class="status">SKU: <span>{{ $sku }}</span></li>
-                        <li class="status">Danh mục: <span>{{ $product_detail->category->name }}</span></li>
+                     {{--    <li class="status">Danh mục: <span>{{ $product_detail->category->name }}</span></li> --}}
                         <li class="status">Tình trạng: 
                             <span>
                                 @if ($product_detail->stock > 0)

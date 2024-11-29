@@ -6,7 +6,7 @@ use App\Models\Post;
 use App\Models\Category;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-
+use App\Models\PostCategory;
 class PostController extends Controller
 {
        public function index(Request $request)
@@ -15,14 +15,14 @@ class PostController extends Controller
         $categoryId = $request->get('category', null);
 
         // Lấy các bài viết theo danh mục và phân trang
-        if ($categoryId) {
-            $posts = Post::where('category_id', $categoryId)->paginate(6); 
-        } else {
-            $posts = Post::paginate(6); 
-        }   
+ if ($categoryId) {
+        $posts = Post::where('category_id', $categoryId)->paginate(6);
+    } else {
+        $posts = Post::paginate(6); // Lấy tất cả bài viết nếu không lọc
+    }
 
 
-        $categories = Category::all();
+        $categories = PostCategory::all();
 
         return view('pages.post', compact('posts', 'categories'));
     }

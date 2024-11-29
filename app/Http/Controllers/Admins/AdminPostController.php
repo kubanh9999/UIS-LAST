@@ -9,7 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\DB;
-
+use App\Models\PostCategory;
 class AdminPostController extends Controller
 {
     /**
@@ -17,7 +17,7 @@ class AdminPostController extends Controller
      */
     public function index()
     {
-        $category = Category::all();
+        $category = PostCategory::all();
         $post = Post::all();
 
         return view('admin.posts.index', compact('post', 'category'));
@@ -28,11 +28,12 @@ class AdminPostController extends Controller
      */
     public function create()
     {
-        $category = Category::all();
+        $category = PostCategory::all();
         return view('admin.posts.create', compact('category'));
     }
     public function upload(Request $request)
     {
+       
         if ($request->hasFile('upload')) {
             $file = $request->file('upload');
             $fileName = time() . '_' . $file->getClientOriginalName();
@@ -51,6 +52,7 @@ class AdminPostController extends Controller
      */
     public function store(Request $request)
     {
+      /*   dd($request->all()); */
         // Lưu ảnh vào thư mục tùy chỉnh (nếu có ảnh được tải lên)
         $thumbnailPath = null;
         if ($request->hasFile('image')) {
@@ -72,7 +74,7 @@ class AdminPostController extends Controller
         $post->category_id = $request->input('category_id');
         $post->content = $request->input('content');
         $post->image = $thumbnailPath;
-        $post->status = $request->input('status');
+       /*  $post->status = $request->input('status'); */
         $post->user_id = Auth::id(); // Lấy ID người dùng hiện tại
         $post->save();
     
