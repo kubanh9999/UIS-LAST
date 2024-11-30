@@ -136,8 +136,14 @@
                                         </td>
                                         <td>{{ $item->id }}</td>
                                         <td contenteditable="true" class="editable-field" data-id="{{ $item->id }}" data-field="name">{{ $item->name }}</td>
+                                            @php
+                                                $imagePath = $item->image;
+                                                if (strpos($imagePath, 'uploads/products') === false) {
+                                                    $imagePath = 'layouts/img/' . $item->image; // Nếu không chứa, thêm 'layouts/img'
+                                                }
+                                            @endphp
                                         <td>
-                                            <img src="{{ asset('layouts/img/' . $item->image) }}" alt="Ảnh sản phẩm" width="100">
+                                            <img src="{{ asset($imagePath) }}" alt="Ảnh sản phẩm" width="100">
 {{--                                            <img src="{{ asset('storage/' . $item->image) }}" alt="Ảnh sản phẩm" width="100">--}}
 {{--                                                php artisan storage:link--}}
                                         </td>
