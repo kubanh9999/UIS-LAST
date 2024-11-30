@@ -179,7 +179,13 @@
                                     <td><strong>Hình ảnh:</strong></td>
                                     <td colspan="4">
                                         @if ($item->gift && $item->gift->image)
-                                            <img src="{{ asset('layouts/img/' . $item->gift->image) }}"
+                                        @php
+                                            $imagePath = $item->gift->image;
+                                            if (strpos($imagePath, 'uploads/products') === false) {
+                                                $imagePath = 'layouts/img/' . $item->gift->image; // Nếu không chứa, thêm 'layouts/img'
+                                            }
+                                        @endphp
+                                            <img src="{{ asset($imagePath) }}"
                                                 class="img-thumbnail" style="width: 50px; height: 50px;">
                                         @else
                                             <span>Hình ảnh không có sẵn</span>
@@ -194,10 +200,16 @@
                                             @foreach ($orders->orderDetails->where('gift_id', $item->gift_id) as $giftItem)
                                                 @if ($giftItem->product)
                                                     <li>
+                                                        @php
+                                                            $imagePath = $giftItem->product->image;
+                                                            if (strpos($imagePath, 'uploads/products') === false) {
+                                                                $imagePath = 'layouts/img/' . $giftItem->product->image; // Nếu không chứa, thêm 'layouts/img'
+                                                            }
+                                                        @endphp
                                                         <img style="width: 40px;"
-                                                            src="{{ asset('layouts/img/' . $giftItem->product->image) }}"
+                                                            src="{{ asset($imagePath) }}"
                                                             alt="">
-                                                        {{ $giftItem->product->name }} x{{ $giftItem->quantity }}
+                                                        {{ $giftItem->product->name }} x {{ $giftItem->quantity .'g' }}
                                                         @php $customGiftTotal += $giftItem->price * $giftItem->quantity; @endphp
                                                     </li>
                                                 @endif
