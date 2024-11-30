@@ -154,7 +154,13 @@
         @foreach ($giftBaskets as $basket)
             <div class="product-card">
                 <a href="{{ route('product.giftDetail', $basket->id) }}">
-                    <img src="{{ asset('layouts/img/' . $basket->image) }}" alt="{{ $basket->name }}">
+                    @php
+                        $imagePath = $basket->image;
+                        if (strpos($imagePath, 'uploads/products') === false) {
+                            $imagePath = 'layouts/img/' . $basket->image; // Nếu không chứa, thêm 'layouts/img'
+                        }
+                    @endphp
+                    <img src="{{ asset($imagePath) }}" alt="{{ $basket->name }}">
                 </a>
                 <h5>
                     <a href="{{ route('product.giftDetail', $basket->id) }}">{{ $basket->name }}</a>
@@ -224,10 +230,6 @@
         </div>
     </section> -->
 @endif
-
-
-
-
 
 <section class="best-sellers mb-4">
     <div class="products-news container p-3 p-md-4 bg-white">
