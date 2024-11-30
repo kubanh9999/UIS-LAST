@@ -51,7 +51,7 @@
                             <ul>
                                 
                                 <li>
-                                    <a href="{{route('admin.products.gift')}}" class="btn btn-success" style="text-decoration: none; color: white; float: right">Xem trang giỏ quà</a>
+                                    <a href="{{route('admin.products.gift')}}" class="btn btn-success" style="text-decoration: none; color: white; float: right">Trang giỏ quà</a>
                                 </li>
                             </ul>
                         </div>

@@ -37,10 +37,9 @@
                             </div>
                         </div>
                         <div class="wordset">
-                            <ul>
-                                
+                            <ul>   
                                 <li>
-                                    <a href="/gio-qua" class="btn btn-success" style="text-decoration: none; color: white; float: right">Xem trang giỏ quà</a>
+                                    <a href="{{route('admin.products.index')}}" class="btn btn-success" style="text-decoration: none; color: white; float: right">Trang trái cây</a>
                                 </li>
                             </ul>
                         </div>
@@ -150,10 +149,10 @@
                                                 <a class="action-link me-3" href="{{ route('admin.products.show', $item->id) }}">
                                                     <img src="{{ asset('assets/img/icons/eye.svg') }}" alt="img" class="icon">
                                                 </a>
-                                                <a class="action-link me-3" href="{{ route('admin.products.edit', $item->id) }}">
+                                                <a class="action-link me-3" href="{{ route('admin.gift.edit', $item->id) }}">
                                                     <i class="fa-solid fa-pen-to-square icon"></i>
                                                 </a>
-                                                <form class="action-link me-3" id="delete-form-{{ $item->id }}" action="{{ route('admin.products.destroy', $item->id) }}" method="POST">
+                                                <form class="action-link me-3" id="delete-form-{{ $item->id }}" action="{{ route('admin.gift_baskets.destroy', $item->id) }}" method="POST">
                                                     @csrf
                                                     @method('DELETE')
                                                     <button type="button" class="btn delete-btn" onclick="confirmDelete({{ $item->id }})">
