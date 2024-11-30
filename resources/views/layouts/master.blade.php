@@ -42,15 +42,15 @@
 </style>
 <body>
     <div id="fb-root"></div>
-<script async defer crossorigin="anonymous" src="https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v12.0"></script>
-
+{{-- <script async defer crossorigin="anonymous" src="https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v12.0"></script>
+ --}}
 <!-- Messenger Module -->
-<div class="fb-messengermodule" 
+{{-- <div class="fb-messengermodule" 
      data-href="https://m.me/110400522102841"  
      data-width="340" 
      data-height="500" 
      data-colorscheme="light"></div>
-
+ --}}
     @include('layouts.header')
 
     <main>

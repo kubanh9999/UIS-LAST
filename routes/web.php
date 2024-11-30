@@ -22,7 +22,9 @@ use App\Http\Controllers\Admins\BannerController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\OrderController;
+use App\Http\Controllers\WebhookController;
 
+Route::match(['get', 'post'], '/webhook', [WebhookController::class, 'handleWebhook']);
 
 Route::put('/admin/updateCategory/{id}', [AdminPostController::class, 'updateCategory'])->name('admin.post.updateCategory');
 Route::get('/post/{id}/editCategory', [AdminPostController::class, 'editCategory'])->name('admin.post.editCategory');
