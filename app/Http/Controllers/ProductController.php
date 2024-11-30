@@ -14,21 +14,35 @@ use Illuminate\Support\Facades\DB;
 class ProductController extends Controller
 {
     public function searchFruits(Request $request)
-    {
-        $query = $request->get('query');
-        $fruits = Product::where('name', 'LIKE', "%{$query}%")->get();
+{
+    $query = $request->get('query', '');
 
-        // Trả về JSON dữ liệu
-        return response()->json($fruits->map(function ($fruit) {
-            return [
-                'id' => $fruit->id,
-                'name' => $fruit->name,
-                'price' => $fruit->price,
-                'price_formatted' => number_format($fruit->price, 0),
-                'image' => asset('layouts/img/' . $fruit->image),
-            ];
-        }));
-    }
+    $fruits = Product::where('name', 'LIKE', "%{$query}%")->get();
+
+    // Xử lý dữ liệu trả về
+    $fruits = $fruits->map(function ($fruit) {
+        $imagePath = $fruit->image;
+
+        // Kiểm tra nếu ảnh không chứa 'uploads/products'
+        if (strpos($imagePath, 'uploads/products') === false) {
+            $imagePath = asset('layouts/img/' . $fruit->image); // Thêm đường dẫn layouts/img
+        } else {
+            $imagePath = asset($fruit->image); // Dùng trực tiếp đường dẫn hiện tại
+        }
+
+        return [
+            'id' => $fruit->id,
+            'name' => $fruit->name,
+            'price' => $fruit->price,
+            'price_formatted' => number_format($fruit->price, 0, ',', '.'),
+            'image' => $imagePath,
+        ];
+    });
+
+    // Trả dữ liệu dạng JSON
+    return response()->json($fruits);
+}
+
     public function index(Request $request)
     {
         // Lấy danh sách tất cả danh mục

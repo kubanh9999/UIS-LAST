@@ -69,7 +69,13 @@
                             @if (isset($item['fruits']) && is_array($item['fruits']))
                                 <tr class="cart-body">
                                     <th scope="row">{{ $loop->iteration }}</th>
-                                    <td><img src="{{ asset('layouts/img/' . $item['basket_image']) }}" alt="Gift Basket" style="width: 100px; height: auto; border-radius: 5px;"></td>
+                                    @php
+                                        $imagePath = $item['basket_image'];
+                                        if (strpos($imagePath, 'uploads/products') === false) {
+                                            $imagePath = 'layouts/img/' . $item['basket_image']; // Nếu không chứa, thêm 'layouts/img'
+                                        }
+                                    @endphp
+                                    <td><img src="{{ asset($imagePath) }}" alt="Gift Basket" style="width: 100px; height: auto; border-radius: 5px;"></td>
                                     <td> <strong>{{ $item['basket_name'] }}</strong></td>
                                     <td>
                                         <ul style="list-style: none; padding: 0;">
