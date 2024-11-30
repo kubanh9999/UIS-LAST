@@ -14,7 +14,13 @@
         <!-- Hình ảnh giỏ quà -->
         <div class="row justify-content-center mb-4">
             <div class="col-md-4 text-center">
-                <img src="{{ asset('layouts/img/' .  $basket->image) }}" alt="{{ $basket->name }}" class="img-fluid rounded shadow" style="width: 100%; max-width: 300px;">
+                @php
+                    $imagePath = $basket->image;
+                    if (strpos($imagePath, 'uploads/products') === false) {
+                        $imagePath = 'layouts/img/' . $basket->image; // Nếu không chứa, thêm 'layouts/img'
+                    }
+                @endphp
+                <img src="{{ asset($imagePath) }}" alt="{{ $basket->name }}" class="img-fluid rounded shadow" style="width: 100%; max-width: 300px;">
             </div>
         </div>
 
@@ -31,8 +37,14 @@
                                 <input type="checkbox" name="fruits[{{ $fruit->id }}]" value="1" id="fruit_{{ $fruit->id }}" class="form-check-input">
                                 
                                 <label for="fruit_{{ $fruit->id }}" class="form-check-label">
+                                    @php
+                                        $imagePath = $basket->image;
+                                        if (strpos($imagePath, 'uploads/products') === false) {
+                                            $imagePath = 'layouts/img/' . $basket->image; // Nếu không chứa, thêm 'layouts/img'
+                                        }
+                                    @endphp
                                     <!-- Hình ảnh trái cây -->
-                                    <img src="{{ asset('layouts/img/' .  $fruit->image) }}" alt="{{ $fruit->name }}" class="img-fluid rounded mb-2" style="max-width: 150px;">
+                                    <img src="{{ asset($imagePath) }}" alt="{{ $fruit->name }}" class="img-fluid rounded mb-2" style="max-width: 150px;">
                                     <!-- Tên trái cây -->
                                     <p class="card-text">{{ $fruit->name }}</p>
                                 </label>

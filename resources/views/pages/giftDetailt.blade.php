@@ -51,7 +51,13 @@
                 <div class="col-md-5">
                     <div class="product-images">
                         <div class="main-image">
-                            <img src="{{ asset('layouts/img/' . $basket->image) }}" alt="{{ $basket->name }}">
+                            @php
+                                $imagePath = $basket->image;
+                                if (strpos($imagePath, 'uploads/products') === false) {
+                                    $imagePath = 'layouts/img/' . $basket->image; // Nếu không chứa, thêm 'layouts/img'
+                                }
+                            @endphp
+                            <img src="{{ asset($imagePath) }}" alt="{{ $basket->name }}">
                         </div>
                     </div>
                 </div>
