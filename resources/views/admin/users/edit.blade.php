@@ -49,15 +49,15 @@
                                     <input type="email" name="address" value="{{ old('email', $user->email) }}" class="form-control" required>
                                 </div>
                             </div>
-                            {{-- <div class="col-lg-3 col-sm-6 col-12">
+                            <div class="col-lg-3 col-sm-6 col-12">
                                 <div class="form-group">
                                     <label>Role</label>
-                                    <select name="role" class="select form-control" required>
+                                    <select name="role" required>
                                         <option value="Owner" {{ $user->role == 'Owner' ? 'selected' : '' }}>Owner</option>
                                         <option value="User" {{ $user->role == 'User' ? 'selected' : '' }}>User</option>
                                     </select>
                                 </div>
-                            </div> --}}
+                            </div>
                             <div class="col-lg-12">
                           
                                 <a href="{{ route('admin.users.index') }}" class="btn btn-secondary">Hủy</a> <!-- Cập nhật link đến route -->
