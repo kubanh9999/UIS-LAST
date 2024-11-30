@@ -122,6 +122,10 @@ Route::get('/account/management/order/detail/{id}', [AccountManagementController
 Route::post('/account/order/{orderId}/cancel', [AccountManagementController::class, 'cancelOrder'])->name('account.order.cancel');
 
 //Admin
+Route::get('/admin/product/edit/{id}', [AdminProductController::class, 'editGift'])->name('admin.gift.edit');
+Route::put('/admin/product/update/{id}', [AdminProductController::class, 'updateGift'])->name('admin.gift.update');
+Route::delete('/admin/gift-baskets/{id}', [AdminProductController::class, 'destroyGift'])->name('admin.gift_baskets.destroy');
+
 Route::prefix('admin')->middleware('checkAdmin')->group(function () {
 
     // Route chính cho trang dashboard
