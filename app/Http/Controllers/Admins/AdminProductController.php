@@ -3,12 +3,16 @@
 namespace App\Http\Controllers\Admins;
 
 use App\Http\Controllers\Controller;
+use App\Mail\ProductNotificationMail;
 use Illuminate\Http\Request;
 use App\Models\Product;
 use App\Models\Order;
 use App\Models\Category;
 use App\Models\ProductType;
 use App\Models\ProductImage;
+use App\Models\Subscriber;
+use App\Models\User;
+use Illuminate\Support\Facades\Mail;
 
 class AdminProductController extends Controller
 {
@@ -96,6 +100,19 @@ class AdminProductController extends Controller
         } catch (\Exception $e) {
             return redirect()->back()->withErrors(['error' => 'Thêm sản phẩm thất bại: ' . $e->getMessage()]);
         }
+        // Lấy email từ bảng subscribers và users và gửi email thông báo
+        $subscribers = Subscriber::all(); // Lấy tất cả người đăng ký
+        $users = User::all(); // Lấy tất cả người dùng
+
+        // Gửi email đến tất cả người đăng ký
+        foreach ($subscribers as $subscriber) {
+            Mail::to($subscriber->email)->send(new ProductNotificationMail($product));
+        }
+
+        // Gửi email đến tất cả người dùng
+        foreach ($users as $user) {
+            Mail::to($user->email)->send(new ProductNotificationMail($product));
+        }
 
         // Lưu ảnh con cho sản phẩm trái cây
         if ($request->hasFile('child_images')) {
@@ -147,9 +164,9 @@ class AdminProductController extends Controller
 
     public function updateGift(Request $request, string $id)
     {
-       
+
         $gift = ProductType::findOrFail($id);
-        
+
         $request->validate([
             'name' => 'required|string|max:255',
             'category_id' => 'required|integer',
@@ -165,7 +182,7 @@ class AdminProductController extends Controller
         $gift->price_gift = $request->price_gift;
         $gift->stock = $request->stock;
         $gift->description = $request->description;
-       
+
         // Kiểm tra và lưu ảnh sản phẩm chính
         if ($request->hasFile('image')) {
             $productImage = $request->file('image')->store('upload', 'public');
@@ -325,24 +342,24 @@ class AdminProductController extends Controller
         }
     }
     public function destroyGift($id)
-{
-    try {
-        // Tìm giỏ quà theo ID
-        $giftBasket = ProductType::findOrFail($id);
+    {
+        try {
+            // Tìm giỏ quà theo ID
+            $giftBasket = ProductType::findOrFail($id);
 
-        // Xóa các ảnh liên quan nếu có (nếu cần)
-        if (file_exists(public_path($giftBasket->image))) {
-            unlink(public_path($giftBasket->image)); // Xóa ảnh sản phẩm
+            // Xóa các ảnh liên quan nếu có (nếu cần)
+            if (file_exists(public_path($giftBasket->image))) {
+                unlink(public_path($giftBasket->image)); // Xóa ảnh sản phẩm
+            }
+
+            // Xóa giỏ quà
+            $giftBasket->delete();
+
+            return redirect()->route('admin.gift_baskets.index')->with('success', 'Giỏ quà đã được xóa thành công!');
+        } catch (\Exception $e) {
+            return redirect()->back()->withErrors(['error' => 'Lỗi khi xóa giỏ quà: ' . $e->getMessage()]);
         }
-
-        // Xóa giỏ quà
-        $giftBasket->delete();
-
-        return redirect()->route('admin.gift_baskets.index')->with('success', 'Giỏ quà đã được xóa thành công!');
-    } catch (\Exception $e) {
-        return redirect()->back()->withErrors(['error' => 'Lỗi khi xóa giỏ quà: ' . $e->getMessage()]);
     }
-}
 
 
 
