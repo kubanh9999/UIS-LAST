@@ -6,10 +6,63 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Laravel\Socialite\Facades\Socialite;
-
+use Illuminate\Support\Facades\Mail;
 use App\Models\UserTimeLog;
 class AuthController extends Controller
 {
+    public function sendVerificationCode(Request $request)
+{
+    $request->validate([
+        'email' => 'required|email',
+    ]);
+
+    // Tạo mã OTP
+    $otp = rand(100000, 999999);
+
+    // Lưu mã vào session
+    session([
+        'verification_email' => $request->email,
+        'verification_code' => $otp,
+        'verification_expires_at' => now()->addMinutes(5), // 5 phút hết hạn
+    ]);
+
+    // Gửi email
+    Mail::raw("Mã xác minh của bạn là: $otp", function ($message) use ($request) {
+        $message->to($request->email)
+                ->subject('Mã xác minh email');
+    });
+
+    // Trả về thông báo thành công dưới dạng JSON
+    return response()->json([
+        'success' => true,
+        'message' => 'Mã xác minh đã được gửi tới email của bạn!'
+    ]);
+}
+
+    public function verifyCode(Request $request)
+{
+    $request->validate([
+        'email' => 'required|email',
+        'verification_code' => 'required|numeric',
+    ]);
+
+    // Kiểm tra email và mã từ session
+    if (
+        session('verification_email') === $request->email &&
+        session('verification_code') == $request->verification_code
+    ) {
+        if (now()->greaterThan(session('verification_expires_at'))) {
+            return back()->withErrors(['verification_code' => 'Mã xác minh đã hết hạn!']);
+        }
+
+        // Xóa mã OTP khỏi session sau khi xác minh thành công
+        session()->forget(['verification_email', 'verification_code', 'verification_expires_at']);
+
+        return redirect()->route('home')->with('message', 'Xác minh email thành công!');
+    }
+
+    return back()->withErrors(['verification_code' => 'Mã xác minh không chính xác!']);
+}
     // Hiển thị form đăng ký
     public function showRegisterForm()
     {
@@ -18,36 +71,66 @@ class AuthController extends Controller
 
     // Xử lý đăng ký
     public function register(Request $request)
-    {
-        // Validate dữ liệu từ form
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users',
-            'password' => 'required|string|min:8|confirmed', // Validate mật khẩu
-            'phone' => 'required|string|max:15', // Validate số điện thoại
-            'address' => 'nullable|string|max:255', // Validate địa chỉ (không bắt buộc)
-
-        ], [
-            // Các thông báo lỗi tùy chỉnh
-            'email.unique' => 'Email này đã được đăng ký.',
-            'password.min' => 'Mật khẩu phải có ít nhất 8 ký tự.',
-            'password.confirmed' => 'Xác nhận mật khẩu không khớp.',
-
+{
+    if (!session()->has('verification_email') || !session()->has('verification_code')) {
+        session()->flash('swal', [
+            'icon' => 'error',
+            'title' => 'Lỗi xác minh',
+            'text' => 'Vui lòng xác minh email trước khi đăng ký.',
         ]);
-    
-        // Tạo người dùng mới
-        User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
-            'phone' => $request->phone,
-            'address' => $request->address,
-            'role' => 0
-        ]);
-    
-        return redirect()->route('login')->with('success', 'Đăng ký thành công! Vui lòng đăng nhập.');
+        return redirect()->route('register');
     }
     
+    // Kiểm tra xem email và mã OTP có khớp với session không
+    if (session('verification_email') !== $request->email || session('verification_code') != $request->verification_code) {
+        session()->flash('swal', [
+            'icon' => 'error',
+            'title' => 'Lỗi xác minh',
+            'text' => 'Mã OTP không chính xác.',
+        ]);
+        return back();
+    }
+    
+    // Kiểm tra xem mã OTP có hết hạn không
+    if (now()->greaterThan(session('verification_expires_at'))) {
+        session()->flash('swal', [
+            'icon' => 'error',
+            'title' => 'Lỗi xác minh',
+            'text' => 'Mã OTP đã hết hạn.',
+        ]);
+        return back();
+    }
+    
+    // Nếu tất cả kiểm tra hợp lệ
+    session()->flash('swal', [
+        'icon' => 'success',
+        'title' => 'Xác minh thành công',
+        'text' => 'Mã OTP chính xác. Bạn có thể tiếp tục đăng ký.',
+    ]);
+    $request->validate([
+        'name' => 'required|string|max:255',
+        'email' => 'required|string|email|max:255|unique:users',
+        'password' => 'required|string|min:8|confirmed', // Validate mật khẩu
+    ], [
+        'email.unique' => 'Email này đã được đăng ký.',
+        'password.min' => 'Mật khẩu phải có ít nhất 8 ký tự.',
+        'password.confirmed' => 'Xác nhận mật khẩu không khớp.',
+    ]);
+    
+    // Tạo người dùng mới
+    User::create([
+        'name' => $request->name,
+        'email' => $request->email,
+        'password' => Hash::make($request->password),
+        'role' => 0,
+    ]);
+
+    // Xóa session sau khi đăng ký thành công
+    session()->forget(['verification_email', 'verification_code', 'verification_expires_at']);
+
+    return redirect()->route('login')->with('success', 'Đăng ký thành công! Vui lòng đăng nhập.');
+}
+
     // Hiển thị form đăng nhập
     public function showLoginForm()
     {

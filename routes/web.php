@@ -24,18 +24,27 @@ use App\Http\Controllers\ContactController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\SubscriberController;
 
+
+// gửi gmail check otp
+Route::post('/send-verification-code', [AuthController::class, 'sendVerificationCode'])->name('verification.send');
+Route::post('/verify-code', [AuthController::class, 'verifyCode'])->name('verification.verify');
+
 Route::put('/admin/updateCategory/{id}', [AdminPostController::class, 'updateCategory'])->name('admin.post.updateCategory');
 Route::get('/post/{id}/editCategory', [AdminPostController::class, 'editCategory'])->name('admin.post.editCategory');
 Route::get('admin/index/post', [AdminPostController::class, 'index_categories'])->name('admin.indexCategory.post');
-
+Route::get('admin/create/post', [AdminPostController::class, 'createCategory'])->name('admin.createCategory.post');
 Route::post('admin/index/store', [AdminPostController::class, 'storeCategory'])->name('admin.storeCategory.post');
 
-Route::get('admin/create/post', [AdminPostController::class, 'createCategory'])->name('admin.createCategory.post');
+
+/* kết thúc post */
+/*tìm kiếm giỏ quà */
 Route::get('/search-fruits', [ProductController::class, 'searchFruits'])->name('search.fruits');
+/* in hóa đơn */
+
 Route::get('/orders/print/{id}', [OrderController::class, 'printInvoice'])->name('order.print');
-
+/* load sp dm home */
 Route::get('/products/category/{categoryName}', [HomeController::class, 'getProductsByCategory'])->name('products.category.name');
-
+/*gửi gmail concact */
 Route::post('/submit_form', [ContactController::class, 'sendEmail'])->name('contact.send');
 
 Route::get('/admin/products/gift', [AdminProductController::class, 'gift'])->name('admin.products.gift');
