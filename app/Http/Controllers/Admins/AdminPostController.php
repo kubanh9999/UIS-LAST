@@ -4,12 +4,16 @@ namespace App\Http\Controllers\Admins;
 
 use App\Models\Post;
 use App\Models\Category;
+use App\Mail\PostNotificationMail;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\DB;
 use App\Models\PostCategory;
+use App\Models\Subscriber;
+use Illuminate\Support\Facades\Mail;
+
 class AdminPostController extends Controller
 {
     /**
@@ -51,37 +55,37 @@ class AdminPostController extends Controller
      * Store a newly created resource in storage.
      */
     public function store(Request $request)
-    {
-      /*   dd($request->all()); */
-        // Lưu ảnh vào thư mục tùy chỉnh (nếu có ảnh được tải lên)
-        $thumbnailPath = null;
-        if ($request->hasFile('image')) {
-            // Lấy tên file gốc
-            $originalFileName = $request->file('image')->getClientOriginalName();
-            // Tạo tên file duy nhất để tránh trùng
-            $uniqueFileName = time() . '_' . preg_replace('/\s+/', '_', $originalFileName);
-            // Xác định thư mục lưu ảnh (bạn có thể thay đổi thư mục này)
-            $uploadFolder = 'uploads/posts';
-            // Lưu ảnh vào thư mục đã chỉ định
-            $request->file('image')->move(public_path($uploadFolder), $uniqueFileName);    
-            // Đường dẫn ảnh để lưu vào cơ sở dữ liệu
-            $thumbnailPath = $uploadFolder . '/' . $uniqueFileName;
-        }
-    
-        // Tạo bài viết mới và lưu vào cơ sở dữ liệu
-        $post = new Post();
-        $post->title = $request->input('title');
-        $post->category_id = $request->input('category_id');
-        $post->content = $request->input('content');
-        $post->image = $thumbnailPath;
-       /*  $post->status = $request->input('status'); */
-        $post->user_id = Auth::id(); // Lấy ID người dùng hiện tại
-        $post->save();
-    
-        // Chuyển hướng về danh sách bài viết với thông báo thành công
-        return redirect()->route('admin.post.index')->with('success', 'Bài viết đã được tạo thành công!');
+{
+    // Lưu ảnh vào thư mục tùy chỉnh (nếu có ảnh được tải lên)
+    $thumbnailPath = null;
+    if ($request->hasFile('image')) {
+        $originalFileName = $request->file('image')->getClientOriginalName();
+        $uniqueFileName = time() . '_' . preg_replace('/\s+/', '_', $originalFileName);
+        $uploadFolder = 'uploads/posts';
+        $request->file('image')->move(public_path($uploadFolder), $uniqueFileName);    
+        $thumbnailPath = $uploadFolder . '/' . $uniqueFileName;
     }
-    
+
+    // Tạo bài viết mới và lưu vào cơ sở dữ liệu
+    $post = new Post();
+    $post->title = $request->input('title');
+    $post->category_id = $request->input('category_id');
+    $post->content = $request->input('content');
+    $post->image = $thumbnailPath;
+    $post->user_id = Auth::id(); // Lấy ID người dùng hiện tại
+    $post->save();
+
+    // Gửi email thông báo cho tất cả subscriber
+    $subscribers = Subscriber::all(); // Lấy tất cả subscriber
+    foreach ($subscribers as $subscriber) {
+        // Gửi email cho từng subscriber
+        Mail::to($subscriber->email)->send(new PostNotificationMail($post));
+    }
+
+    // Chuyển hướng về danh sách bài viết với thông báo thành công
+    return redirect()->route('admin.post.index')->with('success', 'Bài viết đã được tạo thành công và thông báo email đã được gửi!');
+}
+
 
     /**
      * Display the specified resource.
