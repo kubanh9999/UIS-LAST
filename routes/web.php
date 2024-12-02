@@ -22,10 +22,13 @@ use App\Http\Controllers\Admins\BannerController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\OrderController;
+use App\Http\Controllers\SubscriberController;
+
+
 // gửi gmail check otp
 Route::post('/send-verification-code', [AuthController::class, 'sendVerificationCode'])->name('verification.send');
 Route::post('/verify-code', [AuthController::class, 'verifyCode'])->name('verification.verify');
-/* bài post  */
+
 Route::put('/admin/updateCategory/{id}', [AdminPostController::class, 'updateCategory'])->name('admin.post.updateCategory');
 Route::get('/post/{id}/editCategory', [AdminPostController::class, 'editCategory'])->name('admin.post.editCategory');
 Route::get('admin/index/post', [AdminPostController::class, 'index_categories'])->name('admin.indexCategory.post');
@@ -117,6 +120,8 @@ Route::get('login/google/callback', [AuthController::class, 'handleGoogleCallbac
 Route::get('/account/info', [AccountManagementController::class, 'showUserInfo'])->name('account.info');
 Route::post('/account/update', [AccountManagementController::class, 'updateUserInfo'])->name('account.update');
 
+// Gửi mail
+Route::post('/subscribe', [SubscriberController::class, 'store'])->name('subscribe');
 
 
 // User Management

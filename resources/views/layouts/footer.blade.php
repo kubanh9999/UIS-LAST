@@ -45,10 +45,11 @@
             <div class="col-lg-4 col-md-6 mb-4">
                 <h5 class="text-uppercase">Đăng ký</h5>
                 <p>Nhận thông tin khuyến mãi</p>
-                <form class="input-group">
-                    <input type="email" class="form-control" placeholder="Email">
+                <form action="{{ route('subscribe') }}" method="POST" class="input-group">
+                    @csrf
+                    <input type="email" name="email" class="form-control" placeholder="Email" required>
                     <button class="btn btn-success" type="submit">Đăng ký</button>
-                </form>
+                </form>                
             </div>
         </div>
     </div>
