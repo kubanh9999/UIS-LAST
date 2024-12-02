@@ -99,7 +99,16 @@
     </script>
 @endif
 
-
+@if (session('success'))
+    <script>
+        Swal.fire({
+            icon: 'success',
+            title: 'Thành công!',
+            text: "{{ session('success') }}",
+            confirmButtonText: 'OK'
+        });
+    </script>
+@endif
 @if ($errors->any())
     <script>
         Swal.fire({
