@@ -22,7 +22,7 @@ use App\Http\Controllers\Admins\BannerController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\OrderController;
-
+use App\Http\Controllers\SubscriberController;
 
 Route::put('/admin/updateCategory/{id}', [AdminPostController::class, 'updateCategory'])->name('admin.post.updateCategory');
 Route::get('/post/{id}/editCategory', [AdminPostController::class, 'editCategory'])->name('admin.post.editCategory');
@@ -111,6 +111,8 @@ Route::get('login/google/callback', [AuthController::class, 'handleGoogleCallbac
 Route::get('/account/info', [AccountManagementController::class, 'showUserInfo'])->name('account.info');
 Route::post('/account/update', [AccountManagementController::class, 'updateUserInfo'])->name('account.update');
 
+// Gửi mail
+Route::post('/subscribe', [SubscriberController::class, 'store'])->name('subscribe');
 
 
 // User Management
