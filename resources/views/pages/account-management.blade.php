@@ -185,27 +185,60 @@
                     @csrf
                     <div class="mb-3">
                         <label class="form-label">Họ và tên</label>
-                        <input type="text" class="form-control" name="name" value="{{ $user->name }}" id="name" readonly>
+                        <input type="text" class="form-control" name="name" value="{{ old('name', $user->name) }}" id="name" >
                     </div>
-
+                
                     <div class="mb-3">
                         <label class="form-label">Email</label>
-                        <input type="email" class="form-control" name="email" value="{{ $user->email }}" id="email" readonly>
+                        <input type="email" class="form-control" name="email" value="{{ old('email', $user->email) }}" id="email" >
                     </div>
-
+                
                     <div class="mb-3">
                         <label class="form-label">Số điện thoại</label>
-                        <input type="text" class="form-control" name="phone" value="{{ $user->phone }}" id="phone" readonly>
+                        <input type="text" class="form-control" name="phone" value="{{ old('phone', $user->phone) }}" id="phone" >
                     </div>
-
+                
+                   
+                    <!-- Hiển thị thông tin tỉnh thành, quận huyện, phường xã -->
                     <div class="mb-3">
-                        <label class="form-label">Địa chỉ</label>
-                        <input type="text" class="form-control" name="address" value="{{ $user->address }}" id="address" readonly>
+                        <label class="form-label ">Tỉnh/Thành phố</label>
+                        <select class="form-control" name="province_id" id="province" >
+                            <option value="{{ $user->province_id }}" id="data=[]">{{ $user->province->name ?? 'vui lòng chọn Tỉnh thành phố' }}</option>
+                            @foreach ($provinces as $province)
+                                <option value="{{ $province->province_id }}" 
+                                    {{ $province->province_id == $user->province_id ? 'selected' : '' }}>
+                                    {{ $province->name }}
+                                </option>
+                            @endforeach
+                        </select>
                     </div>
-
-                    <button type="button" class="btn btn-primary" id="edit-btn">Chỉnh sửa</button>
-                    <button type="submit" class="btn btn-success" id="update-btn" style="display: none;">Cập nhật</button>
+                
+                    <div class="mb-3">
+                        <label class="form-label" ></label>
+                        <select class="form-control district" name="district_id" id="district">
+                            <!-- Các option sẽ được tải thông qua Ajax khi chọn tỉnh -->
+                            <option value="">Vui lòng chọn Quận/Huyện</option>
+                        </select>
+                    </div>
+                    
+                    
+                    <div class="mb-3">
+                        <label class="form-label">Phường/Xã</label>
+                        <select class="form-control" name="ward_id" id="ward">
+                            <option value="">Vui lòng chọn Phường/Xã</option>
+                        </select>
+                    </div>
+                   
+                    <div class="mb-3">
+                        <label class="form-label">Số nhà</label>
+                        <input type="text" class="form-control" name="street" value="{{ old('street', $user->street) ?? ''}}" id="address" >
+                    </div>
+                
+                    <!-- Nút chỉnh sửa và cập nhật -->
+                   {{--  <button type="button" class="btn btn-success" id="edit-btn">Chỉnh sửa</button> --}}
+                    <button type="submit" class="btn btn-success" id="update-btn" >Cập nhật</button>
                 </form>
+                
             </div>
             <!-- Thay đổi mật khẩu -->
             <div id="password" class="content-section">
@@ -317,6 +350,100 @@
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 <script>
+    $(document).ready(function() {
+    // Khi tỉnh thành thay đổi
+    $('#province').change(function() {
+        var provinceId = $(this).val();
+        console.log(provinceId);
+        console.log('dữ liệu district:',district.id);
+        // Nếu tỉnh thành được chọn
+        if (provinceId) {
+            console.log('Sending request to:', '/get-districts/' + provinceId);
+            $.ajax({
+           
+                url: '/get-districts/' + provinceId,  // Đường dẫn tới controller Laravel
+                method: 'GET',
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') // Gửi CSRF token
+                },
+                success: function (data) {
+                    console.log('Dữ liệu trả về từ server:', data);
+                    // Xóa các option hiện tại trong select quận/huyện và phường/xã
+                    $('#district').empty();
+                    $('#ward').empty();
+                    
+                    // Thêm option mặc định cho quận/huyện
+                    $('#district').append('<option value="">Vui lòng chọn Quận/Huyện</option>');
+
+                    // Thêm các quận/huyện mới vào select
+                    if (data.districts && data.districts.length > 0) {
+                        $.each(data.districts, function (index, district) {
+                            $('#district').append('<option value="' + district.district_id + '">' + district.name + '</option>');
+                        });
+                    } else {
+                        alert('Không tìm thấy quận/huyện nào.');
+                    }
+                },
+                error: function() {
+                    alert('Có lỗi xảy ra khi tải quận huyện.');
+                }
+            });
+        } else {
+            $('#district').empty();
+            $('#ward').empty();
+        }
+    });
+
+    // Khi quận huyện thay đổi
+    $('.district').change(function() {
+        console.log('Sự kiện change đã được gọi');
+        var districtId = $(this).val();
+console.log('districtId:',districtId);
+
+
+        // Nếu quận huyện được chọn
+        if (districtId) {
+            $.ajax({
+                url: '/get-wards/' + districtId,  // Đường dẫn tới controller Laravel
+                method: 'GET',
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') // Gửi CSRF token
+                },
+                success: function(data) {
+                    // Xóa các option hiện tại trong select phường/xã
+                    $('#ward').empty();
+
+                    // Thêm option mặc định cho phường/xã
+                    $('#ward').append('<option value="">Vui lòng chọn Phường/Xã</option>');
+                    // Thêm các phường/xã mới vào select
+                    $.each(data.wards, function(index, ward) {
+                        $('#ward').append('<option value="' + ward.id + '">' + ward.name + '</option>');
+                    });
+                },
+                error: function() {
+                    alert('Có lỗi xảy ra khi tải phường xã.');
+                }
+            });
+        } else {
+            $('#ward').empty();
+        }
+    });
+    
+});
+/* $('#district').change(function() {
+    console.log('Sự kiện change đã được gọi');
+    var districtId = $(this).val();  // Lấy giá trị của select theo id
+    console.log('districtId:', districtId);  // Kiểm tra giá trị districtId
+
+    if (districtId) {
+        // Tiến hành xử lý nếu districtId hợp lệ
+    } else {
+        console.log('Không có giá trị districtId');
+    }
+}); */
+</script>
+<script>
+    
     document.querySelectorAll('.list-group-item a').forEach(link => {
         link.addEventListener('click', function(e) {
             e.preventDefault();
@@ -377,5 +504,23 @@
     });
 
 
+</script>
+<script>
+     $(document).on('change', '.select2[name$="[city]"]', function() {
+            const addressId = $(this).attr('id').split('_')[1];
+            const cityId = $(this).val();
+            loadOptions(`https://esgoo.net/api-tinhthanh/2/${cityId}.htm`, `district_${addressId}`,
+                'Chọn Quận/Huyện');
+            $(`#ward_${addressId}`).html('<option value="">Chọn Phường/Xã</option>').trigger(
+                'change');
+        });
+
+        // Handle district change to load wards
+        $(document).on('change', '.select2[name$="[district]"]', function() {
+            const addressId = $(this).attr('id').split('_')[1];
+            const districtId = $(this).val();
+            loadOptions(`https://esgoo.net/api-tinhthanh/3/${districtId}.htm`, `ward_${addressId}`,
+                'Chọn Phường/Xã');
+        });
 </script>
 @endsection
