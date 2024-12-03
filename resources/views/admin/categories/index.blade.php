@@ -5,15 +5,34 @@
             <div class="page-header">
                 <div class="page-title">
                     <h4>DANH MỤC SẢN PHẨM</h4>
-                    <h6>View/Search product Category</h6>
+                    <h6></h6>
                 </div>
                 <div class="page-btn">
                     <a href="{{ route('admin.categories.create') }}" class="btn btn-success">
                         <i class="fa-solid fa-plus"></i>THÊM DANH MỤC
                     </a>
                 </div>
+                
             </div>
-
+            <div class="wordset">
+                <ul>
+                    
+                    <li>
+                        <a href="{{route('admin.indexCategory.post')}}" class="btn btn-success" style="text-decoration: none; color: white; float: right">xem trang danh mục bài viết</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <script>
+            @if(session('success'))
+                Swal.fire({
+                    title: 'Thành công!',
+                    text: "{{ session('success') }}",
+                    icon: 'success',
+                    confirmButtonText: 'Đóng'
+                });
+            @endif
+        </script>
             <div class="card">
                 <div class="card-body">
                     <div class="table-responsive">
