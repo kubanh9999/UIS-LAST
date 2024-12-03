@@ -11,16 +11,27 @@
                     <a href="{{ route('admin.products.create') }}" class="btn btn-success"><i class="fa-solid fa-plus"></i>Thêm sản phẩm</a>
                 </div>
             </div>
-            @if (session('error'))
-                <div class="alert alert-danger">
-                    {{ session('error') }}
-                </div>
-            @endif
-            @if (session('success'))
-                <div class="alert alert-success">
-                    {{ session('success') }}
-                </div>
-            @endif
+            <script>
+                @if(session('error'))
+                    Swal.fire({
+                        title: 'Lỗi!',
+                        text: "{{ session('error') }}",
+                        icon: 'error',
+                        confirmButtonText: 'Đóng'
+                    });
+                @endif
+            </script>
+            
+            <script>
+                @if(session('success'))
+                    Swal.fire({
+                        title: 'Thành công!',
+                        text: "{{ session('success') }}",
+                        icon: 'success',
+                        confirmButtonText: 'Đóng'
+                    });
+                @endif
+            </script>
             <div class="card">
                 <div class="card-body">
                     <div class="table-top">
@@ -40,7 +51,7 @@
                             <ul>
                                 
                                 <li>
-                                    <a href="{{route('admin.products.gift')}}" class="btn btn-success" style="text-decoration: none; color: white; float: right">Xem trang giỏ quà</a>
+                                    <a href="{{route('admin.products.gift')}}" class="btn btn-success" style="text-decoration: none; color: white; float: right">Trang giỏ quà</a>
                                 </li>
                             </ul>
                         </div>

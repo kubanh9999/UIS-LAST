@@ -46,10 +46,10 @@
                             {!! $post->content !!}
                         </div>
                 
-                        <button id="toggle-button-content" onclick="toggleContent()">Xem thêm</button>
+                        {{-- <button id="toggle-button-content" onclick="toggleContent()">Xem thêm</button>
                         <div id="full-content" style="display: none;">
                             <p>{{ $post->content }}</p>
-                        </div>
+                        </div> --}}
                     </div>
                 </div>
     <style>

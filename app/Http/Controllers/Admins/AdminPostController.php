@@ -4,10 +4,15 @@ namespace App\Http\Controllers\Admins;
 
 use App\Models\Post;
 use App\Models\Category;
+use App\Mail\PostNotificationMail;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\DB;
+use App\Models\PostCategory;
+use App\Models\Subscriber;
+use Illuminate\Support\Facades\Mail;
 
 class AdminPostController extends Controller
 {
@@ -16,7 +21,7 @@ class AdminPostController extends Controller
      */
     public function index()
     {
-        $category = Category::all();
+        $category = PostCategory::all();
         $post = Post::all();
 
         return view('admin.posts.index', compact('post', 'category'));
@@ -27,11 +32,12 @@ class AdminPostController extends Controller
      */
     public function create()
     {
-        $category = Category::all();
+        $category = PostCategory::all();
         return view('admin.posts.create', compact('category'));
     }
     public function upload(Request $request)
     {
+       
         if ($request->hasFile('upload')) {
             $file = $request->file('upload');
             $fileName = time() . '_' . $file->getClientOriginalName();
@@ -49,36 +55,37 @@ class AdminPostController extends Controller
      * Store a newly created resource in storage.
      */
     public function store(Request $request)
-    {
-        // Lưu ảnh vào thư mục tùy chỉnh (nếu có ảnh được tải lên)
-        $thumbnailPath = null;
-        if ($request->hasFile('image')) {
-            // Lấy tên file gốc
-            $originalFileName = $request->file('image')->getClientOriginalName();
-            // Tạo tên file duy nhất để tránh trùng
-            $uniqueFileName = time() . '_' . preg_replace('/\s+/', '_', $originalFileName);
-            // Xác định thư mục lưu ảnh (bạn có thể thay đổi thư mục này)
-            $uploadFolder = 'uploads/posts';
-            // Lưu ảnh vào thư mục đã chỉ định
-            $request->file('image')->move(public_path($uploadFolder), $uniqueFileName);    
-            // Đường dẫn ảnh để lưu vào cơ sở dữ liệu
-            $thumbnailPath = $uploadFolder . '/' . $uniqueFileName;
-        }
-    
-        // Tạo bài viết mới và lưu vào cơ sở dữ liệu
-        $post = new Post();
-        $post->title = $request->input('title');
-        $post->category_id = $request->input('category_id');
-        $post->content = $request->input('content');
-        $post->image = $thumbnailPath;
-        $post->status = $request->input('status');
-        $post->user_id = Auth::id(); // Lấy ID người dùng hiện tại
-        $post->save();
-    
-        // Chuyển hướng về danh sách bài viết với thông báo thành công
-        return redirect()->route('admin.post.index')->with('success', 'Bài viết đã được tạo thành công!');
+{
+    // Lưu ảnh vào thư mục tùy chỉnh (nếu có ảnh được tải lên)
+    $thumbnailPath = null;
+    if ($request->hasFile('image')) {
+        $originalFileName = $request->file('image')->getClientOriginalName();
+        $uniqueFileName = time() . '_' . preg_replace('/\s+/', '_', $originalFileName);
+        $uploadFolder = 'uploads/posts';
+        $request->file('image')->move(public_path($uploadFolder), $uniqueFileName);    
+        $thumbnailPath = $uploadFolder . '/' . $uniqueFileName;
     }
-    
+
+    // Tạo bài viết mới và lưu vào cơ sở dữ liệu
+    $post = new Post();
+    $post->title = $request->input('title');
+    $post->category_id = $request->input('category_id');
+    $post->content = $request->input('content');
+    $post->image = $thumbnailPath;
+    $post->user_id = Auth::id(); // Lấy ID người dùng hiện tại
+    $post->save();
+
+    // Gửi email thông báo cho tất cả subscriber
+    $subscribers = Subscriber::all(); // Lấy tất cả subscriber
+    foreach ($subscribers as $subscriber) {
+        // Gửi email cho từng subscriber
+        Mail::to($subscriber->email)->send(new PostNotificationMail($post));
+    }
+
+    // Chuyển hướng về danh sách bài viết với thông báo thành công
+    return redirect()->route('admin.post.index')->with('success', 'Bài viết đã được tạo thành công và thông báo email đã được gửi!');
+}
+
 
     /**
      * Display the specified resource.
@@ -158,4 +165,74 @@ class AdminPostController extends Controller
         // Quay lại trang danh sách bài viết và thông báo thành công
         return redirect()->route('admin.post.index')->with('success', 'Bài viết đã được xóa thành công!');
     }
+
+function index_categories(){
+    $postCategories = DB::table('post_categories')->get();
+    return view('admin.posts.index_categories',compact('postCategories'));
+}
+    function createCategory(){
+        return view('admin.posts.createPost');
+    }
+    public function storeCategory(Request $request)
+    {
+        // Xác thực dữ liệu
+        $request->validate([
+            'name' => 'required|string|max:255',
+        ]);
+    
+        // Tạo danh mục mới
+        DB::table('post_categories')->insert([
+            'name' => $request->name,
+            'description' => $request->description ?? null, // Nếu không có giá trị description thì dùng giá trị mặc định
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
+        return redirect()->route('admin.indexCategory.post')->with('success', 'Danh mục đã được thêm thành công!');
+    }
+    public function editCategory($id)
+{
+    // Lấy danh mục theo ID
+    $category = DB::table('post_categories')->where('id', $id)->first();
+
+    // Kiểm tra nếu không tìm thấy danh mục
+    if (!$category) {
+        return redirect()->route('admin.indexCategory.post')->with('error', 'Danh mục không tồn tại!');
+    }
+
+    // Trả về view với dữ liệu danh mục
+    return view('admin.posts.editCategory', compact('category'));
+}
+
+public function updateCategory(Request $request, $id)
+{
+    // Xác thực dữ liệu
+    $request->validate([
+        'name' => 'required|string|max:255',
+    ]);
+
+    // Tìm danh mục theo ID
+    $category = DB::table('post_categories')->where('id', $id)->first();
+
+    // Kiểm tra nếu không tìm thấy danh mục
+    if (!$category) {
+        return redirect()->route('admin.indexCategory.post')->with('error', 'Danh mục không tồn tại!');
+    }
+
+    // Cập nhật các thông tin danh mục
+    DB::table('post_categories')
+        ->where('id', $id)
+        ->update([
+            'name' => $request->name,
+            'description' => $request->description ?? null, // Nếu có description thì update, nếu không có thì giữ null
+            'updated_at' => now(), // Cập nhật thời gian sửa
+        ]);
+
+    // Quay lại trang danh mục với thông báo thành công
+    return redirect()->route('admin.indexCategory.post')->with('success', 'Danh mục đã được cập nhật thành công!');
+}
+
+
+
+
+
 }

@@ -22,16 +22,18 @@
                             <ul class="category-list list-unstyled mb-0">
                                 <!-- Tất cả sản phẩm -->
                                 <li class="category-item">
-                                    <a href="{{ route('products.byCategory', ['category' => 'all']) }}">Tất cả sản phẩm</a>
+                                    <a href="{{ route('products.byCategory', array_merge(request()->except('category'), ['category' => 'all'])) }}">Tất cả sản phẩm</a>
                                 </li>
                             
                                 <!-- Danh sách các danh mục -->
                                 @foreach ($categories as $category)
                                     <li class="category-item">
-                                        <a href="{{ route('products.byCategory', ['category' => $category->id]) }}">{{ $category->name }}</a>
+                                        <a href="{{ route('products.byCategory', array_merge(request()->except('category'), ['category' => $category->id])) }}">
+                                            {{ $category->name }}
+                                        </a>
                                     </li>
                                 @endforeach
-                            </ul>
+                            </ul>                                                       
                         </div>
                         <div class="price-filter bg-white p-3 mb-3 mt-4">
                             <h4>Mức giá</h4>

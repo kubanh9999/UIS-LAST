@@ -22,8 +22,11 @@
                             </div>
                             <!-- Submit and Cancel Buttons -->
                             <div class="col-lg-12">
-                                <button type="submit" class="btn btn-submit me-2">Submit</button> <!-- Sử dụng button thay vì a -->
-                                <a href="{{ route('admin.categories.create') }}" class="btn btn-cancel">Cancel</a> <!-- Cập nhật link đến route -->
+                                
+                                <!-- Sử dụng button thay vì a -->
+                                <a href="{{ route('admin.categories.create') }}" class="btn btn-secondary">Hủy</a>
+                                <button type="submit" class="btn btn-success me-2">Đồng ý</button>
+                                <!-- Cập nhật link đến route -->
                             </div>
                         </div>
                     </div>

@@ -3,12 +3,16 @@
 namespace App\Http\Controllers\Admins;
 
 use App\Http\Controllers\Controller;
+use App\Mail\ProductNotificationMail;
 use Illuminate\Http\Request;
 use App\Models\Product;
 use App\Models\Order;
 use App\Models\Category;
 use App\Models\ProductType;
 use App\Models\ProductImage;
+use App\Models\Subscriber;
+use App\Models\User;
+use Illuminate\Support\Facades\Mail;
 
 class AdminProductController extends Controller
 {
@@ -79,7 +83,7 @@ class AdminProductController extends Controller
             } catch (\Exception $e) {
                 return redirect()->back()->withErrors(['error' => 'Lỗi khi thêm giỏ quà vào product_types: ' . $e->getMessage()]);
             }
-            return redirect()->route('admin.products.index')->with('success', 'Giỏ quà đã được thêm thành công!');
+            return redirect()->route('admin.products.gift')->with('success', 'Giỏ quà đã được thêm thành công!');
         }
 
         // Nếu là trái cây, lưu vào bảng products
@@ -95,6 +99,19 @@ class AdminProductController extends Controller
             ]);
         } catch (\Exception $e) {
             return redirect()->back()->withErrors(['error' => 'Thêm sản phẩm thất bại: ' . $e->getMessage()]);
+        }
+        // Lấy email từ bảng subscribers và users và gửi email thông báo
+        $subscribers = Subscriber::all(); // Lấy tất cả người đăng ký
+        $users = User::all(); // Lấy tất cả người dùng
+
+        // Gửi email đến tất cả người đăng ký
+        foreach ($subscribers as $subscriber) {
+            Mail::to($subscriber->email)->send(new ProductNotificationMail($product));
+        }
+
+        // Gửi email đến tất cả người dùng
+        foreach ($users as $user) {
+            Mail::to($user->email)->send(new ProductNotificationMail($product));
         }
 
         // Lưu ảnh con cho sản phẩm trái cây
@@ -132,6 +149,52 @@ class AdminProductController extends Controller
         // Trả về view với sản phẩm và danh sách danh mục
         return view('admin.products.edit', compact('product', 'categories'));
     }
+
+    public function editGift($id)
+    {
+        // Lấy sản phẩm theo ID
+        $gift = ProductType::findOrFail($id);
+
+        // Lấy danh sách danh mục để hiển thị trong dropdown
+        $categories = Category::all();
+
+        // Trả về view với sản phẩm và danh sách danh mục
+        return view('admin.products.editGift', compact('gift', 'categories'));
+    }
+
+    public function updateGift(Request $request, string $id)
+    {
+
+        $gift = ProductType::findOrFail($id);
+
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'category_id' => 'required|integer',
+            'price_gift' => 'required|numeric|min:0',
+            'stock' => 'required|integer|min:0',
+            'description' => 'required|string',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+        ]);
+
+        // Cập nhật sản phẩm
+        $gift->name = $request->name;
+        $gift->category_id = $request->category_id;
+        $gift->price_gift = $request->price_gift;
+        $gift->stock = $request->stock;
+        $gift->description = $request->description;
+
+        // Kiểm tra và lưu ảnh sản phẩm chính
+        if ($request->hasFile('image')) {
+            $productImage = $request->file('image')->store('upload', 'public');
+            $gift->image = $productImage;
+        }
+
+        $gift->save();
+
+
+        return redirect()->route('admin.products.gift')->with('success', 'Giỏ quà đã được cập nhật thành công!');
+    }
+
     public function updateField(Request $request)
     {
         $product = Product::find($request->id);
@@ -278,6 +341,26 @@ class AdminProductController extends Controller
             return redirect()->route('admin.products.index')->with('error', 'Không thể xóa sản phẩm.');
         }
     }
+    public function destroyGift($id)
+    {
+        try {
+            // Tìm giỏ quà theo ID
+            $giftBasket = ProductType::findOrFail($id);
+
+            // Xóa các ảnh liên quan nếu có (nếu cần)
+            if (file_exists(public_path($giftBasket->image))) {
+                unlink(public_path($giftBasket->image)); // Xóa ảnh sản phẩm
+            }
+
+            // Xóa giỏ quà
+            $giftBasket->delete();
+
+            return redirect()->route('admin.gift_baskets.index')->with('success', 'Giỏ quà đã được xóa thành công!');
+        } catch (\Exception $e) {
+            return redirect()->back()->withErrors(['error' => 'Lỗi khi xóa giỏ quà: ' . $e->getMessage()]);
+        }
+    }
+
 
 
     public function updateStatus(Request $request)

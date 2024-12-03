@@ -45,7 +45,13 @@
                     <div class="row">
                         <div class="gift-basket-left col-md-5">
                             <div class="gift-basket-images">
-                                <img src="{{ asset('layouts/img/' . $basket->image) }}" alt="{{ $basket->name }}">
+                                @php
+                                    $imagePath = $basket->image;
+                                    if (strpos($imagePath, 'uploads/products') === false) {
+                                        $imagePath = 'layouts/img/' . $basket->image; // Nếu không chứa, thêm 'layouts/img'
+                                    }
+                                @endphp
+                                <img src="{{ asset($imagePath) }}" alt="{{ $basket->name }}">
                             </div>
                             <h4 class="gift-basket-name">{{ $basket->name }}</h4>
                             <div class="gift-basket-price">Tổng: <span id="totalPrice">0</span> VND</div>
@@ -67,7 +73,14 @@
                                     id="fruit_{{ $fruit->id }}" class="form-check-input"
                                     data-price="{{ $fruit->price }}">
                                 <label for="fruit_{{ $fruit->id }}" class="form-label d-flex align-items-center">
-                                    <img src="{{ asset('layouts/img/' . $fruit->image) }}" alt="{{ $fruit->name }}"
+                                    @php
+                                        $imagePath = $fruit->image;
+                                        // Nếu đường dẫn ảnh chứa 'uploads/posts', không cần thêm 'layouts/img'
+                                        if (strpos($imagePath, 'uploads/products') === false) {
+                                            $imagePath = 'layouts/img/' . $fruit->image; // Nếu không chứa, thêm 'layouts/img'
+                                        }
+                                    @endphp
+                                    <img src="{{ asset($imagePath) }}" alt="{{ $fruit->name }}"
                                         style="max-width: 50px;" class="me-2">
                                         <span><strong>{{ $fruit->name }}</strong> - <span class="dynamic-price"
                                             data-price="{{ $fruit->price }}">
@@ -94,31 +107,38 @@
 
 
     <script>
-   document.getElementById("search").addEventListener("input", function () {
+document.getElementById("search").addEventListener("input", function () {
     const searchTerm = this.value; // Lấy từ khóa tìm kiếm
 
+    // Gửi yêu cầu tìm kiếm tới server
     fetch(`/search-fruits?query=${encodeURIComponent(searchTerm)}`)
         .then(response => response.json())
         .then(data => {
-            const productContainer = document.querySelector(".gift-basket-right"); // Lấy container hiển thị sản phẩm
+            console.log(data); // Kiểm tra dữ liệu trả về từ server
+            const productContainer = document.querySelector(".gift-basket-right");
             productContainer.innerHTML = ""; // Xóa nội dung cũ
 
-            // Duyệt qua danh sách kết quả và render HTML
+            // Duyệt qua danh sách sản phẩm trả về
             data.forEach(fruit => {
                 productContainer.innerHTML += `
                     <div class="product-item d-flex align-items-center mb-3">
-                        <input type="checkbox" name="fruits[${fruit.id}]" value="1" id="fruit_${fruit.id}" class="form-check-input" data-price="${fruit.price}">
+                        <input type="checkbox" name="fruits[${fruit.id}]" value="1"
+                            id="fruit_${fruit.id}" class="form-check-input"
+                            data-price="${fruit.price}">
                         <label for="fruit_${fruit.id}" class="form-label d-flex align-items-center">
                             <img src="${fruit.image}" alt="${fruit.name}" style="max-width: 50px;" class="me-2">
-                            <span>
-                                <strong>${fruit.name}</strong> - <span class="dynamic-price" data-price="${fruit.price}">${fruit.price_formatted}</span> VND
-                            </span>
+                            <span><strong>${fruit.name}</strong> - <span class="dynamic-price"
+                                data-price="${fruit.price}">
+                                ${fruit.price_formatted}
+                            </span></span>
                         </label>
                         <select name="quantities[${fruit.id}]" class="ms-auto" style="width: 130px;">
                             <option value="100" selected>100g</option>
                             <option value="200">200g</option>
                             <option value="300">300g</option>
+                            <option value="400">400g</option>
                             <option value="500">500g</option>
+                            <option value="1000">1kg</option>
                         </select>
                     </div>
                 `;
@@ -126,6 +146,7 @@
         })
         .catch(error => console.error("Error:", error)); // Xử lý lỗi
 });
+
 
 
 

@@ -53,7 +53,7 @@
                         </div>
 
                         <!-- Trạng thái -->
-                        <div class="col-lg-6 col-sm-6 col-12">
+                       {{--  <div class="col-lg-6 col-sm-6 col-12">
                             <div class="form-group">
                                 <label>Trạng thái</label>
                                 <select name="status" required class="form-control">
@@ -62,7 +62,7 @@
                                 </select>
                             </div>
                         </div>
-
+ --}}
                         <!-- Ngày đăng -->
                         <div class="col-lg-6 col-sm-6 col-12">
                             <div class="form-group">

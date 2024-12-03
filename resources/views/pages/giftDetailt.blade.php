@@ -51,7 +51,13 @@
                 <div class="col-md-5">
                     <div class="product-images">
                         <div class="main-image">
-                            <img src="{{ asset('layouts/img/' . $basket->image) }}" alt="{{ $basket->name }}">
+                            @php
+                                $imagePath = $basket->image;
+                                if (strpos($imagePath, 'uploads/products') === false) {
+                                    $imagePath = 'layouts/img/' . $basket->image; // Nếu không chứa, thêm 'layouts/img'
+                                }
+                            @endphp
+                            <img src="{{ asset($imagePath) }}" alt="{{ $basket->name }}">
                         </div>
                     </div>
                 </div>
@@ -63,7 +69,7 @@
                         <ul class="product-status">
                             <li class="status">SKU: <span>I00000</span></li>
                             <li class="status">Danh mục: <span>Trái cây</span></li>
-                            <li class="status">Tình trạng: <span>Còn hàng</span></li>
+                            <li class="status">Tình trạng: <span>Còn: {{$basket->stock}} sản phẩm</span></li>
                         </ul>
                         <div class="product-price">
                             <div class="price">
@@ -117,7 +123,7 @@
                     <!-- Tab panes -->
                     <div class="tab-content">
                         <div id="description" class="text-container container tab-pane active">
-                            <p id="text-content">{{ $basket->description }}</p>
+                            <p id="text-content">{!! $basket->description !!}</p>
                             <button class="toggle">Xem thêm</button>
                         </div>
                         <div id="comment" class="comment-section container tab-pane fade"><br>

@@ -4,7 +4,7 @@
         <div class="content">
             <div class="page-header">
                 <div class="page-title">
-                    <h4>chỉnh sửa danh mục</h4>
+                    <h4>CHỈNH SỬA DANH MỤC SẢN PHẨM</h4>
                   
                 </div>
             </div>
@@ -26,9 +26,13 @@
                                 </div>
                                 
                                 <!-- Submit and Cancel Buttons -->
+                              
                                 <div class="col-lg-12">
-                                    <button type="submit" class="btn btn-submit me-2">Submit</button>
-                                    <a href="{{ route('admin.categories.index') }}" class="btn btn-cancel">Cancel</a>
+                                
+                                    <!-- Sử dụng button thay vì a -->
+                                    <a href="{{ route('admin.categories.index') }}" class="btn btn-secondary">Hủy</a>
+                                    <button type="submit" class="btn btn-success me-2">Đồng ý</button>
+                                    <!-- Cập nhật link đến route -->
                                 </div>
                             </div>
                         </div>

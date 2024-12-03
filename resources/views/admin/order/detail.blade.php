@@ -168,7 +168,13 @@
                         <div class="product-list">
                             <ul>
                                 <li>
-                                    <img src="{{ asset('layouts/img/' . $item->product->image) }}">
+                                    @php
+                                        $imagePath = $item->product->image;
+                                        if (strpos($imagePath, 'uploads/products') === false) {
+                                            $imagePath = 'layouts/img/' . $item->product->image; // Nếu không chứa, thêm 'layouts/img'
+                                        }
+                                    @endphp
+                                    <img src="{{ asset($imagePath) }}">
                                     <span>{{ $item->product->name }} | x {{ $item->quantity }}</span>
                                 </li>
                             </ul>
@@ -190,7 +196,13 @@
                         <div class="card">
                             <strong></strong> {{ $item->gift->name }} | Số lượng: x{{ $item->quantity }}
                             <br>
-                            <img src="{{ asset('layouts/img/' . $item->gift->image) }}" alt="Hình ảnh giỏ quà" style="width: 100px;">
+                                @php
+                                    $imagePath = $item->gift->image;
+                                    if (strpos($imagePath, 'uploads/products') === false) {
+                                        $imagePath = 'layouts/img/' . $item->gift->image; // Nếu không chứa, thêm 'layouts/img'
+                                    }
+                                @endphp
+                            <img src="{{ asset($imagePath) }}" alt="Hình ảnh giỏ quà" style="width: 100px;">
                             <br>
                             <div class="product-list">
                                 @php
@@ -209,7 +221,13 @@
                                         @foreach ($giftItems as $giftItem)
                                             @if ($giftItem->product)
                                                 <li>
-                                                    <img src="{{ asset('layouts/img/' . $giftItem->product->image) }}" 
+                                                    @php
+                                                        $imagePath = $giftItem->product->image;
+                                                        if (strpos($imagePath, 'uploads/products') === false) {
+                                                            $imagePath = 'layouts/img/' . $giftItem->product->image; // Nếu không chứa, thêm 'layouts/img'
+                                                        }
+                                                    @endphp
+                                                    <img src="{{ asset($imagePath) }}" 
                                                         alt="{{ $giftItem->product->name }}" style="width: 40px;">
                                                     <span>{{ $giftItem->product->name }} x{{ $giftItem->quantity }}</span>
                                                 </li>
