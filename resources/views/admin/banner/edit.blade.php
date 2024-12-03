@@ -109,3 +109,6 @@
         // Gọi lại sự kiện khi trang đã tải để hiển thị nhóm liên kết đúng
         linkType.dispatchEvent(new Event('change'));
     });
+</script>
+
+@endsection
