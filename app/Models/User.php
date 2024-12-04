@@ -26,7 +26,7 @@ class User extends Authenticatable
         'status',
         'remember_token',
         'street',         // Đường
-        'ward_id',        // Phường/xã
+        'wards_id',        // Phường/xã
         'district_id',    // Quận/huyện
         'province_id',    // Tỉnh/thành phố
     ];
@@ -50,7 +50,7 @@ class User extends Authenticatable
     // Liên kết với Ward
     public function ward()
     {
-        return $this->belongsTo(Ward::class, 'ward_id', 'ward_id');
+        return $this->belongsTo(Ward::class, 'wards_id', 'wards_id');
     }
 
     // Liên kết với bảng GiftWrapping

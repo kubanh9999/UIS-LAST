@@ -102,6 +102,7 @@ class AccountManagementController extends Controller
 
     public function updateUserInfo(Request $request)
     {
+       /*  dd(vars: $request->ward_id); */
         $user = Auth::user(); // Lấy thông tin người dùng hiện tại
 
         // Validate dữ liệu nhập
@@ -112,10 +113,10 @@ class AccountManagementController extends Controller
             'name' => $request->name,
             'email' => $request->email,
             'phone' => $request->phone,
-            'address' => $request->address,
+            'street' => $request->street,
             'province_id' => $request->province_id,
             'district_id' => $request->district_id,
-            'ward_id' => $request->ward_id,
+            'wards_id' => $request->ward_id,
         ]);
 
         return redirect()->route('account.management')->with('success', 'Cập nhật thông tin thành công!');
