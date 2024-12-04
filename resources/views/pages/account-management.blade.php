@@ -302,7 +302,7 @@
                                 <tr>
                                     <th scope="col">#ID</th>
                                     <th scope="col">Tên người mua</th>
-                                    <th scope="col">Địa chỉ giao hàng</th>
+                                   {{--  <th scope="col">Địa chỉ giao hàng</th> --}}
                                     <th scope="col">Số điện thoại</th>
                                     <th scope="col">Ngày đặt hàng</th>
 
@@ -316,7 +316,10 @@
                                     <tr>
                                         <td>#{{ $item->id }}</td>
                                         <td>{{ $item->user->name }}</td> <!-- Hiển thị tên người mua -->
-                                        <td>{{ $item->address }}</td> <!-- Hiển thị địa chỉ giao hàng -->
+                                       {{--  <td>  {{ $orders->province->name  }}
+                                            {{ $orders->district->name  }}, 
+                                            {{ $orders->ward->name  }}, 
+                                            {{ $orders->street }}, </td> --}} <!-- Hiển thị địa chỉ giao hàng -->
                                         <td>{{ $item->phone }}</td> <!-- Hiển thị số điện thoại -->
                                         <td>{{ \Carbon\Carbon::parse($item->order_date)->format('d/m/Y') }}</td>
 

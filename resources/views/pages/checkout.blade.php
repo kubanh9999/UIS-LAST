@@ -33,7 +33,7 @@
         <div class="input-group">
             <input type="text" name="discount_code" id="discount_code" class="form-control" placeholder="Nhập mã giảm giá" required>
             <div class="input-group-append">
-                <button type="submit" class="btn btn-primary">Áp dụng</button>
+                <button type="submit" class="btn btn-success">Áp dụng</button>
             </div>
         </div>
     </div>
@@ -42,19 +42,112 @@
 <!-- Form thanh toán chính -->
         <form id="checkout-form" action="{{ route('checkout.complete') }}" method="POST" class="mb-4" data-shipping-cost="{{ $shippingCost }}">
             @csrf
-            <div class="row">
+            <div class="row" >
                 <!-- Thông tin người nhận hàng -->
-                <div class="checkout-left col-lg-7 p-3 border-right">
+                <div class="checkout-left col-lg-7 p-3 border-right" >
                     <h2 class="info-title">Thông tin nhận hàng</h2>
-
-                    <div class="user-info-group">
-                        @foreach (['email' => 'Email', 'name' => 'Họ và tên', 'phone' => 'Số điện thoại', 'address' => 'Địa chỉ'] as $field => $placeholder)
-                            <div class="form-group" style="margin-bottom: 15px;">
-                                <input type="{{ $field === 'email' ? 'email' : 'text' }}" name="{{ $field }}" class="form-control" placeholder="{{ $placeholder }}" required>
-                                <small id="{{ $field }}-error" class="text-danger" style="display:none;">Vui lòng nhập {{ strtolower($placeholder) }}</small>
-                            </div>
-                        @endforeach
+                    <div class="row" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px;">
+                        <!-- Họ và tên -->
+                        <div class="form-group">
+                            <label for="name" class="form-label">Họ và tên</label>
+                            <input 
+                                type="text" 
+                                name="name" 
+                                id="name" 
+                                class="form-control" 
+                                placeholder="Họ và tên" 
+                                value="{{ old('name', $user->name) }}" 
+                                required>
+                            <small id="name-error" class="text-danger" style="display:none;">
+                                Vui lòng nhập họ và tên
+                            </small>
+                        </div>
+                        
+                        <!-- Email -->
+                        <div class="form-group">
+                            <label for="email" class="form-label">Email</label>
+                            <input 
+                                type="email" 
+                                name="email" 
+                                id="email" 
+                                class="form-control" 
+                                placeholder="Email" 
+                                value="{{ old('email', $user->email) }}" 
+                                required>
+                            <small id="email-error" class="text-danger" style="display:none;">
+                                Vui lòng nhập email
+                            </small>
+                        </div>
+                        
+                        <!-- Số điện thoại -->
+                        <div class="form-group">
+                            <label for="phone" class="form-label">Số điện thoại</label>
+                            <input 
+                                type="text" 
+                                name="phone" 
+                                id="phone" 
+                                class="form-control" 
+                                placeholder="Số điện thoại" 
+                                value="{{ old('phone', $user->phone) }}" 
+                                required>
+                            <small id="phone-error" class="text-danger" style="display:none;">
+                                Vui lòng nhập số điện thoại
+                            </small>
+                        </div>
+                    
+                        <!-- Địa chỉ -->
+                        <div class="form-group">
+                            <label for="name" class="form-label">Địa chỉ</label>
+                            <input 
+                                type="text" 
+                                name="address" 
+                                id="street" 
+                                class="form-control" 
+                                placeholder="Địa chỉ" 
+                                value="{{ old('street', $user->street) }}" 
+                                required>
+                            <small id="street-error" class="text-danger" style="display:none;">
+                                Vui lòng nhập địa chỉ
+                            </small>
+                        </div>
+                    
+                        <!-- Tỉnh/Thành phố -->
+                        <div class="form-group">
+                            <label for="name" class="form-label">Tỉnh/Thành phố</label>
+                            <select class="form-control" name="province_id" id="province" required>
+                                <option value="{{ $user->province_id }}">
+                                    {{ $user->province->name ?? 'Vui lòng chọn Tỉnh/Thành phố' }}
+                                </option>
+                                @foreach ($provinces as $province)
+                                    <option value="{{ $province->province_id }}" {{ $province->province_id == $user->province_id ? 'selected' : '' }}>
+                                        {{ $province->name }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
+                    
+                        <!-- Quận/Huyện -->
+                        <div class="form-group">
+                            <label for="name" class="form-label">Quận/Huyện</label>
+                            <select class="form-control district" name="district_id" id="district"required >
+                                <option value="{{ $user->district_id }}">
+                                    {{ $user->district->name ?? 'Vui lòng chọn Quận/Huyện' }}
+                                </option>
+                            </select>
+                        </div>
+                    
+                        <!-- Phường/Xã -->
+                        <div class="form-group">
+                            <label for="name" class="form-label">Phường/Xã</label>
+                            <select class="form-control" name="ward_id" id="ward" required >
+                               
+                                <option value="{{ $user->wards_id }}">
+                                    {{ $user->ward->name ?? 'Vui lòng chọn Phường/Xã' }}
+                                </option>
+                            </select>
+                        </div>
                     </div>
+                    
 
 
                     <h2 class="shipping-title mt-4">Vận chuyển</h2>
@@ -76,7 +169,7 @@
                 @if(isset($cart) && count($cart) > 0)
                     @php
                         $totalPrice = 0;
-                        $shippingCost = 30000; // Phí vận chuyển
+                        $shippingCost = 0; // Phí vận chuyển
                     @endphp
 
                     <div class="checkout-right col-lg-5 px-4">
@@ -187,6 +280,9 @@
             <input type="hidden" name="email" id="vnpay_email">
             <input type="hidden" name="phone" id="vnpay_phone">
             <input type="hidden" name="address" id="vnpay_address">
+            <input type="hidden" name="province_id" id="vnpay_province_id">
+            <input type="hidden" name="district_id" id="vnpay_district_id">
+            <input type="hidden" name="ward_id" id="vnpay_ward_id">
             <!-- <input type="hidden" name="note" id="note"> -->
             <input type="hidden" name="price" id="vnpay_price" value="{{ number_format($totalPrice + $shippingCost) ?? 0 }}">
         </form>
@@ -200,6 +296,9 @@
             <input type="hidden" name="phone" id="momo_phone">
             <!-- <input type="hidden" name="note" id="note"> -->
             <input type="hidden" name="address" id="momo_address">
+            <input type="hidden" name="province_id" id="momo_province_id">
+            <input type="hidden" name="district_id" id="momo_district_id">
+            <input type="hidden" name="ward_id" id="momo_ward_id">
             <input type="hidden" name="price" id="momo_price" value="{{ number_format($totalPrice + $shippingCost) ?? 0}}">
         </form>
 
@@ -209,6 +308,9 @@
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
+    const provinceId = $('#province').val();
+    console.log('provinceId',provinceId);
+    
     $(document).ready(function () {
         // Lấy dữ liệu từ server thông qua data attributes
         let totalPrice = document.getElementById('total-price').getAttribute('data-price');
@@ -272,8 +374,12 @@
                 email: $('input[name="email"]').val(),
                 phone: $('input[name="phone"]').val(),
                 address: $('input[name="address"]').val(),
+                ward_id: $('#ward').val(),
+                district_id: $('#district').val(),
+                province_id: $('#province').val(),
                 price: totalPrice
             };
+      
 
             // Xử lý thanh toán theo từng phương thức
             if (selectedPaymentMethod === 'momo') {
@@ -314,5 +420,119 @@
     });
 </script>
 
+<script>
+    $(document).ready(function() {
+        // Khi tỉnh thành thay đổi
+        $('#province').change(function() {
+            var provinceId = $(this).val();
+            console.log(provinceId);
+            console.log('dữ liệu district:', district.id);
+            // Nếu tỉnh thành được chọn
+            if (provinceId) {
+                console.log('Sending request to:', '/get-districts/' + provinceId);
+                $.ajax({
 
+                    url: '/get-districts/' + provinceId, // Đường dẫn tới controller Laravel
+                    method: 'GET',
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr(
+                            'content') // Gửi CSRF token
+                    },
+                    success: function(data) {
+                        console.log('Dữ liệu trả về từ server:', data);
+                        // Xóa các option hiện tại trong select quận/huyện và phường/xã
+                        $('#district').empty();
+                        $('#ward').empty();
+
+                        // Thêm option mặc định cho quận/huyện
+                        $('#district').append(
+                            '<option value="">Vui lòng chọn Quận/Huyện</option>');
+
+                        // Thêm các quận/huyện mới vào select
+                        if (data.districts && data.districts.length > 0) {
+                            $.each(data.districts, function(index, district) {
+                                $('#district').append('<option value="' + district
+                                    .district_id + '">' + district.name +
+                                    '</option>');
+                            });
+                        } else {
+                            alert('Không tìm thấy quận/huyện nào.');
+                        }
+                    },
+                    error: function() {
+                        alert('Có lỗi xảy ra khi tải quận huyện.');
+                    }
+                });
+            } else {
+                $('#district').empty();
+                $('#ward').empty();
+            }
+        });
+        /* $('.ward').chance(function(){
+            var ward = $(this).val;
+            console.log('ward',ward);
+            
+        }) */
+        // Khi quận huyện thay đổi
+        $('.district').change(function() {
+            console.log('Sự kiện change đã được gọi');
+            var districtId = $(this).val();
+
+            console.log('districtId:', districtId);
+            /* console.log('ward',wards.wards_id); */
+
+
+            // Nếu quận huyện được chọn
+            if (districtId) {
+                $.ajax({
+                    url: '/get-wards/' + districtId, // Đường dẫn tới controller Laravel
+                    method: 'GET',
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr(
+                            'content') // Gửi CSRF token
+                    },
+                    success: function(data) {
+                        // Xóa các option hiện tại trong select phường/xã
+                        $('#ward').empty();
+
+                        // Thêm option mặc định cho phường/xã
+                        $('#ward').append(
+                            '<option value="">Vui lòng chọn Phường/Xã</option>');
+                        // Thêm các phường/xã mới vào select
+                        $.each(data.wards, function(index, ward) {
+                            if (ward.wards_id) {
+                                $('#ward').append('<option value="' + ward
+                                    .wards_id + '">' + ward.name + '</option>');
+                                console.log('aaa:', ward.wards_id);
+                            }
+                        });
+
+                        // Gắn sự kiện change sau khi thêm các option vào dropdown
+                        $('#ward').change(function() {
+                            var selectedWardId = $(this).val();
+                            console.log('Ward selected:', selectedWardId);
+                        });
+                    },
+                    error: function() {
+                        alert('Có lỗi xảy ra khi tải phường xã.');
+                    }
+                });
+            } else {
+                $('#ward').empty();
+            }
+        });
+
+    });
+    /* $('#district').change(function() {
+        console.log('Sự kiện change đã được gọi');
+        var districtId = $(this).val();  // Lấy giá trị của select theo id
+        console.log('districtId:', districtId);  // Kiểm tra giá trị districtId
+
+        if (districtId) {
+            // Tiến hành xử lý nếu districtId hợp lệ
+        } else {
+            console.log('Không có giá trị districtId');
+        }
+    }); */
+</script>
 @endsection

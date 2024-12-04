@@ -133,7 +133,16 @@
                                 </tr>
                                 <tr>
                                     <td><strong>Địa chỉ:</strong></td>
-                                    <td class="text-right">{{ $orders->address }}</td>
+                                    
+                                    <td class="text-right">
+                                        {{ $orders->province->name  }}
+                                        {{ $orders->district->name  }}, 
+                                        {{ $orders->ward->name  }}, 
+                                        {{ $orders->street }}, 
+                                        
+                                    
+                                       
+                                    </td>
                                 </tr>
                                 <tr>
                                     <td><strong>Thanh toán:</strong></td>
