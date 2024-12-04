@@ -102,14 +102,16 @@
     </main>
 
     <script>
-document.getElementById("search").addEventListener("input", function () {
+    document.getElementById("search").addEventListener("input", function () {
     const searchTerm = this.value; // Lấy từ khóa tìm kiếm
+
+    // Lưu trạng thái vào LocalStorage trước khi tìm kiếm
+    saveStateToLocalStorage();
 
     // Gửi yêu cầu tìm kiếm tới server
     fetch(`/search-fruits?query=${encodeURIComponent(searchTerm)}`)
         .then(response => response.json())
         .then(data => {
-            console.log(data); // Kiểm tra dữ liệu trả về từ server
             const productContainer = document.querySelector(".gift-basket-right");
             productContainer.innerHTML = ""; // Xóa nội dung cũ
 
@@ -123,7 +125,7 @@ document.getElementById("search").addEventListener("input", function () {
                         <label for="fruit_${fruit.id}" class="form-label d-flex align-items-center">
                             <img src="${fruit.image}" alt="${fruit.name}" style="max-width: 50px;" class="me-2">
                             <span><strong>${fruit.name}</strong> - <span class="dynamic-price"
-                                data-price="${fruit.price}">
+                                data-id="fruit_${fruit.id}" data-price="${fruit.price}">
                                 ${fruit.price_formatted}
                             </span></span>
                         </label>
@@ -138,38 +140,19 @@ document.getElementById("search").addEventListener("input", function () {
                     </div>
                 `;
             });
+
+            // Khôi phục trạng thái từ LocalStorage
+            restoreStateFromLocalStorage();
+
+            // Gắn lại sự kiện cho checkbox và selector mới
+            attachEventHandlers();
         })
         .catch(error => console.error("Error:", error)); // Xử lý lỗi
 });
 
-
-
-
-        document.getElementById('giftBasketForm').addEventListener('submit', function(event) {
-            // Lấy tất cả các checkbox trong form
-            const checkboxes = document.querySelectorAll('input[name^="fruits"]:checked');
-
-            // Kiểm tra nếu không có checkbox nào được chọn
-            if (checkboxes.length === 0) {
-                event.preventDefault(); // Ngăn không cho form submit
-                Swal.fire({
-    title: 'Chưa chọn trái cây!',
-    text: 'Vui lòng chọn ít nhất một loại trái cây trước khi thêm vào giỏ hàng.',
-    icon: 'warning',
-    showClass: {
-        popup: 'animate__animated animate__fadeInDown'
-    },
-    hideClass: {
-        popup: 'animate__animated animate__fadeOutUp'
-    }
-});
-            }
-        });
-
-        document.addEventListener('DOMContentLoaded', function() {
+function attachEventHandlers() {
     const fruitCheckboxes = document.querySelectorAll('input[name^="fruits"]');
     const quantitySelectors = document.querySelectorAll('select[name^="quantities"]');
-    const totalPriceElement = document.getElementById('totalPrice');
     const dynamicPrices = document.querySelectorAll('.dynamic-price');
 
     function calculateTotalPrice() {
@@ -196,21 +179,81 @@ document.getElementById("search").addEventListener("input", function () {
         });
 
         // Cập nhật tổng tiền
-        totalPriceElement.textContent = total.toLocaleString('vi-VN');
+        document.getElementById('totalPrice').textContent = total.toLocaleString('vi-VN');
     }
 
-    // Lắng nghe sự kiện thay đổi trên checkbox và số lượng
     fruitCheckboxes.forEach(checkbox => {
-        checkbox.addEventListener('change', calculateTotalPrice);
+        checkbox.addEventListener('change', () => {
+            saveStateToLocalStorage(); // Lưu trạng thái vào LocalStorage khi thay đổi
+            calculateTotalPrice();
+        });
     });
 
     quantitySelectors.forEach(selector => {
-        selector.addEventListener('change', calculateTotalPrice);
+        selector.addEventListener('change', () => {
+            saveStateToLocalStorage(); // Lưu trạng thái khi thay đổi trọng lượng
+            calculateTotalPrice();
+        });
     });
 
-    // Tính tổng tiền khi trang tải lần đầu
+    // Tính lại tổng khi DOM cập nhật
     calculateTotalPrice();
+}
+
+// Hàm lưu toàn bộ trạng thái vào LocalStorage
+function saveStateToLocalStorage() {
+    const state = [];
+    document.querySelectorAll('.product-item').forEach(item => {
+        const checkbox = item.querySelector('input[name^="fruits"]');
+        const quantitySelector = item.querySelector('select[name^="quantities"]');
+        const dynamicPriceElement = item.querySelector('.dynamic-price');
+        const imgElement = item.querySelector('img');
+
+        if (checkbox) {
+            state.push({
+                id: checkbox.id,
+                checked: checkbox.checked,
+                price: dynamicPriceElement.textContent, // Giá hiển thị hiện tại
+                quantity: quantitySelector.value, // Trọng lượng (gram)
+                image: imgElement.src // URL ảnh sản phẩm
+            });
+        }
+    });
+
+    localStorage.setItem('productState', JSON.stringify(state));
+}
+
+// Hàm khôi phục trạng thái từ LocalStorage
+function restoreStateFromLocalStorage() {
+    const state = JSON.parse(localStorage.getItem('productState')) || [];
+    state.forEach(savedItem => {
+        const checkbox = document.getElementById(savedItem.id);
+        const quantitySelector = document.querySelector(`select[name="quantities[${savedItem.id.split('_')[1]}]"]`);
+        const dynamicPriceElement = document.querySelector(`.dynamic-price[data-id="${savedItem.id}"]`);
+        const imgElement = checkbox?.closest('.product-item')?.querySelector('img');
+
+        if (checkbox) {
+            checkbox.checked = savedItem.checked; // Khôi phục trạng thái checkbox
+        }
+        if (quantitySelector) {
+            quantitySelector.value = savedItem.quantity; // Khôi phục trọng lượng
+        }
+        if (dynamicPriceElement) {
+            dynamicPriceElement.textContent = savedItem.price; // Khôi phục giá
+        }
+        if (imgElement) {
+            imgElement.src = savedItem.image; // Khôi phục ảnh
+        }
+    });
+}
+
+// Gắn sự kiện lần đầu
+document.addEventListener("DOMContentLoaded", function () {
+    restoreStateFromLocalStorage(); // Khôi phục trạng thái khi tải trang
+    attachEventHandlers();
 });
+
+
     </script>
 
 @endsection
