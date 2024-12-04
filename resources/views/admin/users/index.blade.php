@@ -7,11 +7,11 @@
                 <div class="page-title">
                     <h4>Danh sách tài khoản</h4>
                 </div>
-                <div class="page-btn">
+                {{-- <div class="page-btn">
                     <a href="{{ route('admin.users.create') }}" class="btn btn-success">
                         <i class="fa-solid fa-plus"></i>Thêm tài khoản
                     </a>
-                </div>
+                </div> --}}
             </div>
             <script>
                 @if(session('success'))
@@ -136,16 +136,16 @@
                                             </div>
                                             
                                                 
-                                                <a class="action-icon" href="{{ route('admin.users.edit', $item->id) }}">
+                                              {{--   <a class="action-icon" href="{{ route('admin.users.edit', $item->id) }}">
                                                     <i class="fa-solid fa-pen-to-square"></i>
-                                                </a>
-                                                <form id="delete-form-{{ $item->id }}" action="{{ route('admin.users.destroy', $item->id) }}" method="POST" style="display:inline;">
+                                                </a> --}}
+                                               {{--  <form id="delete-form-{{ $item->id }}" action="{{ route('admin.users.destroy', $item->id) }}" method="POST" style="display:inline;">
                                                     @csrf
                                                     @method('DELETE')
                                                     <button type="button" class="btn delete-btn" onclick="confirmDelete({{ $item->id }})">
                                                         <i class="fa-solid fa-trash"></i>
                                                     </button>
-                                                </form>
+                                                </form> --}}
                                             </div>
                                         </td>
                                         
