@@ -16,17 +16,18 @@ class AccountManagementController extends Controller
 {
     public function management()
     {
-        $user = Auth::user();
-        // Kiểm tra xem người dùng đã đăng nhập và có province_id hợp lệ không
-   
+        $user = Auth::user(); 
         $provinces = Province::all();
+        $districts = District::where('province_id', $user->province_id)->get();
+        $wards = Ward::where('district_id', $user->district_id)->get();
+        $user->load('province', 'district', 'ward'); // Lấy thông tin người dùng hiện tại
 
     
         $orders = Order::orderBy('id', 'DESC')
             ->where('user_id', $user->id)
             ->with(['orderDetails', 'orderDetails.product', 'orderDetails.gift', 'orderDetails.productInGift.product']) // Nạp dữ liệu liên quan
             ->get();
-        return view('pages.account-management', compact('orders','provinces', 'user'));
+        return view('pages.account-management', compact('orders','provinces', 'user','districts','wards'));
     }
 
     public function changePassword()
@@ -55,8 +56,11 @@ class AccountManagementController extends Controller
     }
     public function orderDetail($id)
     {
-        $user = Auth::user(); // Lấy thông tin người dùng đã đăng nhập
-        // Lấy đơn hàng theo user_id và id của đơn hàng
+        $user = Auth::user(); 
+        $provinces = Province::all();
+        $districts = District::where('province_id', $user->province_id)->get();
+        $wards = Ward::where('district_id', $user->district_id)->get();
+        $user->load('province', 'district', 'ward'); // Lấy thông tin người dùng hiện tại
         $orders = Order::with([
             'orderDetails.product',
             'orderDetails.gift',
@@ -65,7 +69,7 @@ class AccountManagementController extends Controller
             }
         ])->find($id);
 
-        return view('pages.account-check-orderDetail', compact('orders'));
+        return view('pages.account-check-orderDetail', compact('orders','provinces', 'user','districts','wards'));
     }
 
     public function cancelOrder($orderId)
