@@ -117,7 +117,14 @@
                                 @foreach ($productTypes as $productType)
                                     <div class="product-card">
                                         <a href="{{ route('product.giftDetail', $productType->id) }}">
-                                            <img src="{{ asset('layouts/img/' . $productType->image) }}" alt="{{ $productType->name }}" class="card-img-top">
+                                            @php
+                                                $imagePath = $productType->image;
+                                                // Nếu đường dẫn ảnh chứa 'uploads/posts', không cần thêm 'layouts/img'
+                                                if (strpos($imagePath, 'uploads/products') === false) {
+                                                    $imagePath = 'layouts/img/' . $imagePath; // Nếu không chứa, thêm 'layouts/img'
+                                                }
+                                            @endphp
+                                            <img src="{{ asset($imagePath) }}" alt="{{ $productType->name }}" class="card-img-top">
                                         </a>
                                         <h5 class="product-name">
                                             <a href="{{ route('product.giftDetail', $productType->id) }}">
