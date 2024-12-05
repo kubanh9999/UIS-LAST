@@ -171,31 +171,36 @@ function drawBarChart() {
     // Tùy chọn hiển thị biểu đồ
     var options = {
         title: 'Doanh thu theo từng sản phẩm mỗi ngày',
-        hAxis: {
-            title: 'Ngày',
-            textStyle: { fontSize: 10 },
-        },
-        vAxis: {
-            title: 'Giá trị',
-            textStyle: { fontSize: 10 },
-        },
-        legend: {
-            position: 'top',
-            textStyle: { fontSize: 10 }
-        },
-        chartArea: {
-            width: '85%',
-            height: '75%'
-        },
-        width: 1200,
-        height: 700,
-        colors: ['#4CAF50', '#FFC107', '#2196F3'],
-        animation: {
-            startup: true,
-            duration: 1000,
-            easing: 'out'
-        }
+        isStacked: true, // Tùy chọn xếp chồng các giá trị
+        bar: { groupWidth: '75%' }, 
+    hAxis: {
+        title: 'Ngày',
+        textStyle: { fontSize: 8 },
+        slantedText: true,
+        slantedTextAngle: 45 // Xoay trục ngang để dễ đọc hơn
+    },
+    vAxis: {
+        title: 'Giá trị',
+        textStyle: { fontSize: 8 },
+    },
+    legend: {
+        position: 'top',
+        textStyle: { fontSize: 10 }
+    },
+    chartArea: {
+        width: '120%', // Mở rộng chiều rộng
+        height: '75%'
+    },
+    width: 1400,
+    height: 700,
+    colors: ['#4CAF50', '#FFC107', '#2196F3'],
+    animation: {
+        startup: true,
+        duration: 1000,
+        easing: 'out'
+    }
     };
+    
     // Tạo biểu đồ cột và vẽ nó lên trong phần tử có id 'bar_chart'
     var chart = new google.visualization.ColumnChart(document.getElementById('bar_chart'));
     chart.draw(data, options);
@@ -203,7 +208,21 @@ function drawBarChart() {
 
     
 }
+function drawTableChart() {
+    google.charts.load('current', { packages: ['table'] });
+    google.charts.setOnLoadCallback(function () {
+        var data = google.visualization.arrayToDataTable(<?php echo json_encode($chartData); ?>);
 
+        var options = {
+            showRowNumber: true,
+            width: '100%',
+            height: '100%'
+        };
+
+        var table = new google.visualization.Table(document.getElementById('bar_chart'));
+        table.draw(data, options);
+    });
+}
 }
 
 }
