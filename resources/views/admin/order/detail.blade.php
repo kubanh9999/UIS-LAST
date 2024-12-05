@@ -139,7 +139,10 @@
                     </tr>
                     <tr>
                         <td>Địa chỉ:</td>
-                        <td>{{ $order->address }}</td>
+                        <td> {{ $order->province->name  }}
+                            {{ $order->district->name  }}, 
+                            {{ $order->ward->name  }}, 
+                            {{ $order->street }}, </td>
                     </tr>
                     <tr>
                         <td>Trạng thái:</td>
