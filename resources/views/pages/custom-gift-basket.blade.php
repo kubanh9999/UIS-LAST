@@ -53,7 +53,7 @@
                             <div class="acction-container mt-5">
                                
                                 <a href="{{ route('home.index') }}" class="btn btn-danger mx-2">Quay lại giỏ quà</a>
-                                <button type="submit" class="btn btn-primary mx-2">Thêm giỏ hàng</button>
+                                <button type="submit" class="btn btn-success mx-2">Thêm giỏ hàng</button>
                             </div>
 
                         </div>

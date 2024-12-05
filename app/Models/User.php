@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -24,24 +23,60 @@ class User extends Authenticatable
         'address',
         'role',
         'facebook_id',
-         'status'
+        'status',
+        'remember_token',
+        'street',         // Đường
+        'wards_id',        // Phường/xã
+        'district_id',    // Quận/huyện
+        'province_id',    // Tỉnh/thành phố
     ];
+
+    /**
+     * Relationships
+     */
+
+    // Liên kết với Province
+    public function province()
+    {
+        return $this->belongsTo(Province::class, 'province_id', 'province_id');
+    }
+
+    // Liên kết với District
+    public function district()
+    {
+        return $this->belongsTo(District::class, 'district_id', 'district_id');
+    }
+
+    // Liên kết với Ward
+    public function ward()
+    {
+        return $this->belongsTo(Ward::class, 'wards_id', 'wards_id');
+    }
+
+    // Liên kết với bảng GiftWrapping
     public function giftWrappings()
     {
         return $this->hasMany(GiftWrapping::class, 'user_id');
     }
+
+    // Liên kết với bảng Favorite
     public function favorites()
     {
-        return $this->hasMany(Favorite::class, 'products_id');
+        return $this->hasMany(Favorite::class, 'user_id'); // Sửa khóa ngoại là `user_id` thay vì `products_id`
     }
+
+    // Liên kết với bảng Comment
     public function comments()
     {
         return $this->hasMany(Comment::class);
     }
+
+    // Liên kết với bảng Discount thông qua bảng trung gian discounts_product
     public function discounts()
     {
-        return $this->belongsToMany(Discount::class, 'discounts_product');
+        return $this->belongsToMany(Discount::class, 'discounts_product', 'user_id', 'discount_id');
     }
+
     /**
      * The attributes that should be hidden for serialization.
      *
@@ -53,7 +88,7 @@ class User extends Authenticatable
     ];
 
     /**
-     * Get the attributes that should be cast.
+     * The attributes that should be cast.
      *
      * @return array<string, string>
      */
