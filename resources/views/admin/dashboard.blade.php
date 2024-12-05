@@ -121,9 +121,10 @@
                 ['Tháng {{ $sale['month'] }}', {{ $sale['total'] }}],
             @endforeach
         ]);
+/* console.log('data',data); */
 
         var options = {
-            title: 'Doanh thu hàng tháng trong năm',
+            title: 'Tổng doanh thu hàng tháng trong năm',
             curveType: 'function',
             legend: { position: 'bottom' },
             hAxis: {
@@ -156,50 +157,54 @@ google.charts.setOnLoadCallback(drawBarChart);
 
 // Hàm vẽ biểu đồ
 function drawBarChart() {
-    // Dữ liệu truyền từ PHP
+    google.charts.load('current', { packages: ['corechart'] });
+
+google.charts.setOnLoadCallback(drawBarChart);
+
+function drawBarChart() {
+    // Dữ liệu truyền từ PHP, cần đảm bảo rằng $chartData đã đúng cấu trúc (mảng 2 chiều)
     var data = google.visualization.arrayToDataTable(<?php echo json_encode($chartData); ?>);
-console.log(data);
+    
+    // Kiểm tra dữ liệu trên console để đảm bảo đúng cấu trúc
+    console.log('Dữ liệu cho biểu đồ:', data);
 
     // Tùy chọn hiển thị biểu đồ
     var options = {
-        title: 'Doanh thu theo từng sản phẩm mỗi tháng',
+        title: 'Doanh thu theo từng sản phẩm mỗi ngày',
         hAxis: {
             title: 'Ngày',
-            textStyle: { fontSize: 10 }, // Kích thước chữ trục X nhỏ hơn để dễ đọc
-            slantedText: true, // Góc nghiêng cho chữ trên trục X nếu có nhiều dữ liệu
-            slantedTextAngle: 45 // Góc nghiêng
+            textStyle: { fontSize: 10 },
         },
         vAxis: {
             title: 'Giá trị',
-            textStyle: { fontSize: 10 }, // Kích thước chữ trục Y nhỏ hơn
-            scaleType: 'log', // Sử dụng scale logarithmic nếu giá trị chênh lệch quá lớn
+            textStyle: { fontSize: 10 },
         },
         legend: {
             position: 'top',
-            textStyle: { fontSize: 10 } // Kích thước chữ chú thích nhỏ hơn
+            textStyle: { fontSize: 10 }
         },
         chartArea: {
-            width: '85%', // Vùng hiển thị biểu đồ
-            height: '75%' // Tăng chiều cao của vùng hiển thị biểu đồ
+            width: '85%',
+            height: '75%'
         },
-        bar: {
-            groupWidth: '70%' // Giảm bớt groupWidth (giảm 150% xuống còn 70%) để các cột vừa phải
-        },
-        width: 1200, // Chiều rộng biểu đồ (tăng để có thêm không gian cho nhiều cột)
-        height: 700, // Chiều cao biểu đồ
-        colors: ['#4CAF50', '#FFC107', '#2196F3'], // Màu sắc cột
+        width: 1200,
+        height: 700,
+        colors: ['#4CAF50', '#FFC107', '#2196F3'],
         animation: {
-            startup: true, // Hiệu ứng khi tải biểu đồ
-            duration: 1000, // Thời gian hiệu ứng
-            easing: 'out' // Kiểu hiệu ứng
+            startup: true,
+            duration: 1000,
+            easing: 'out'
         }
     };
-
-    // Tạo biểu đồ cột và vẽ
+    // Tạo biểu đồ cột và vẽ nó lên trong phần tử có id 'bar_chart'
     var chart = new google.visualization.ColumnChart(document.getElementById('bar_chart'));
     chart.draw(data, options);
+
+
+    
 }
 
+}
 
 }
 

@@ -121,7 +121,7 @@ class CheckoutController extends Controller
                 }
             }
         }
-        $shippingCost = 30000;
+        $shippingCost = 0;
         $totalAmount += $shippingCost;
         /*   dd($totalAmount);
           die(); */
@@ -137,7 +137,7 @@ class CheckoutController extends Controller
             'email' => $request->email,
             'phone' => $request->phone,
             // Cung cấp giá trị mặc định nếu không có dữ liệu
-            'payment_method' => 0,
+            'payment_method' => "thanh toán tiền mặt",
             'status' => '0',
             'token' => $token,
             'order_date' => now(),
@@ -170,6 +170,20 @@ class CheckoutController extends Controller
         foreach ($cart as $item) {
             if (isset($item['fruits'])) { // Trường hợp giỏ quà tùy chỉnh
                 foreach ($item['fruits'] as $fruit) {
+                    $quantity = $fruit['quantity']; // Số lượng trong đơn vị gram
+                    $price = $fruit['price']; // Giá của sản phẩm (giá cho 1 đơn vị, có thể là giá cho 100g, 1kg...)
+        
+                    // Kiểm tra và xử lý số lượng từ 100g đến 1000g (1kg)
+                    if ($quantity >= 100 && $quantity <= 900) {
+                        // Chuyển đổi số lượng từ gram sang kg
+                        $quantityInKg = $quantity / 1000;
+                        // Chia giá cho 1000 để tính giá theo kg
+                        $pricePerKg = $price / 1000;
+                    } else {
+                        // Nếu số lượng lớn hơn 900g, giữ nguyên giá
+                        $quantityInKg = $quantity / 1000; // Chuyển số lượng từ gram sang kg
+                        $pricePerKg = $price; // Giữ nguyên giá (giá cho 1kg)
+                    } // In ra giá trị quantity, price và quantityInKg
                     // Lưu sản phẩm trong giỏ quà, chỉ cần lưu một bản ghi
                     OrderDetail::create([
                         'user_id' => Auth::id(),
@@ -353,7 +367,7 @@ class CheckoutController extends Controller
                 }
             }
         }
-        $shippingCost = 30000;
+        $shippingCost = 0;
         $totalAmount += $shippingCost;
 
         // Kiểm tra tổng số tiền không âm
@@ -434,7 +448,7 @@ class CheckoutController extends Controller
             'email' => $request->email,
             'phone' => $request->phone,
             // Cung cấp giá trị mặc định nếu không có dữ liệu
-            'payment_method' => 0,
+            'payment_method' => "thanh toán VNPAY",
             'status' => '0',
             'token' => $vnp_TxnRef,
             'order_date' => now(),
@@ -450,14 +464,29 @@ class CheckoutController extends Controller
         foreach ($cart as $item) {
             if (isset($item['fruits'])) { // Trường hợp giỏ quà tùy chỉnh
                 foreach ($item['fruits'] as $fruit) {
+                    $quantity = $fruit['quantity']; // Số lượng trong đơn vị gram
+                    $price = $fruit['price']; // Giá của sản phẩm (giá cho 1 đơn vị, có thể là giá cho 100g, 1kg...)
+        
+                    // Kiểm tra và xử lý số lượng từ 100g đến 1000g (1kg)
+                    if ($quantity >= 100 && $quantity <= 900) {
+                        // Chuyển đổi số lượng từ gram sang kg
+                        $quantityInKg = $quantity / 1000;
+                        // Chia giá cho 1000 để tính giá theo kg
+                        $pricePerKg = $price / 1000;
+                    } else {
+                        // Nếu số lượng lớn hơn 900g, giữ nguyên giá
+                        $quantityInKg = $quantity / 1000; // Chuyển số lượng từ gram sang kg
+                        $pricePerKg = $price; // Giữ nguyên giá (giá cho 1kg)
+                    } // In ra giá trị quantity, price và quantityInKg
+
                     OrderDetail::create([
                         'user_id' => Auth::id(),
                         'order_id' => $order->id,
                         'gift_id' => $item['gift_id'], // Có thể để null nếu không cần
                         'product_id' => $fruit['product_id'],
-                        'quantity' => $fruit['quantity'],
-                        'price' => $fruit['price'],
-                        'total_price' => $fruit['price'] * $fruit['quantity'],
+                        'quantity' => $quantityInKg, // Sử dụng số lượng trong kg
+                        'price' => $pricePerKg, // Giá đã được chia cho 1000 nếu số lượng trong phạm vi từ 100g đến 900g
+                        'total_price' => $pricePerKg * $quantityInKg, // Tính tổng giá trị đơn hàng
                     ]);
                     $product = Product::find($fruit['product_id']);
                     if ($product) {
@@ -530,7 +559,7 @@ class CheckoutController extends Controller
                 }
             }
         }
-        $shippingCost = 30000;
+        $shippingCost = 0;
         $totalAmount += $shippingCost;
 
         // Kiểm tra tổng số tiền không âm
@@ -603,7 +632,7 @@ class CheckoutController extends Controller
                     'email' => $request->email,
                     'phone' => $request->phone,
                     // Cung cấp giá trị mặc định nếu không có dữ liệu
-                    'payment_method' => 0,
+                    'payment_method' => "thanh toán MOMO",
                     'status' => '0',
                     'token' => $vnp_TxnRef,
                     'order_date' => now(),
@@ -620,6 +649,20 @@ class CheckoutController extends Controller
                 foreach ($cart as $item) {
                     if (isset($item['fruits'])) { // Trường hợp giỏ quà tùy chỉnh
                         foreach ($item['fruits'] as $fruit) {
+                            $quantity = $fruit['quantity']; // Số lượng trong đơn vị gram
+                    $price = $fruit['price']; // Giá của sản phẩm (giá cho 1 đơn vị, có thể là giá cho 100g, 1kg...)
+        
+                    // Kiểm tra và xử lý số lượng từ 100g đến 1000g (1kg)
+                    if ($quantity >= 100 && $quantity <= 900) {
+                        // Chuyển đổi số lượng từ gram sang kg
+                        $quantityInKg = $quantity / 1000;
+                        // Chia giá cho 1000 để tính giá theo kg
+                        $pricePerKg = $price / 1000;
+                    } else {
+                        // Nếu số lượng lớn hơn 900g, giữ nguyên giá
+                        $quantityInKg = $quantity / 1000; // Chuyển số lượng từ gram sang kg
+                        $pricePerKg = $price; // Giữ nguyên giá (giá cho 1kg)
+                    } 
                             // Lưu sản phẩm trong giỏ quà, chỉ cần lưu một bản ghi
                             OrderDetail::create([
                                 'user_id' => Auth::id(),
