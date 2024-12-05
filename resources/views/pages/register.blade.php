@@ -144,7 +144,15 @@
     </div>
     <p class="not-register">Đã có mật khẩu <a href="{{ route('login') }}">đăng nhập</a> tại đây?</p>
 </form>
-
+<script>
+    document.getElementById('send-otp-btn').addEventListener('click', function() {
+        // Vô hiệu hóa nút
+        this.disabled = true;
+        
+        // Gửi OTP (mô phỏng xử lý gửi OTP)
+        console.log("Mã OTP đã được gửi!");
+    });
+</script>
 <script>
     // Event listener for sending OTP
     document.getElementById('send-otp-btn').addEventListener('click', function () {
