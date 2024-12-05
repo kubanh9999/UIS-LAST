@@ -183,16 +183,16 @@ class CheckoutController extends Controller
                         // Nếu số lượng lớn hơn 900g, giữ nguyên giá
                         $quantityInKg = $quantity / 1000; // Chuyển số lượng từ gram sang kg
                         $pricePerKg = $price; // Giữ nguyên giá (giá cho 1kg)
-                    } // In ra giá trị quantity, price và quantityInKg
-                    // Lưu sản phẩm trong giỏ quà, chỉ cần lưu một bản ghi
+                    } 
+                           
                     OrderDetail::create([
                         'user_id' => Auth::id(),
                         'order_id' => $order->id,
                         'gift_id' => $item['gift_id'], // Có thể để null nếu không cần
-                        'product_id' => $fruit['product_id'], // Đảm bảo không null
-                        'quantity' => $fruit['quantity'],
-                        'price' => $fruit['price'],
-                        'total_price' => $fruit['price'] * $fruit['quantity'],
+                        'product_id' => $fruit['product_id'],
+                        'quantity' => $quantityInKg, // Sử dụng số lượng trong kg
+                        'price' => $pricePerKg, // Giá đã được chia cho 1000 nếu số lượng trong phạm vi từ 100g đến 900g
+                        'total_price' => $pricePerKg * $quantityInKg, // Tính tổng giá trị đơn hàng
                     ]);
 
                     $product = Product::find($fruit['product_id']);
@@ -669,9 +669,9 @@ class CheckoutController extends Controller
                                 'order_id' => $order->id,
                                 'gift_id' => $item['gift_id'], // Có thể để null nếu không cần
                                 'product_id' => $fruit['product_id'], // Đảm bảo không null
-                                'quantity' => $fruit['quantity'],
-                                'price' => $fruit['price'],
-                                'total_price' => $fruit['price'] * $fruit['quantity'],
+                                'quantity' => $quantityInKg,
+                                'price' => $pricePerKg,
+                                'total_price' => $pricePerKg * $quantityInKg, 
                             ]);
                             $product = Product::find($fruit['product_id']);
                             if ($product) {
