@@ -365,15 +365,32 @@ class AdminProductController extends Controller
 
     public function updateStatus(Request $request)
     {
+        // Mảng ánh xạ giá trị số với trạng thái chữ
+        $statusMapping = [
+            -1 => 'Đã hủy',
+            0  => 'Đang xử lý',
+            1  => 'Đang vận chuyển',
+            2  => 'Đã nhận hàng',
+        ];
+
+        // Lấy đơn hàng từ ID
         $order = Order::find($request->id);
         if ($order) {
-            $order->status = $request->status;
-            $order->save();
+            // Kiểm tra nếu giá trị trạng thái hợp lệ
+            if (array_key_exists($request->status, $statusMapping)) {
+                // Cập nhật trạng thái bằng chữ thay vì số
+                $order->status = $statusMapping[$request->status];
+                $order->save();
 
-            return response()->json(['success' => true]);
+                return response()->json(['success' => true]);
+            } else {
+                return response()->json(['success' => false, 'message' => 'Trạng thái không hợp lệ']);
+            }
         }
+
         return response()->json(['success' => false]);
     }
+
     function gift()
     {
         $ProductType = ProductType::orderBy('id', 'desc')->get();

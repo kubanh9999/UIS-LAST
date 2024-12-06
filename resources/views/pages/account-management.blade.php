@@ -317,31 +317,15 @@
                                         <td>#{{ $item->id }}</td>
                                         <td>{{ $item->user->name }}</td> <!-- Hiển thị tên người mua -->
                                        {{--  <td>  {{ $orders->province->name  }}
-                                            {{ $orders->district->name  }}, 
-                                            {{ $orders->ward->name  }}, 
+                                            {{ $orders->district->name  }},
+                                            {{ $orders->ward->name  }},
                                             {{ $orders->street }}, </td> --}} <!-- Hiển thị địa chỉ giao hàng -->
                                         <td>{{ $item->phone }}</td> <!-- Hiển thị số điện thoại -->
                                         <td>{{ \Carbon\Carbon::parse($item->order_date)->format('d/m/Y') }}</td>
 
                                         <td>
-                                            <span
-                                                class="badge 
-                                    @if ($item->status == -1) bg-danger 
-                                    @elseif($item->status == 0) bg-warning 
-                                    @elseif($item->status == 1) bg-info 
-                                    @elseif($item->status == 2) bg-success 
-                                    @else bg-secondary @endif">
-                                                @if ($item->status == -1)
-                                                    Đơn hàng đã hủy
-                                                @elseif($item->status == 0)
-                                                    Đơn hàng đang được xử lý
-                                                @elseif($item->status == 1)
-                                                    Đơn hàng đang vận chuyển
-                                                @elseif($item->status == 2)
-                                                    Đơn hàng đã được giao thành công
-                                                @else
-                                                    Không xác định
-                                                @endif
+                                            <span class="" >
+                                                {{ $item->status }}
                                             </span>
                                         </td>
                                         <td>{{ $item->payment_method }}</td>
@@ -422,7 +406,7 @@
                 /* $('.ward').chance(function(){
                     var ward = $(this).val;
                     console.log('ward',ward);
-                    
+
                 }) */
                 // Khi quận huyện thay đổi
                 $('.district').change(function() {

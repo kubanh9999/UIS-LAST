@@ -156,17 +156,7 @@
                                 <tr>
                                     <td><strong>Trạng thái:</strong></td>
                                     <td class="text-right">
-                                        @if ($orders->status == -1)
-                                            <span class="text-danger">Đơn hàng đã hủy</span>
-                                        @elseif ($orders->status == 0)
-                                            <span class="text-warning">Đang được xử lý</span>
-                                        @elseif ($orders->status == 1)
-                                            <span class="text-primary">Đang vận chuyển</span>
-                                        @elseif ($orders->status == 2)
-                                            <span class="text-success">Đã giao thành công</span>
-                                        @else
-                                            <span class="text-secondary">Chưa xác định</span>
-                                        @endif
+                                      {{$orders->status}}
                                     </td>
                                 </tr>
 
