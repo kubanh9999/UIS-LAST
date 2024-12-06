@@ -303,6 +303,7 @@ class CheckoutController extends Controller
                     $quantity = (int) $fruit['quantity'];
                     $totalPrice += $price * $quantity;
                 }
+              
                 
             } else {
                 // Sản phẩm thông thường
@@ -311,6 +312,7 @@ class CheckoutController extends Controller
                 $totalPrice += $price * $quantity;
             }
         }
+
         // Bước 4: Áp dụng giảm giá
         $discountPercentage = $discount->discount_percent;
         $discountAmount = ($totalPrice * $discountPercentage) / 100;

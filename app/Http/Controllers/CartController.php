@@ -217,20 +217,20 @@ class CartController extends Controller
 
     public function addGiftBasketToCart(Request $request, $basket_id)
     {
-  /*      dd() */
         if (!Auth::check()) {
             return redirect()->route('login')->with('error', 'Bạn cần đăng nhập mua hàng.');
         }
-
+    
         // Khởi tạo giỏ hàng từ session
         $cart = Session::get('cart', []);
         $quantities = $request->input('quantities', []);
+        
         // Kiểm tra giỏ quà
         $giftBasket = ProductType::find($basket_id);
         if (!$giftBasket) {
             return redirect()->route('cart.index')->with('error', 'Giỏ quà không tồn tại.');
         }
-
+    
         // Kiểm tra trái cây trong giỏ quà
         $fruits = [];
         foreach ($request->fruits as $fruit_id => $isChecked) {
@@ -239,63 +239,64 @@ class CartController extends Controller
                 if ($fruit) {
                     // Lấy giá trị quantity từ form, ép kiểu về số nguyên
                     $quantity = (int)($quantities[$fruit_id] ?? 0); // Đảm bảo quantity là số nguyên
-
+                    $quantityKg = $quantity / 1000; // Chuyển đổi quantity từ gam sang kg
+    
                     // Lấy giá trị price từ sản phẩm, ép kiểu về số thập phân
                     $price = (float)$fruit->price; // Đảm bảo price là số thập phân
-
-                    if ($quantity > $fruit->stock) {  // Giả sử `stock` là trường lưu trữ số lượng tồn kho
+    
+                    if ($quantityKg > $fruit->stock) {  // Giả sử `stock` là trường lưu trữ số lượng tồn kho
                         return back()->with('error', 'Số lượng trái cây ' . $fruit->name . ' vượt quá số lượng tồn kho.');
                     }
-
+    
                     if ($quantity > 0) {
                         $fruits[$fruit_id] = [
                             'product_id' => $fruit->id,
                             'name' => $fruit->name,
                             'image' => $fruit->image,
-                            'quantity' => $quantity,
+                            'quantity' => $quantityKg, // Lưu số lượng theo kg
                             'price' => $price
                         ];
                     }
                 }
             }
         }
-
+    
         // Tính tổng giỏ quà
-        $total = $this->calculateBasketTotal($fruits);  // Hàm tính tổng có thể được cập nhật để tính đúng
-   /*  dd($total); */
+        $totalPrice = $this->calculateBasketTotal($fruits); // Tính tổng giỏ quà
+        /* dd($totalPrice); */ // Debug totalPrice
+    
         $basket = [
             'gift_id' => $giftBasket->id,
             'basket_name' => $giftBasket->name,
             'basket_image' => $giftBasket->image,
             'fruits' => $fruits,
-            'total' => $total
+            'total' => $totalPrice // Đảm bảo sử dụng totalPrice
         ];
-
+    
         // Thêm giỏ quà vào giỏ hàng trong session
         $cart[] = $basket;
         Session::put('cart', $cart);
-       /*  dd($cart); */
+    
         if ($request->input('action') === 'buy_now') {
             return redirect()->route('cart.index')->with('success', 'Sản phẩm đã được thêm vào giỏ hàng và chuyển tới trang giỏ hàng.');
         } else {
             return back()->with('success', 'Sản phẩm đã được thêm vào giỏ hàng.');
         }
     }
-
+    
     // Hàm tính tổng giỏ quà
     public function calculateBasketTotal($fruits)
     {
         $total = 0;
         foreach ($fruits as $fruit) {
-            // Nếu giá trị quantity là trong đơn vị gam và bạn muốn tính giá theo kg
-            // Đảm bảo rằng quantity là số nguyên và bạn tính đúng theo đơn vị
-            $weightInKg = $fruit['quantity'] / 1000; // Chuyển đổi gam sang kg nếu cần
-
+            // Nếu quantity đã là kg thì không cần chia thêm nữa
+            $weightInKg = $fruit['quantity'];
+    
             // Cộng dồn tổng theo trọng lượng và giá trị
-            $total += $weightInKg * $fruit['price'];  // Giá sản phẩm tính theo trọng lượng (kg)
+            $total += $weightInKg * $fruit['price'];
         }
+    
         return $total;
     }
-
 
 }
