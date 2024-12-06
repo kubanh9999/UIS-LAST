@@ -275,59 +275,61 @@ class CheckoutController extends Controller
         $request->validate([
             'discount_code' => 'required|string|max:50',
         ]);
-
+    
         $discountCode = $request->input('discount_code');
-
+    
         // Bước 2: Kiểm tra mã giảm giá trong cơ sở dữ liệu
         $discount = Discount::where('code', $discountCode)
-            ->where('valid_form', '<=', now()->addDay())
-            ->where('valid_end', '>=', now())
+            ->where('valid_form', '<=', now()) // Ngày bắt đầu hợp lệ
+            ->where('valid_end', '>=', now()) // Ngày kết thúc hợp lệ
             ->first();
-
+    
+        // Kiểm tra mã giảm giá tồn tại
+        if (!$discount) {
+            return response()->json([
+                'message' => 'Mã giảm giá không hợp lệ hoặc đã hết hạn.',
+            ], 422);
+        }
+    
         // Bước 3: Tính tổng giá trị sản phẩm trong giỏ hàng từ session
         $cart = session()->get('cart', []);
-        $totalPrice = 0; // Khởi tạo tổng giá trị
-/* dd($cart); */
-        // Tính tổng giá trị giỏ hàng
-        // Khởi tạo tổng giá trị giỏ hàng
-
+        $totalPrice = 0;
+    
         foreach ($cart as $item) {
             if (isset($item['fruits'])) {
-                // Đây là giỏ quà
+                // Giỏ quà
                 foreach ($item['fruits'] as $fruit) {
-                    $price = (float) $fruit['price']; // Giá của từng loại trái cây trong giỏ
-                    $quantity = (int) $fruit['quantity']; // Số lượng của từng loại trái cây
-                    $totalPrice += $price * $quantity; // Cộng vào tổng giá trị
+                    $price = (float) $fruit['price'];
+                    $quantity = (int) $fruit['quantity'];
+                    $totalPrice += $price * $quantity;
                 }
+                
             } else {
-                // Đây là sản phẩm thông thường
-                $price = (float) $item['price']; // Giá sản phẩm
-                $quantity = (int) $item['quantity']; // Số lượng sản phẩm
-                $totalPrice += $price * $quantity; // Cộng vào tổng giá trị
+                // Sản phẩm thông thường
+                $price = (float) $item['price'];
+                $quantity = (int) $item['quantity'];
+                $totalPrice += $price * $quantity;
             }
         }
-
-        // Áp dụng giảm giá nếu có
-        if ($discount) {
-            $discountPercentage = $discount->discount_percent; // Lấy tỷ lệ giảm giá
-            $discountAmount = ($totalPrice * $discountPercentage) / 100; // Tính số tiền giảm giá
-
-            $totalPrice -= $discountAmount;
-            session()->put('discount_amount', round($discountAmount, 2));
-            session()->put('discount_id', $discount->id);
-            session()->put('discounted_total', round($totalPrice, 2));
-        } else {
-            $discountPercentage = 0;
-            /*  $totalAmountAfterDiscount = $totalPrice; */ // Nếu không có mã giảm giá, đặt về 0
-        }
-
-        // Bước 5: Trả về tổng giá trị sau khi giảm giá
+        // Bước 4: Áp dụng giảm giá
+        $discountPercentage = $discount->discount_percent;
+        $discountAmount = ($totalPrice * $discountPercentage) / 100;
+    
+        $totalPriceAfterDiscount = $totalPrice - $discountAmount;
+    
+        // Lưu thông tin giảm giá vào session
+        session()->put('discount_amount', round($discountAmount, 2));
+        session()->put('discount_id', $discount->id);
+        session()->put('discounted_total', round($totalPriceAfterDiscount, 2));
+    
+        // Trả về kết quả
         return response()->json([
-            'total_price' => number_format($totalPrice, 2, '.', ''),
-            'discount' => $discountPercentage, // Trả về discount_percentage
-            'message' => $discount ? 'Giảm giá đã được áp dụng.' : 'Mã giảm giá không hợp lệ hoặc đã hết hạn.'
+            'total_price' => number_format($totalPriceAfterDiscount, 2, '.', ''),
+            'discount' => $discountPercentage,
+            'message' => 'Giảm giá đã được áp dụng thành công.',
         ]);
     }
+    
 
 
 

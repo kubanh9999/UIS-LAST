@@ -321,42 +321,36 @@
 
         // Xử lý áp dụng mã giảm giá
         $('#discount-form').on('submit', function (event) {
-            event.preventDefault();
+    event.preventDefault();
 
-            $.ajax({
-                url: $(this).attr('action'),
-                method: 'POST',
-                data: $(this).serialize(),
-                success: function (response) {
-                    let discountPercent = response.discount
-                        ? Math.min(Math.max(response.discount, 1), 100)
-                        : 0;
-
-                    let discountAmount = (discountPercent / 100) * totalPrice;
-                    let totalAfterDiscount = totalPrice - discountAmount;
-
-                    // Định dạng số theo kiểu "59,500 VND"
-                    let formattedTotal = totalAfterDiscount
-                        .toLocaleString('en-US', { minimumFractionDigits: 0 }) + " VND";
-
-                    $('#discount-percentage').text(discountPercent);
-                    $('#total-remaining').text(formattedTotal);
-                    $('#message')
-                        .text('Áp dụng mã thành công!')
-                        .removeClass('alert-danger')
-                        .addClass('alert alert-success')
-                        .show();
-                },
-                error: function (xhr) {
-                    $('#message')
-                        .text('Mã giảm giá đã hết hạn hoặc không tồn tại!')
-                        .removeClass('alert-success')
-                        .addClass('alert alert-danger')
-                        .show();
-                    console.error(xhr.responseJSON?.message || "Lỗi không xác định.");
-                }
+    $.ajax({
+        url: $(this).attr('action'),
+        method: 'POST',
+        data: $(this).serialize(),
+        success: function (response) {
+            let totalAfterDiscount = parseFloat(response.total_price).toLocaleString('vi-VN', {
+                style: 'currency',
+                currency: 'VND',
             });
-        });
+
+            $('#discount-percentage').text(response.discount + '%');
+            $('#total-remaining').text(totalAfterDiscount);
+            $('#message')
+                .text(response.message)
+                .removeClass('alert-danger')
+                .addClass('alert alert-success')
+                .show();
+        },
+        error: function (xhr) {
+            $('#message')
+                .text(xhr.responseJSON?.message || 'Mã giảm giá không hợp lệ hoặc đã hết hạn.')
+                .removeClass('alert-success')
+                .addClass('alert alert-danger')
+                .show();
+        },
+    });
+});
+
 
 
 
