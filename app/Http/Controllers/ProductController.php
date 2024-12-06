@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Models\Category;
 use App\Models\Comment;
 use App\Models\Product;
-
 use App\Models\ProductType;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -14,34 +13,34 @@ use Illuminate\Support\Facades\DB;
 class ProductController extends Controller
 {
     public function searchFruits(Request $request)
-{
-    $query = $request->get('query', '');
+    {
+        $query = $request->get('query', '');
 
-    $fruits = Product::where('name', 'LIKE', "%{$query}%")->get();
+        $fruits = Product::where('name', 'LIKE', "%{$query}%")->get();
 
-    // Xử lý dữ liệu trả về
-    $fruits = $fruits->map(function ($fruit) {
-        $imagePath = $fruit->image;
+        // Xử lý dữ liệu trả về
+        $fruits = $fruits->map(function ($fruit) {
+            $imagePath = $fruit->image;
 
-        // Kiểm tra nếu ảnh không chứa 'uploads/products'
-        if (strpos($imagePath, 'uploads/products') === false) {
-            $imagePath = asset('layouts/img/' . $fruit->image); // Thêm đường dẫn layouts/img
-        } else {
-            $imagePath = asset($fruit->image); // Dùng trực tiếp đường dẫn hiện tại
-        }
+            // Kiểm tra nếu ảnh không chứa 'uploads/products'
+            if (strpos($imagePath, 'uploads/products') === false) {
+                $imagePath = asset('layouts/img/' . $fruit->image); // Thêm đường dẫn layouts/img
+            } else {
+                $imagePath = asset($fruit->image); // Dùng trực tiếp đường dẫn hiện tại
+            }
 
-        return [
-            'id' => $fruit->id,
-            'name' => $fruit->name,
-            'price' => $fruit->price,
-            'price_formatted' => number_format($fruit->price, 0, ',', '.'),
-            'image' => $imagePath,
-        ];
-    });
+            return [
+                'id' => $fruit->id,
+                'name' => $fruit->name,
+                'price' => $fruit->price,
+                'price_formatted' => number_format($fruit->price, 0, ',', '.'),
+                'image' => $imagePath,
+            ];
+        });
 
-    // Trả dữ liệu dạng JSON
-    return response()->json($fruits);
-}
+        // Trả dữ liệu dạng JSON
+        return response()->json($fruits);
+    }
 
     public function index(Request $request)
     {
@@ -151,88 +150,177 @@ class ProductController extends Controller
 
 
     public function showByCategory(Request $request, $id)
-{
-    // Lấy tất cả các danh mục
-    $categories = Category::all();
-    $productTypes = collect();
-    // Xây dựng query sản phẩm
-    $productsQuery = DB::table('products')
-        ->select('id', 'name', 'price', 'image', 'category_id');
+    {
+        // Lấy tất cả các danh mục
+        $categories = Category::all();
+        $productTypes = collect(); // Khởi tạo collection rỗng
 
-    if ($id == 'all') {
-        // Kết hợp bảng products và product_types
-        $productTypesQuery = DB::table('product_types')
-            ->select('id', 'name', 'price_gift as price', 'image', 'category_id');
+        // Xây dựng query sản phẩm
+        $productsQuery = DB::table('products')
+            ->select('id', 'name', 'price', 'image', 'category_id');
 
-        $unionQuery = $productsQuery->unionAll($productTypesQuery);
+        if ($id == 'all') {
+            // Kết hợp bảng product_types mà không cần lọc giá
+            $productTypesQuery = DB::table('product_types')
+                ->select('id', 'name', 'price_gift as price', 'image', 'category_id');
 
-        // Tạo query tổng hợp
-        $products = DB::table(DB::raw("({$unionQuery->toSql()}) as aggregate_table"))
-            ->mergeBindings($productsQuery)
-            ->mergeBindings($productTypesQuery);
+            // Lọc theo giá cho products nếu có
+            if ($request->has('price')) {
+                $priceRange = $request->input('price');
+                switch ($priceRange) {
+                    case 'under_99000':
+                        $productsQuery->where('price', '<', 99000);
+                        break;
+                    case '99000_201000':
+                        $productsQuery->whereBetween('price', [99000, 201000]);
+                        break;
+                    case '201000_301000':
+                        $productsQuery->whereBetween('price', [201000, 301000]);
+                        break;
+                    case '301000_501000':
+                        $productsQuery->whereBetween('price', [301000, 501000]);
+                        break;
+                    case '501000_1000000':
+                        $productsQuery->whereBetween('price', [501000, 1000000]);
+                        break;
+                    case 'above_1000000':
+                        $productsQuery->where('price', '>', 1000000);
+                        break;
+                }
+            }
 
-    } else {
-        // Lọc theo danh mục (category_id)
-        $productsQuery->where('category_id', $id);
+            // Sắp xếp cho products nếu có
+            if ($request->has('sort')) {
+                $sortOption = $request->input('sort');
+                switch ($sortOption) {
+                    case 'asc':
+                        $productsQuery->orderBy('price', 'asc');
+                        break;
+                    case 'desc':
+                        $productsQuery->orderBy('price', 'desc');
+                        break;
+                    case 'newest':
+                        $productsQuery->orderBy('id', 'desc');
+                        break;
+                    case 'oldest':
+                        $productsQuery->orderBy('id', 'asc');
+                        break;
+                }
+            }
 
-        // Lấy giỏ quà liên quan đến danh mục
-        $productTypes = DB::table('product_types')
-            ->where('category_id', $id)
-            ->get();
+            // Kết hợp query giữa products và product_types
+            $unionQuery = $productsQuery->unionAll($productTypesQuery);
 
-        $products = $productsQuery;
-    }
+            // Tạo query tổng hợp
+            $products = DB::table(DB::raw("({$unionQuery->toSql()}) as aggregate_table"))
+                ->mergeBindings($productsQuery) // Liên kết bindings với products
+                ->mergeBindings($productTypesQuery) // Liên kết bindings với product_types
+                ->select('*');
+        } else {
+            // Lọc theo danh mục (category_id)
+            $productsQuery->where('category_id', $id);
 
-    // Lọc theo giá nếu có
-    if ($request->has('price')) {
-        switch ($request->input('price')) {
-            case 'under_99000':
-                $products->where('price', '<', 99000);
-                break;
-            case '99000_201000':
-                $products->whereBetween('price', [99000, 201000]);
-                break;
-            case '201000_301000':
-                $products->whereBetween('price', [201000, 301000]);
-                break;
-            case '301000_501000':
-                $products->whereBetween('price', [301000, 501000]);
-                break;
-            case '501000_1000000':
-                $products->whereBetween('price', [501000, 1000000]);
-                break;
-            case 'above_1000000':
-                $products->where('price', '>', 1000000);
-                break;
+            // Lọc giỏ quà theo category_id
+            $productTypesQuery = DB::table('product_types')
+                ->where('category_id', $id);
+
+            // Lọc theo giá cho giỏ quà
+            if ($request->has('price')) {
+                switch ($request->input('price')) {
+                    case 'under_99000':
+                        $productTypesQuery->where('price_gift', '<', 99000);
+                        break;
+                    case '99000_201000':
+                        $productTypesQuery->whereBetween('price_gift', [99000, 201000]);
+                        break;
+                    case '201000_301000':
+                        $productTypesQuery->whereBetween('price_gift', [201000, 301000]);
+                        break;
+                    case '301000_501000':
+                        $productTypesQuery->whereBetween('price_gift', [301000, 501000]);
+                        break;
+                    case '501000_1000000':
+                        $productTypesQuery->whereBetween('price_gift', [501000, 1000000]);
+                        break;
+                    case 'above_1000000':
+                        $productTypesQuery->where('price_gift', '>', 1000000);
+                        break;
+                }
+            }
+
+            // Sắp xếp giỏ quà
+            if ($request->has('sort')) {
+                switch ($request->input('sort')) {
+                    case 'asc':
+                        $productTypesQuery->orderBy('price_gift', 'asc');
+                        break;
+                    case 'desc':
+                        $productTypesQuery->orderBy('price_gift', 'desc');
+                        break;
+                    case 'newest':
+                        $productTypesQuery->orderBy('id', 'desc');
+                        break;
+                    case 'oldest':
+                        $productTypesQuery->orderBy('id', 'asc');
+                        break;
+                }
+            }
+
+            // Lấy giỏ quà
+            $productTypes = $productTypesQuery->get();
+
+            // Kết hợp kết quả
+            $products = $productsQuery;
         }
-    }
 
-    // Sắp xếp nếu có yêu cầu
-    if ($request->has('sort')) {
-        switch ($request->input('sort')) {
-            case 'asc':
-                $products->orderBy('price', 'asc');
-                break;
-            case 'desc':
-                $products->orderBy('price', 'desc');
-                break;
-            case 'newest':
-                $products->orderBy('id', 'desc');
-                break;
-            case 'oldest':
-                $products->orderBy('id', 'asc');
-                break;
+        // Lọc theo giá cho sản phẩm nếu có
+        if ($request->has('price')) {
+            switch ($request->input('price')) {
+                case 'under_99000':
+                    $products->where('price', '<', 99000);
+                    break;
+                case '99000_201000':
+                    $products->whereBetween('price', [99000, 201000]);
+                    break;
+                case '201000_301000':
+                    $products->whereBetween('price', [201000, 301000]);
+                    break;
+                case '301000_501000':
+                    $products->whereBetween('price', [301000, 501000]);
+                    break;
+                case '501000_1000000':
+                    $products->whereBetween('price', [501000, 1000000]);
+                    break;
+                case 'above_1000000':
+                    $products->where('price', '>', 1000000);
+                    break;
+            }
         }
+
+        // Sắp xếp nếu có yêu cầu
+        if ($request->has('sort')) {
+            switch ($request->input('sort')) {
+                case 'asc':
+                    $products->orderBy('price', 'asc');
+                    break;
+                case 'desc':
+                    $products->orderBy('price', 'desc');
+                    break;
+                case 'newest':
+                    $products->orderBy('id', 'desc');
+                    break;
+                case 'oldest':
+                    $products->orderBy('id', 'asc');
+                    break;
+            }
+        }
+
+        // Phân trang sản phẩm
+        $products = $products->paginate(12);
+
+        // Truyền dữ liệu vào view
+        return view('pages.product', compact('products', 'categories', 'productTypes'));
     }
-
-    // Phân trang
-    $products = $products->paginate(12);
-
-    // Truyền dữ liệu vào view
-    return view('pages.product', compact('products', 'categories', 'productTypes'));
-}
-
-
 
     public function detail($id)
     {
@@ -273,141 +361,148 @@ class ProductController extends Controller
 
     // Tìm kiếm sản phẩm 
     public function search(Request $request)
-    {
-        $query = $request->input('query', ''); // Từ khóa tìm kiếm
-        $sortOption = $request->input('sort', 'default'); // Tùy chọn sắp xếp
-        $priceRange = $request->input('price'); // Phạm vi giá
-        $categoryId = $request->input('category_id'); // Lọc theo danh mục
+{
+    $query = $request->input('query', ''); // Từ khóa tìm kiếm
+    $sortOption = $request->input('sort', 'default'); // Tùy chọn sắp xếp
+    $priceRange = $request->input('price'); // Phạm vi giá
+    $categoryId = $request->input('category_id'); // Lọc theo danh mục
+    $giftBasketQuery = $request->input('gift_basket'); // Tìm kiếm giỏ quà (ProductType)
 
-        // Lấy danh sách danh mục để hiển thị
-        $categories = Category::all();
+    // Lấy danh sách danh mục để hiển thị
+    $categories = Category::all();
 
-        // Bắt đầu query sản phẩm
-        $products = Product::query();
+    // Bắt đầu query sản phẩm
+    $products = Product::query();
 
-        // Tìm kiếm theo từ khóa
-        if (!empty($query)) {
-            $products->where(function ($queryBuilder) use ($query) {
-                $queryBuilder->where('name', 'like', "%{$query}%")
-                    ->orWhere('description', 'like', "%{$query}%");
-            });
-        }
-
-        // Lọc theo danh mục
-        if (!empty($categoryId)) {
-            $products->where('category_id', $categoryId);
-        }
-
-        // Lọc sản phẩm theo giá
-        if (!empty($priceRange)) {
-            switch ($priceRange) {
-                case 'under_99000':
-                    $products->where('price', '<', 99000);
-                    break;
-                case '99000_201000':
-                    $products->whereBetween('price', [99000, 201000]);
-                    break;
-                case '201000_301000':
-                    $products->whereBetween('price', [201000, 301000]);
-                    break;
-                case '301000_501000':
-                    $products->whereBetween('price', [301000, 501000]);
-                    break;
-                case '501000_1000000':
-                    $products->whereBetween('price', [501000, 1000000]);
-                    break;
-                case 'above_1000000':
-                    $products->where('price', '>', 1000000);
-                    break;
-            }
-        }
-
-        // Sắp xếp sản phẩm theo tùy chọn
-        switch ($sortOption) {
-            case 'asc':
-                $products->orderBy('price', 'asc');
-                break;
-            case 'desc':
-                $products->orderBy('price', 'desc');
-                break;
-            case 'newest':
-                $products->orderBy('created_at', 'desc');
-                break;
-            case 'oldest':
-                $products->orderBy('created_at', 'asc');
-                break;
-        }
-
-        // Phân trang sản phẩm
-        $products = $products->paginate(6);
-
-        // Lọc ProductType giống như lọc Product
-        $productTypes = ProductType::whereHas('products', function ($queryBuilder) use ($query, $categoryId, $priceRange) {
-            // Tìm kiếm theo từ khóa
-            if (!empty($query)) {
-                $queryBuilder->where(function ($q) use ($query) {
-                    $q->where('name', 'like', "%{$query}%")
-                        ->orWhere('description', 'like', "%{$query}%");
-                });
-            }
-
-            // Lọc theo danh mục
-            if (!empty($categoryId)) {
-                $queryBuilder->where('category_id', $categoryId);
-            }
-
-            // Lọc theo giá
-            if (!empty($priceRange)) {
-                switch ($priceRange) {
-                    case 'under_99000':
-                        $queryBuilder->where('price', '<', 99000);
-                        break;
-                    case '99000_201000':
-                        $queryBuilder->whereBetween('price', [99000, 201000]);
-                        break;
-                    case '201000_301000':
-                        $queryBuilder->whereBetween('price', [201000, 301000]);
-                        break;
-                    case '301000_501000':
-                        $queryBuilder->whereBetween('price', [301000, 501000]);
-                        break;
-                    case '501000_1000000':
-                        $queryBuilder->whereBetween('price', [501000, 1000000]);
-                        break;
-                    case 'above_1000000':
-                        $queryBuilder->where('price', '>', 1000000);
-                        break;
-                }
-            }
+    // Tìm kiếm theo từ khóa
+    if (!empty($query)) {
+        $products->where(function ($queryBuilder) use ($query) {
+            $queryBuilder->where('name', 'like', "%{$query}%")
+                ->orWhere('description', 'like', "%{$query}%");
         });
+    }
 
-        // Sắp xếp ProductType theo tùy chọn
-        switch ($sortOption) {
-            case 'asc':
-                $productTypes->with(['products' => function ($query) {
-                    $query->orderBy('price', 'asc');
-                }]);
+    // Lọc theo danh mục
+    if (!empty($categoryId)) {
+        $products->where('category_id', $categoryId);
+    }
+
+    // Lọc sản phẩm theo giá
+    if (!empty($priceRange)) {
+        switch ($priceRange) {
+            case 'under_99000':
+                $products->where('price', '<', 99000);
                 break;
-            case 'desc':
-                $productTypes->with(['products' => function ($query) {
-                    $query->orderBy('price', 'desc');
-                }]);
+            case '99000_201000':
+                $products->whereBetween('price', [99000, 201000]);
                 break;
-            case 'newest':
-                $productTypes->with(['products' => function ($query) {
-                    $query->orderBy('created_at', 'desc');
-                }]);
+            case '201000_301000':
+                $products->whereBetween('price', [201000, 301000]);
                 break;
-            case 'oldest':
-                $productTypes->with(['products' => function ($query) {
-                    $query->orderBy('created_at', 'asc');
-                }]);
+            case '301000_501000':
+                $products->whereBetween('price', [301000, 501000]);
+                break;
+            case '501000_1000000':
+                $products->whereBetween('price', [501000, 1000000]);
+                break;
+            case 'above_1000000':
+                $products->where('price', '>', 1000000);
                 break;
         }
-
-        $productTypes = $productTypes->paginate(6); // Phân trang ProductType
-
-        return view('pages.product', compact('products', 'categories', 'productTypes'))
-            ->with('query', $query);
     }
+
+    // Sắp xếp sản phẩm theo tùy chọn
+    switch ($sortOption) {
+        case 'asc':
+            $products->orderBy('price', 'asc');
+            break;
+        case 'desc':
+            $products->orderBy('price', 'desc');
+            break;
+        case 'newest':
+            $products->orderBy('created_at', 'desc');
+            break;
+        case 'oldest':
+            $products->orderBy('created_at', 'asc');
+            break;
+    }
+
+    // Phân trang sản phẩm
+    $products = $products->paginate(6);
+
+    // Lọc ProductType (Giỏ quà) giống như lọc Product
+    $productTypes = ProductType::query();
+
+    // Tìm kiếm giỏ quà theo từ khóa
+    if (!empty($giftBasketQuery)) {
+        $productTypes->where(function ($queryBuilder) use ($giftBasketQuery) {
+            $queryBuilder->where('name', 'like', "%{$giftBasketQuery}%")
+                ->orWhere('description', 'like', "%{$giftBasketQuery}%");
+        });
+    }
+
+    // Lọc theo danh mục nếu có
+    if (!empty($categoryId)) {
+        $productTypes->where('category_id', $categoryId);
+    }
+
+    // Lọc theo giá (nếu có)
+    if (!empty($priceRange)) {
+        switch ($priceRange) {
+            case 'under_99000':
+                $productTypes->whereHas('products', function ($queryBuilder) {
+                    $queryBuilder->where('price', '<', 99000);
+                });
+                break;
+            case '99000_201000':
+                $productTypes->whereHas('products', function ($queryBuilder) {
+                    $queryBuilder->whereBetween('price', [99000, 201000]);
+                });
+                break;
+            case '201000_301000':
+                $productTypes->whereHas('products', function ($queryBuilder) {
+                    $queryBuilder->whereBetween('price', [201000, 301000]);
+                });
+                break;
+            case '301000_501000':
+                $productTypes->whereHas('products', function ($queryBuilder) {
+                    $queryBuilder->whereBetween('price', [301000, 501000]);
+                });
+                break;
+            case '501000_1000000':
+                $productTypes->whereHas('products', function ($queryBuilder) {
+                    $queryBuilder->whereBetween('price', [501000, 1000000]);
+                });
+                break;
+            case 'above_1000000':
+                $productTypes->whereHas('products', function ($queryBuilder) {
+                    $queryBuilder->where('price', '>', 1000000);
+                });
+                break;
+        }
+    }
+
+    // Sắp xếp ProductType (Giỏ quà) theo tùy chọn
+    switch ($sortOption) {
+        case 'asc':
+            $productTypes->orderBy('name', 'asc');
+            break;
+        case 'desc':
+            $productTypes->orderBy('name', 'desc');
+            break;
+        case 'newest':
+            $productTypes->orderBy('created_at', 'desc');
+            break;
+        case 'oldest':
+            $productTypes->orderBy('created_at', 'asc');
+            break;
+    }
+
+    // Phân trang ProductType (Giỏ quà)
+    $productTypes = $productTypes->paginate(6);
+
+    return view('pages.product', compact('products', 'categories', 'productTypes'))
+        ->with('query', $query);
+}
+
 }
