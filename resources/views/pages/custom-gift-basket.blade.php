@@ -51,17 +51,17 @@
                             <h4 class="gift-basket-name">{{ $basket->name }}</h4>
                             <div class="gift-basket-price">Tổng: <span id="totalPrice">0</span> VND</div>
                             <div class="acction-container mt-5">
-                               
+
                                 <a href="{{ route('home.index') }}" class="btn btn-danger mx-2">Quay lại giỏ quà</a>
                                 <button type="submit" class="btn btn-success mx-2">Thêm giỏ hàng</button>
                             </div>
 
                         </div>
-                      
+
                         <div class="gift-basket-right col-md-7">
                             <h5>Chọn trái cây:</h5>
-                          
-                        
+
+
                             @foreach ($fruits as $fruit)
                             <div class="product-item d-flex align-items-center mb-3">
                                 <input type="checkbox" name="fruits[{{ $fruit->id }}]" value="1"
@@ -93,7 +93,7 @@
                             </div>
                         @endforeach
                         </div>
-                        
+
                     </div>
                 </form>
             </div>
@@ -101,159 +101,88 @@
 
     </main>
 
-    <script>
+<script>
     document.getElementById("search").addEventListener("input", function () {
-    const searchTerm = this.value; // Lấy từ khóa tìm kiếm
+        const searchTerm = this.value.toLowerCase(); // Lấy từ khóa tìm kiếm và chuyển thành chữ thường
 
-    // Lưu trạng thái vào LocalStorage trước khi tìm kiếm
-    saveStateToLocalStorage();
+        // Lấy tất cả các sản phẩm
+        const productContainer = document.querySelector(".gift-basket-right");
+        const products = Array.from(productContainer.querySelectorAll(".product-item"));
 
-    // Gửi yêu cầu tìm kiếm tới server
-    fetch(`/search-fruits?query=${encodeURIComponent(searchTerm)}`)
-        .then(response => response.json())
-        .then(data => {
-            const productContainer = document.querySelector(".gift-basket-right");
-            productContainer.innerHTML = ""; // Xóa nội dung cũ
+        // Lưu lại các ID của các trái cây đã được chọn trước khi tìm kiếm
+        let checkedFruits = [];
+        const checkboxes = document.querySelectorAll('input[type="checkbox"]:checked');
+        checkboxes.forEach(checkbox => {
+            checkedFruits.push(checkbox.id); // Lưu ID của checkbox đã chọn
+        });
 
-            // Duyệt qua danh sách sản phẩm trả về
-            data.forEach(fruit => {
-                productContainer.innerHTML += `
-                    <div class="product-item d-flex align-items-center mb-3">
-                        <input type="checkbox" name="fruits[${fruit.id}]" value="1"
-                            id="fruit_${fruit.id}" class="form-check-input"
-                            data-price="${fruit.price}">
-                        <label for="fruit_${fruit.id}" class="form-label d-flex align-items-center">
-                            <img src="${fruit.image}" alt="${fruit.name}" style="max-width: 50px;" class="me-2">
-                            <span><strong>${fruit.name}</strong> - <span class="dynamic-price"
-                                data-id="fruit_${fruit.id}" data-price="${fruit.price}">
-                                ${fruit.price_formatted}
-                            </span></span>
-                        </label>
-                        <select name="quantities[${fruit.id}]" class="ms-auto" style="width: 130px;">
-                            <option value="100" selected>100g</option>
-                            <option value="200">200g</option>
-                            <option value="300">300g</option>
-                            <option value="400">400g</option>
-                            <option value="500">500g</option>
-                            <option value="1000">1kg</option>
-                        </select>
-                    </div>
-                `;
-            });
+        // Sắp xếp lại các sản phẩm
+        const filteredProducts = products.filter(product => {
+            const label = product.querySelector('label');
+            const fruitName = label ? label.textContent.toLowerCase() : '';
+            return fruitName.includes(searchTerm); // Kiểm tra nếu tên sản phẩm có chứa từ khóa tìm kiếm
+        });
 
-            // Khôi phục trạng thái từ LocalStorage
-            restoreStateFromLocalStorage();
+        // Các sản phẩm không khớp tìm kiếm
+        const nonFilteredProducts = products.filter(product => {
+            const label = product.querySelector('label');
+            const fruitName = label ? label.textContent.toLowerCase() : '';
+            return !fruitName.includes(searchTerm);
+        });
 
-            // Gắn lại sự kiện cho checkbox và selector mới
-            attachEventHandlers();
-        })
-        .catch(error => console.error("Error:", error)); // Xử lý lỗi
-});
+        // Di chuyển các sản phẩm tìm thấy lên đầu
+        productContainer.innerHTML = ''; // Xóa nội dung hiện tại
 
-function attachEventHandlers() {
-    const fruitCheckboxes = document.querySelectorAll('input[name^="fruits"]');
-    const quantitySelectors = document.querySelectorAll('select[name^="quantities"]');
-    const dynamicPrices = document.querySelectorAll('.dynamic-price');
+        filteredProducts.forEach(product => productContainer.appendChild(product)); // Thêm sản phẩm tìm thấy lên đầu
+        nonFilteredProducts.forEach(product => productContainer.appendChild(product)); // Thêm các sản phẩm không khớp vào sau
 
-    function calculateTotalPrice() {
-        let total = 0;
-
-        fruitCheckboxes.forEach((checkbox, index) => {
-            const quantitySelector = quantitySelectors[index];
-            const dynamicPriceElement = dynamicPrices[index];
-
-            if (checkbox.checked) {
-                const fruitPricePerKg = parseInt(checkbox.getAttribute('data-price')); // Giá cho 1kg
-                const quantityInGrams = parseInt(quantitySelector.value); // Trọng lượng tính bằng gram
-                const priceForQuantity = (fruitPricePerKg / 1000) * quantityInGrams; // Giá tương ứng với số lượng
-
-                // Cập nhật giá hiển thị trong dynamic-price
-                dynamicPriceElement.textContent = priceForQuantity.toLocaleString('vi-VN');
-
-                // Tính tổng tiền
-                total += priceForQuantity;
-            } else {
-                // Reset giá về giá trị ban đầu khi bỏ chọn checkbox
-                dynamicPriceElement.textContent = parseInt(checkbox.getAttribute('data-price')).toLocaleString('vi-VN');
+        // Cập nhật lại trạng thái checkbox
+        filteredProducts.forEach(product => {
+            const checkbox = product.querySelector('input[type="checkbox"]');
+            if (checkedFruits.includes(checkbox.id)) {
+                checkbox.checked = true; // Đánh dấu lại checkbox đã được chọn trước đó
             }
         });
 
-        // Cập nhật tổng tiền
-        document.getElementById('totalPrice').textContent = total.toLocaleString('vi-VN');
-    }
-
-    fruitCheckboxes.forEach(checkbox => {
-        checkbox.addEventListener('change', () => {
-            saveStateToLocalStorage(); // Lưu trạng thái vào LocalStorage khi thay đổi
-            calculateTotalPrice();
-        });
+        // Gọi lại hàm tính tổng giá sau khi tìm kiếm
+        calculateTotal();
     });
 
-    quantitySelectors.forEach(selector => {
-        selector.addEventListener('change', () => {
-            saveStateToLocalStorage(); // Lưu trạng thái khi thay đổi trọng lượng
-            calculateTotalPrice();
-        });
-    });
+    document.addEventListener("DOMContentLoaded", function() {
+        const checkboxes = document.querySelectorAll('input[type="checkbox"]'); // Chọn tất cả các checkbox
+        const totalPriceElement = document.getElementById("totalPrice"); // Lấy phần tử hiển thị tổng giá
+        let totalPrice = 0; // Khởi tạo biến tổng giá
 
-    // Tính lại tổng khi DOM cập nhật
-    calculateTotalPrice();
-}
-
-// Hàm lưu toàn bộ trạng thái vào LocalStorage
-function saveStateToLocalStorage() {
-    const state = [];
-    document.querySelectorAll('.product-item').forEach(item => {
-        const checkbox = item.querySelector('input[name^="fruits"]');
-        const quantitySelector = item.querySelector('select[name^="quantities"]');
-        const dynamicPriceElement = item.querySelector('.dynamic-price');
-        const imgElement = item.querySelector('img');
-
-        if (checkbox) {
-            state.push({
-                id: checkbox.id,
-                checked: checkbox.checked,
-                price: dynamicPriceElement.textContent, // Giá hiển thị hiện tại
-                quantity: quantitySelector.value, // Trọng lượng (gram)
-                image: imgElement.src // URL ảnh sản phẩm
+        // Hàm tính tổng giá
+        function calculateTotal() {
+            totalPrice = 0; // Khởi tạo giá trị tổng là 0
+            // Lặp qua tất cả các checkbox
+            checkboxes.forEach(function(checkbox) {
+                if (checkbox.checked) {
+                    const price = parseFloat(checkbox.dataset.price); // Lấy giá của sản phẩm từ thuộc tính data-price
+                    const quantity = checkbox.closest('.product-item').querySelector('select').value; // Lấy số lượng từ select
+                    totalPrice += price * (parseInt(quantity) / 1000); // Tính giá tổng dựa trên số lượng (kg)
+                }
             });
+            totalPriceElement.textContent = totalPrice.toLocaleString(); // Cập nhật giá trị tổng vào DOM
         }
+
+        // Lắng nghe sự kiện thay đổi checkbox hoặc select
+        checkboxes.forEach(function(checkbox) {
+            checkbox.addEventListener('change', calculateTotal);
+        });
+
+        // Lắng nghe sự kiện thay đổi lượng trong select
+        const selects = document.querySelectorAll('select');
+        selects.forEach(function(select) {
+            select.addEventListener('change', calculateTotal);
+        });
+
+        // Gọi hàm tính tổng khi tải trang
+        calculateTotal();
     });
 
-    localStorage.setItem('productState', JSON.stringify(state));
-}
+</script>
 
-// Hàm khôi phục trạng thái từ LocalStorage
-function restoreStateFromLocalStorage() {
-    const state = JSON.parse(localStorage.getItem('productState')) || [];
-    state.forEach(savedItem => {
-        const checkbox = document.getElementById(savedItem.id);
-        const quantitySelector = document.querySelector(`select[name="quantities[${savedItem.id.split('_')[1]}]"]`);
-        const dynamicPriceElement = document.querySelector(`.dynamic-price[data-id="${savedItem.id}"]`);
-        const imgElement = checkbox?.closest('.product-item')?.querySelector('img');
-
-        if (checkbox) {
-            checkbox.checked = savedItem.checked; // Khôi phục trạng thái checkbox
-        }
-        if (quantitySelector) {
-            quantitySelector.value = savedItem.quantity; // Khôi phục trọng lượng
-        }
-        if (dynamicPriceElement) {
-            dynamicPriceElement.textContent = savedItem.price; // Khôi phục giá
-        }
-        if (imgElement) {
-            imgElement.src = savedItem.image; // Khôi phục ảnh
-        }
-    });
-}
-
-// Gắn sự kiện lần đầu
-document.addEventListener("DOMContentLoaded", function () {
-    restoreStateFromLocalStorage(); // Khôi phục trạng thái khi tải trang
-    attachEventHandlers();
-});
-
-
-    </script>
 
 @endsection
