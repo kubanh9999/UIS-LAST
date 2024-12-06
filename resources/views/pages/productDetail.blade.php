@@ -293,7 +293,7 @@ input#quantity:focus {
                             <img src="{{ asset($imagePath) }}" alt="{{ $relatedProduct->name }}">
                         </a>
                         <a href="{{ route('product.detail', $relatedProduct->id) }}" style="text-decoration:none;color: black" >
-                            <h5>{{ $relatedProduct->name }}</h5>
+                            <h5 class="product-name">{{ $relatedProduct->name }}</h5>
                         </a>
                         <div class="price">
                             {{ number_format($relatedProduct->price) }} VND
