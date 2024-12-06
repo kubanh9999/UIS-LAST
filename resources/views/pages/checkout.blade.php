@@ -40,7 +40,7 @@
 </form>
 
 <!-- Form thanh toán chính -->
-        <form id="checkout-form" action="{{ route('checkout.complete') }}" method="POST" class="mb-4" data-shipping-cost="{{ $shippingCost }}">
+        <form id="checkout-form" action="{{ route('checkout.complete') }}" method="POST" class="mb-4">
             @csrf
             <div class="row" >
                 <!-- Thông tin người nhận hàng -->
@@ -50,67 +50,67 @@
                         <!-- Họ và tên -->
                         <div class="form-group">
                             <label for="name" class="form-label">Họ và tên</label>
-                            <input 
-                                type="text" 
-                                name="name" 
-                                id="name" 
-                                class="form-control" 
-                                placeholder="Họ và tên" 
-                                value="{{ old('name', $user->name) }}" 
+                            <input
+                                type="text"
+                                name="name"
+                                id="name"
+                                class="form-control"
+                                placeholder="Họ và tên"
+                                value="{{ old('name', $user->name) }}"
                                 required>
                             <small id="name-error" class="text-danger" style="display:none;">
                                 Vui lòng nhập họ và tên
                             </small>
                         </div>
-                        
+
                         <!-- Email -->
                         <div class="form-group">
                             <label for="email" class="form-label">Email</label>
-                            <input 
-                                type="email" 
-                                name="email" 
-                                id="email" 
-                                class="form-control" 
-                                placeholder="Email" 
-                                value="{{ old('email', $user->email) }}" 
+                            <input
+                                type="email"
+                                name="email"
+                                id="email"
+                                class="form-control"
+                                placeholder="Email"
+                                value="{{ old('email', $user->email) }}"
                                 required>
                             <small id="email-error" class="text-danger" style="display:none;">
                                 Vui lòng nhập email
                             </small>
                         </div>
-                        
+
                         <!-- Số điện thoại -->
                         <div class="form-group">
                             <label for="phone" class="form-label">Số điện thoại</label>
-                            <input 
-                                type="text" 
-                                name="phone" 
-                                id="phone" 
-                                class="form-control" 
-                                placeholder="Số điện thoại" 
-                                value="{{ old('phone', $user->phone) }}" 
+                            <input
+                                type="text"
+                                name="phone"
+                                id="phone"
+                                class="form-control"
+                                placeholder="Số điện thoại"
+                                value="{{ old('phone', $user->phone) }}"
                                 required>
                             <small id="phone-error" class="text-danger" style="display:none;">
                                 Vui lòng nhập số điện thoại
                             </small>
                         </div>
-                    
+
                         <!-- Địa chỉ -->
                         <div class="form-group">
                             <label for="name" class="form-label">Địa chỉ</label>
-                            <input 
-                                type="text" 
-                                name="address" 
-                                id="street" 
-                                class="form-control" 
-                                placeholder="Địa chỉ" 
-                                value="{{ old('street', $user->street) }}" 
+                            <input
+                                type="text"
+                                name="address"
+                                id="street"
+                                class="form-control"
+                                placeholder="Địa chỉ"
+                                value="{{ old('street', $user->street) }}"
                                 required>
                             <small id="street-error" class="text-danger" style="display:none;">
                                 Vui lòng nhập địa chỉ
                             </small>
                         </div>
-                    
+
                         <!-- Tỉnh/Thành phố -->
                         <div class="form-group">
                             <label for="name" class="form-label">Tỉnh/Thành phố</label>
@@ -125,7 +125,7 @@
                                 @endforeach
                             </select>
                         </div>
-                    
+
                         <!-- Quận/Huyện -->
                         <div class="form-group">
                             <label for="name" class="form-label">Quận/Huyện</label>
@@ -135,19 +135,19 @@
                                 </option>
                             </select>
                         </div>
-                    
+
                         <!-- Phường/Xã -->
                         <div class="form-group">
                             <label for="name" class="form-label">Phường/Xã</label>
                             <select class="form-control" name="ward_id" id="ward" required >
-                               
+
                                 <option value="{{ $user->wards_id }}">
                                     {{ $user->ward->name ?? 'Vui lòng chọn Phường/Xã' }}
                                 </option>
                             </select>
                         </div>
                     </div>
-                    
+
 
 
                     <h2 class="shipping-title mt-4">Vận chuyển</h2>
@@ -181,38 +181,38 @@
                                 $price = $item['price_gift'] ?? $item['price'] ?? 0;
 
                                 // Tính tổng giá cho từng sản phẩm hoặc giỏ quà
-                                $itemTotal = isset($item['fruits']) 
-                                                ? $item['total'] 
+                                $itemTotal = isset($item['fruits'])
+                                                ? $item['total']
                                                 : $price * ($item['quantity'] ?? 1);
 
                                 $totalPrice += $itemTotal;
 
                                 // Lấy số lượng sản phẩm
-                                $quantity = isset($item['fruits']) 
-                                                ? 1 
+                                $quantity = isset($item['fruits'])
+                                                ? 1
                                                 : ($item['quantity'] ?? 0);
                             @endphp
                             @php
                             // Xử lý đường dẫn hình ảnh
-                            $imagePath = isset($item['fruits']) 
-                                ? (strpos($item['basket_image'], 'uploads/products/') === 0 
+                            $imagePath = isset($item['fruits'])
+                                ? (strpos($item['basket_image'], 'uploads/products/') === 0
                                     ? asset($item['basket_image']) // Nếu đường dẫn bắt đầu bằng 'uploads/products/', không thêm 'layouts/img/'
                                     : asset('layouts/img/' . $item['basket_image'])
-                                ) 
-                                : (is_array($item) && isset($item['image']) 
-                                    ? (strpos($item['image'], 'uploads/products/') === 0 
+                                )
+                                : (is_array($item) && isset($item['image'])
+                                    ? (strpos($item['image'], 'uploads/products/') === 0
                                         ? asset($item['image']) // Nếu đường dẫn bắt đầu bằng 'uploads/products/', không thêm 'layouts/img/'
                                         : asset('layouts/img/' . $item['image'])
-                                    ) 
+                                    )
                                     : asset('layouts/img/default-image.jpg')); // Đảm bảo có hình ảnh mặc định
                         @endphp
-                        
+
 
                             <div class="info-order-product d-flex align-items-center mb-3 border p-2 rounded shadow-sm">
-                              <img 
-                                src="{{ $imagePath }}" 
-                                alt="{{ isset($item['fruits']) ? 'Gift Basket Image' : 'Product lll' }}" 
-                                class="img-fluid" 
+                              <img
+                                src="{{ $imagePath }}"
+                                alt="{{ isset($item['fruits']) ? 'Gift Basket Image' : 'Product lll' }}"
+                                class="img-fluid"
                                 style="width: 80px; height: 80px;">
 
                                 {{-- Hiển thị số lượng sản phẩm --}}
@@ -223,10 +223,10 @@
                             </div>
 
 
-                            
+
                         @endforeach
-                      
-                                
+
+
                         @php
                             if (isset($productData['price']) && isset($productData['quantity'])) {
                             // Tính tổng giá cho sản phẩm mới
@@ -237,8 +237,8 @@
                             Log::error('Product price or quantity is null or invalid', ['productData' => $productData]);
                         }
                         @endphp
-                    
-   
+
+
                         <div class="order-summary mt-3">
                             <div class="d-flex justify-content-between">
                                 <p class="mb-0">Tạm tính</p>
@@ -254,7 +254,7 @@
                             <p class="mb-0">Giảm giá (%)</p>
                             <span id="discount-percentage">{{ $discountPercentage ?? 0 }}</span>
                         </div>
-                        
+
                         <div class="total-summary d-flex justify-content-between mt-4">
                             <p class="mb-0 font-weight-bold">Tổng cộng</p>
                             <span id="total-remaining" class="font-weight-bold">{{ number_format($totalPrice + $shippingCost - ($totalPrice * ($discountPercentage ?? 0) / 100)) }} VND</span>
@@ -310,11 +310,11 @@
 <script>
     const provinceId = $('#province').val();
     console.log('provinceId',provinceId);
-    
+
     $(document).ready(function () {
         // Lấy dữ liệu từ server thông qua data attributes
         let totalPrice = document.getElementById('total-price').getAttribute('data-price');
-        let shippingCost = parseFloat($('#checkout-form').data('shipping-cost'));
+        let shippingCost = 0;
         totalPrice = parseFloat(totalPrice);
         totalPrice = totalPrice + shippingCost;
         let selectedPaymentMethod = null;
@@ -335,8 +335,12 @@
                     let discountAmount = (discountPercent / 100) * totalPrice;
                     let totalAfterDiscount = totalPrice - discountAmount;
 
+                    // Định dạng số theo kiểu "59,500 VND"
+                    let formattedTotal = totalAfterDiscount
+                        .toLocaleString('en-US', { minimumFractionDigits: 0 }) + " VND";
+
                     $('#discount-percentage').text(discountPercent);
-                    $('#total-remaining').text(totalAfterDiscount.toFixed(0) + " VND");
+                    $('#total-remaining').text(formattedTotal);
                     $('#message')
                         .text('Áp dụng mã thành công!')
                         .removeClass('alert-danger')
@@ -353,6 +357,9 @@
                 }
             });
         });
+
+
+
 
         // Theo dõi lựa chọn phương thức thanh toán
         $('input[name="payment_method"]').on('change', function () {
@@ -379,7 +386,7 @@
                 province_id: $('#province').val(),
                 price: totalPrice
             };
-      
+
 
             // Xử lý thanh toán theo từng phương thức
             if (selectedPaymentMethod === 'momo') {
@@ -471,7 +478,7 @@
         /* $('.ward').chance(function(){
             var ward = $(this).val;
             console.log('ward',ward);
-            
+
         }) */
         // Khi quận huyện thay đổi
         $('.district').change(function() {
