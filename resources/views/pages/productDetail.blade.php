@@ -24,7 +24,7 @@
         background-color: #f44336 !important; /* Màu đỏ */
         color: white !important;
     }
-    
+
     /* Đặt màu cho thông báo thành công */
     .toast-success {
         background-color: #4CAF50 !important; /* Màu xanh */
@@ -51,13 +51,13 @@
 
 <section class="product-detail mb-4">
     <div class="container bg-white p-4">
-        
+
         @if (session('success'))
         <script>
             toastr.success('{{ session('success') }}');  // Hiển thị thông báo thành công
         </script>
     @endif
-    
+
     @if (session('error'))
         <script>
             toastr.error('{{ session('error') }}');  // Hiển thị thông báo lỗi nếu có
@@ -94,10 +94,10 @@
                     <ul class="product-status">
                         <li class="status">SKU: <span>{{ $sku }}</span></li>
                      {{--    <li class="status">Danh mục: <span>{{ $product_detail->category->name }}</span></li> --}}
-                        <li class="status">Tình trạng: 
+                        <li class="status">Tình trạng:
                             <span>
                                 @if ($product_detail->stock > 0)
-                                    <span style="color: green;">Còn {{$product_detail->stock}} sản phẩm</span>
+                                    <span style="color: green;">Còn {{$product_detail->stock}} kg/g</span>
                                 @else
                                     <span style="color: red;">Hết hàng</span>
                                 @endif
@@ -130,7 +130,7 @@
                     </div>
 
                     <div class="purchase-options">
-                        @if ($product_detail->stock <= 0) 
+                        @if ($product_detail->stock <= 0)
                             <button disabled type="submit" name="action" class="btn-buy-now">
                                 <span><img src="img/i-muangay.svg" alt=""> Mua ngay</span>
                                 <p class="mb-0">Giao hàng tận tay quý khách</p>
@@ -139,7 +139,7 @@
                                 <span>Cho vào giỏ</span>
                                 <p class="mb-0">Thêm vào giỏ để chọn tiếp</p>
                             </button>
-                        @else 
+                        @else
                             <button type="submit" name="action" class="btn-buy-now">
                                 <span><img src="img/i-muangay.svg" alt=""> Mua ngay</span>
                                 <p class="mb-0">Giao hàng tận tay quý khách</p>
@@ -302,7 +302,7 @@
             const increaseBtn = document.getElementById('increase-btn');
             const quantityDisplay = document.getElementById('quantity');
             const quantityHidden = document.getElementById('quantity-hidden');
-        
+
             // Hàm giảm số lượng
             const decreaseQuantity = () => {
                 let currentQuantity = parseInt(quantityDisplay.value);
@@ -313,7 +313,7 @@
                 }
                 console.log("Giảm số lượng: ", currentQuantity);
             };
-        
+
             // Hàm tăng số lượng
             const increaseQuantity = () => {
                 let currentQuantity = parseInt(quantityDisplay.value);
@@ -322,7 +322,7 @@
                 quantityHidden.value = currentQuantity; // Cập nhật input ẩn
                 console.log("Tăng số lượng: ", currentQuantity);
             };
-        
+
             // Gắn sự kiện cho các nút
             decreaseBtn.addEventListener("click", decreaseQuantity);
             increaseBtn.addEventListener("click", increaseQuantity);
@@ -344,7 +344,7 @@
         button.addEventListener('click', (event) => {
             event.preventDefault();
 
-            const commentBox = button.closest('.comment-box'); 
+            const commentBox = button.closest('.comment-box');
             const replyForm = commentBox.querySelector('.reply-form');
 
             // Hiện/ẩn form trả lời
@@ -364,10 +364,10 @@
 
             const form = document.createElement('form');
             form.method = 'POST';
-        
+
             // Nếu đã thích, gửi yêu cầu bỏ thích, ngược lại gửi yêu cầu thích
             form.action = isLiked ? `/comments/${commentId}/unlike` : `/comments/${commentId}/like`;
-        
+
             form.innerHTML = `
             <input type="hidden" name="_token" value="${document.querySelector('meta[name="csrf-token"]').getAttribute('content')}">
             `;
@@ -412,7 +412,7 @@
         button.addEventListener('click', (event) => {
             event.preventDefault();
             const commentId = button.getAttribute('data-id');
-        
+
             const form = document.createElement('form');
             form.method = 'POST';
             form.action = `/comments/${commentId}`;
@@ -432,7 +432,7 @@
         button.addEventListener('click', (event) => {
             event.preventDefault();
             const commentId = button.getAttribute('data-id');
-        
+
             const form = document.createElement('form');
             form.method = 'POST';
             form.action = `/comments/${commentId}/like`;
@@ -476,7 +476,7 @@
         button.addEventListener('click', (event) => {
             event.preventDefault();
             const commentId = button.getAttribute('data-id');
-        
+
             const form = document.createElement('form');
             form.method = 'POST';
             form.action = `/comments/${commentId}`;
