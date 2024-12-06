@@ -367,6 +367,7 @@ class CheckoutController extends Controller
                 }
             }
         }
+        /* dd($totalAmount); */
         $shippingCost = 0;
         $totalAmount += $shippingCost;
 
@@ -478,7 +479,7 @@ class CheckoutController extends Controller
                         $quantityInKg = $quantity / 1000; // Chuyển số lượng từ gram sang kg
                         $pricePerKg = $price; // Giữ nguyên giá (giá cho 1kg)
                     } // In ra giá trị quantity, price và quantityInKg
-
+/* dd($pricePerKg); */
                     OrderDetail::create([
                         'user_id' => Auth::id(),
                         'order_id' => $order->id,
@@ -525,7 +526,8 @@ class CheckoutController extends Controller
                 }
             }
         }
-
+        Mail::to($order->email)->send(new OrderMail($order));
+        session()->forget(['cart', 'discounted_total']);
         session()->forget('discount_amount');
         session()->forget('discount_id');
         session()->forget('cart');
@@ -723,7 +725,8 @@ class CheckoutController extends Controller
                         }
                     }
                 }
-
+                Mail::to($order->email)->send(new OrderMail($order));
+                session()->forget(['cart', 'discounted_total']);
                 // Clear session data
                 session()->forget('discount_amount');
                 session()->forget('discount_id');

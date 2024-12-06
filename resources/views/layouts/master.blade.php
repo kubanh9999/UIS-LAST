@@ -17,22 +17,24 @@
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css" />
     <link rel="stylesheet" type="text/css"
         href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick-theme.css" />
-        <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" rel="stylesheet">
-        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 </head>
 <style>
     /* Đặt màu cho thông báo lỗi */
     .toast-error {
-        background-color: #f44336 !important; /* Màu đỏ */
+        background-color: #f44336 !important;
+        /* Màu đỏ */
         color: white !important;
     }
-    
+
     /* Đặt màu cho thông báo thành công */
     .toast-success {
-        background-color: #4CAF50 !important; /* Màu xanh */
+        background-color: #4CAF50 !important;
+        /* Màu xanh */
         color: white !important;
     }
 
@@ -42,16 +44,15 @@
         border-radius: 8px;
     }
 </style>
+
 <body>
     <div id="fb-root"></div>
-<script async defer crossorigin="anonymous" src="https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v12.0"></script>
+    <script async defer crossorigin="anonymous" src="https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v12.0">
+    </script>
 
-<!-- Messenger Module -->
-<div class="fb-messengermodule" 
-     data-href="https://m.me/110400522102841"  
-     data-width="340" 
-     data-height="500" 
-     data-colorscheme="light"></div>
+    <!-- Messenger Module -->
+    <div class="fb-messengermodule" data-href="https://m.me/110400522102841" data-width="340" data-height="500"
+        data-colorscheme="light"></div>
 
     @include('layouts.header')
 
@@ -59,19 +60,68 @@
         @yield('content')
 
         <!-- Facebook Messenger Module -->
-       
+
         <!-- Start of Tawk.to Script -->
+        <!--Start of Tawk.to Script-->
         <script type="text/javascript">
-            var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
-            (function(){
-                var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
-                s1.async=true;
-                s1.src='https://embed.tawk.to/6710d27d2480f5b4f58eef24/1iacrcf8v';
-                s1.charset='UTF-8';
-                s1.setAttribute('crossorigin','*');
-                s0.parentNode.insertBefore(s1,s0);
+            var Tawk_API = Tawk_API || {},
+                Tawk_LoadStart = new Date();
+    
+            // Nạp Tawk.to script
+            (function() {
+                var s1 = document.createElement("script"),
+                    s0 = document.getElementsByTagName("script")[0];
+                s1.async = true;
+                s1.src = 'https://embed.tawk.to/675279a74304e3196aed2379/1ied2mdor';
+                s1.charset = 'UTF-8';
+                s1.setAttribute('crossorigin', '*');
+                s0.parentNode.insertBefore(s1, s0);
             })();
+    
+            // Khi Tawk.to sẵn sàng
+            Tawk_API.onLoad = function() {
+                fetch('/api/product-count')
+                    .then(response => response.json())
+                    .then(data => {
+                        console.log('Số lượng sản phẩm ban đầu:', data.count);
+    
+                        // Cập nhật thuộc tính trên Tawk.to
+                        Tawk_API.setAttributes({
+                            productcount: data.count // Key không chứa ký tự đặc biệt
+                        }, function(error) {
+                            if (error) {
+                                console.error('Tawk.to Error:', error);
+                            }
+                        });
+                    })
+                    .catch(error => console.error('Error fetching product count:', error));
+            };
+    
+            // Cập nhật số lượng sản phẩm mỗi 60 giây
+            setInterval(function() {
+                if (Tawk_API && Tawk_API.setAttributes) {
+                    fetch('/api/product-count')
+                        .then(response => response.json())
+                        .then(data => {
+                            console.log('Số lượng sản phẩm cập nhật:', data.count);
+    
+                            // Cập nhật thuộc tính trên Tawk.to
+                            Tawk_API.setAttributes({
+                                productcount: data.count 
+                               /*  console.log('productcount',productcount); */
+                                // Key không chứa ký tự đặc biệt
+                            }, function(error) {
+                                if (error) {
+                                    console.error('Tawk.to Error:', error);
+                                }
+                            });
+                        })
+                        .catch(error => console.error('Error fetching product count:', error));
+                }
+            }, 60000); // Cập nhật mỗi 60 giây
         </script>
+        
+        <!--End of Tawk.to Script-->
         <!-- End of Tawk.to Script -->
     </main>
 
@@ -81,7 +131,7 @@
     <div class="offcanvas offcanvas-start" id="offcanvas-menu">
         <div class="offcanvas-header">
             <div class="offcanvas-title">
-                <a href="{{route('home.index')}}" class="text-decoration-none">
+                <a href="{{ route('home.index') }}" class="text-decoration-none">
                     <h2 class="m-0">UIS <span>Fruits</span></h2>
                 </a>
             </div>
@@ -92,8 +142,8 @@
                 <li class="nav-item"><a href="{{ route('home.index') }}">Trang chủ</a></li>
                 <li class="nav-item"><a href="{{ route('home.introduction') }}">Giới thiệu</a></li>
                 <li class="nav-item"><a href="{{ route('products.index') }}">Sản phẩm</a></li>
-                <li class="nav-item"><a href="{{route('posts.index')}}">Tin tức</a></li>
-                <li class="nav-item"><a href="{{route('contact.index')}}">Liên hệ</a></li>
+                <li class="nav-item"><a href="{{ route('posts.index') }}">Tin tức</a></li>
+                <li class="nav-item"><a href="{{ route('contact.index') }}">Liên hệ</a></li>
                 <li class="nav-item"> <a href="{{ route('login') }}">Đăng nhập</a></li>
             </ul>
         </div>
@@ -114,7 +164,7 @@
         </ul>
     </div>
 
-  
+
 
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -123,21 +173,26 @@
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js"></script>
+
+
     <script>
         fetch('/users/log-time', { // Thay đổi đường dẫn
-    method: 'POST',
-    headers: {
-        'Content-Type': 'application/json',
-        'X-CSRF-TOKEN': '{{ csrf_token() }}' // CSRF token
-    },
-    body: JSON.stringify({ duration: duration })
-});
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': '{{ csrf_token() }}' // CSRF token
+            },
+            body: JSON.stringify({
+                duration: duration
+            })
+        });
         let startTime = new Date().getTime();
 
         // Gửi thời gian truy cập về server sau mỗi 30 giây
         setInterval(() => {
             let currentTime = new Date().getTime();
-            let duration = Math.floor((currentTime - startTime) / 1000); // Tính thời gian ở lại trang tính bằng giây
+            let duration = Math.floor((currentTime - startTime) /
+            1000); // Tính thời gian ở lại trang tính bằng giây
 
             fetch('/api/log-time', {
                 method: 'POST',
@@ -145,31 +200,33 @@
                     'Content-Type': 'application/json',
                     'X-CSRF-TOKEN': '{{ csrf_token() }}' // Nếu bạn sử dụng CSRF
                 },
-                body: JSON.stringify({ duration: duration })
+                body: JSON.stringify({
+                    duration: duration
+                })
             });
         }, 30000); // Gửi mỗi 30 giây
     </script>
- <script>
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            var textContent = document.getElementById('text-content');
-            var toggleButton = document.getElementById('toggle-button-content');
+        < script >
+            document.addEventListener('DOMContentLoaded', function() {
+                var textContent = document.getElementById('text-content');
+                var toggleButton = document.getElementById('toggle-button-content');
 
-            // Kiểm tra nếu nội dung dài hơn 250 ký tự
-            if (textContent.textContent.length > 900) {
-                toggleButton.style.display = 'block'; // Hiển thị nút "Xem thêm"
-            }
-
-            toggleButton.addEventListener('click', function() {
-                if (textContent.classList.contains('expanded')) {
-                    textContent.classList.remove('expanded');
-                    this.textContent = 'Xem thêm';
-                } else {
-                    textContent.classList.add('expanded');
-                    this.textContent = 'Thu gọn ';
+                // Kiểm tra nếu nội dung dài hơn 250 ký tự
+                if (textContent.textContent.length > 900) {
+                    toggleButton.style.display = 'block'; // Hiển thị nút "Xem thêm"
                 }
+
+                toggleButton.addEventListener('click', function() {
+                    if (textContent.classList.contains('expanded')) {
+                        textContent.classList.remove('expanded');
+                        this.textContent = 'Xem thêm';
+                    } else {
+                        textContent.classList.add('expanded');
+                        this.textContent = 'Thu gọn ';
+                    }
+                });
             });
-        });
     </script>
 
     <script>
