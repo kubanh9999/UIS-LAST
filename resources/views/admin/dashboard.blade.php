@@ -254,7 +254,7 @@ function drawTableChart() {
                         <th>Tên sản phẩm</th>
                         <th>Hình ảnh</th>
                         <th>Giá</th>
-                        <th>Giảm giá</th>
+                       
                         <th>Tồn kho</th>
                         <th>Ngày tạo</th>
                     </tr>`;
@@ -319,7 +319,7 @@ function drawTableChart() {
                                     <td>${item.name}</td>
                                     <td><img src="${baseUrl}/${item.image}" alt="image" width="50"></td>
                                     <td>${Math.round(item.price).toLocaleString('vi-VN')} VND</td>
-                                    <td>${item.discount}</td>
+                                   
                                     <td>${item.stock}</td>
                                     <td>${item.created_at}</td>
                                 </tr>`;
