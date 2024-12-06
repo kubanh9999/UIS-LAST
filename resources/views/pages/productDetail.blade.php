@@ -36,6 +36,21 @@
         font-size: 16px;
         border-radius: 8px;
     }
+    input#quantity {
+    border-radius: 5px; /* Làm tròn các góc input */
+    width: 80px; /* Đặt chiều rộng cố định, hoặc có thể thay đổi tùy vào giao diện */
+    padding: 5px 10px; /* Thêm khoảng cách nội dung trong input */
+    font-size: 16px; /* Đặt kích thước font để dễ đọc */
+    border: 1px solid #ccc; /* Đặt viền màu xám nhạt */
+    background-color: #fff; /* Màu nền nhẹ nhàng */
+    transition: border 0.3s ease; /* Thêm hiệu ứng chuyển động khi thay đổi viền */
+}
+
+input#quantity:focus {
+    border-color: #66afe9; /* Thay đổi màu viền khi focus */
+    outline: none; /* Loại bỏ outline khi focus */
+}
+
 </style>
 <section class="breadcrumb">
     <div class="container">
@@ -112,13 +127,11 @@
 
                     <div class="quantity-form">
                         <h4>Số lượng:</h4>
+                        <div class="quantity-container">
+                            <input type="number" name="quantity-display" id="quantity" value="1" min="1" class="quantity-input-sl">
+                        </div>
                         <div class="group-quantity">
-                            <div class="group-quantity">
-                                <button type="button" id="decrease-btn" class="btn btn-success">-</button>
-                                <input type="text" name="quantity-display" id="quantity" value="1" readonly>
-                                <button type="button" id="increase-btn" class="btn btn-success">+</button>
-                            </div>
-
+                           
                              <!-- Input ẩn để lưu số lượng thực tế -->
                              @csrf
                             <input type="hidden" id="quantity-hidden" name="quantity" value="1">
@@ -140,7 +153,7 @@
                                 <p class="mb-0">Thêm vào giỏ để chọn tiếp</p>
                             </button>
                         @else
-                            <button type="submit" name="action" class="btn-buy-now">
+                            <button type="submit" name="action" value="buy_now" class="btn-buy-now">
                                 <span><img src="img/i-muangay.svg" alt=""> Mua ngay</span>
                                 <p class="mb-0">Giao hàng tận tay quý khách</p>
                             </button>
@@ -296,37 +309,25 @@
     </div>
 </section>
     <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            // Lấy các phần tử nút và input
-            const decreaseBtn = document.getElementById('decrease-btn');
-            const increaseBtn = document.getElementById('increase-btn');
-            const quantityDisplay = document.getElementById('quantity');
-            const quantityHidden = document.getElementById('quantity-hidden');
+       document.addEventListener("DOMContentLoaded", function () {
+        const quantityDisplay = document.getElementById('quantity');
+        const quantityHidden = document.getElementById('quantity-hidden');
 
-            // Hàm giảm số lượng
-            const decreaseQuantity = () => {
-                let currentQuantity = parseInt(quantityDisplay.value);
-                if (currentQuantity > 1) {
-                    currentQuantity--;
-                    quantityDisplay.value = currentQuantity;
-                    quantityHidden.value = currentQuantity; // Cập nhật input ẩn
-                }
-                console.log("Giảm số lượng: ", currentQuantity);
-            };
+        // Cập nhật giá trị khi người dùng nhập số lượng
+        const updateQuantity = () => {
+            let currentQuantity = parseInt(quantityDisplay.value);
+            if (currentQuantity < 1) {
+                quantityDisplay.value = 1; // Đảm bảo số lượng không nhỏ hơn 1
+                currentQuantity = 1;
+            }
+            quantityHidden.value = currentQuantity; // Cập nhật input ẩn
+            console.log("Cập nhật số lượng: ", currentQuantity);
+        };
 
-            // Hàm tăng số lượng
-            const increaseQuantity = () => {
-                let currentQuantity = parseInt(quantityDisplay.value);
-                currentQuantity++;
-                quantityDisplay.value = currentQuantity;
-                quantityHidden.value = currentQuantity; // Cập nhật input ẩn
-                console.log("Tăng số lượng: ", currentQuantity);
-            };
+        // Lắng nghe sự kiện thay đổi trên input
+        quantityDisplay.addEventListener("input", updateQuantity);
+});
 
-            // Gắn sự kiện cho các nút
-            decreaseBtn.addEventListener("click", decreaseQuantity);
-            increaseBtn.addEventListener("click", increaseQuantity);
-        });
     </script>
 
     <script>
