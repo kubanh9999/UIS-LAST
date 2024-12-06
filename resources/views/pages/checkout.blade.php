@@ -15,6 +15,54 @@
 .user-info-group .form-group {
     margin-bottom: 15px; /* Khoảng cách giữa các input */
 }
+.custom-row {
+    display: flex;
+    gap: 20px;
+    margin-bottom: 20px;
+}
+
+.custom-form-group {
+    display: flex;
+    flex-direction: column;
+    flex: 1; /* Đảm bảo các trường input chiếm đều không gian */
+}
+
+.custom-form-group label {
+    font-weight: bold;
+    margin-bottom: 8px;
+    font-size: 14px;
+}
+
+.custom-form-group .custom-form-control {
+    padding: 10px;
+    font-size: 14px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    transition: border-color 0.3s ease;
+}
+
+.custom-form-group .custom-form-control:focus {
+    border-color: #66afe9;
+    outline: none;
+}
+
+.custom-form-group select.custom-form-control {
+    padding: 10px;
+    font-size: 14px;
+    border-radius: 8px;
+    border: 1px solid #ccc
+    background-color: #fff;
+}
+
+.custom-form-group small {
+    color: #ff0000;
+    font-size: 12px;
+    display: none;
+}
+
+.custom-form-control::placeholder {
+    color: #888;
+}
 
 </style>
 
@@ -46,107 +94,114 @@
                 <!-- Thông tin người nhận hàng -->
                 <div class="checkout-left col-lg-7 p-3 border-right" >
                     <h2 class="info-title">Thông tin nhận hàng</h2>
-                    <div class="row" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px;">
-                        <!-- Họ và tên -->
-                        <div class="form-group">
-                            <label for="name" class="form-label">Họ và tên</label>
-                            <input
-                                type="text"
-                                name="name"
-                                id="name"
-                                class="form-control"
-                                placeholder="Họ và tên"
-                                value="{{ old('name', $user->name) }}"
-                                required>
-                            <small id="name-error" class="text-danger" style="display:none;">
-                                Vui lòng nhập họ và tên
-                            </small>
-                        </div>
+                    <div class="custom-row">
+    <!-- Họ và tên -->
+    <div class="custom-form-group">
+        <label for="name" class="form-label">Họ và tên</label>
+        <input
+            type="text"
+            name="name"
+            id="name"
+            class="custom-form-control"
+            placeholder="Họ và tên"
+            value="{{ old('name', $user->name) }}"
+            required>
+        <small id="name-error" class="text-danger" style="display:none;">
+            Vui lòng nhập họ và tên
+        </small>
+    </div>
 
-                        <!-- Email -->
-                        <div class="form-group">
-                            <label for="email" class="form-label">Email</label>
-                            <input
-                                type="email"
-                                name="email"
-                                id="email"
-                                class="form-control"
-                                placeholder="Email"
-                                value="{{ old('email', $user->email) }}"
-                                required>
-                            <small id="email-error" class="text-danger" style="display:none;">
-                                Vui lòng nhập email
-                            </small>
-                        </div>
+    <!-- Email -->
+    <div class="custom-form-group">
+        <label for="email" class="form-label">Email</label>
+        <input
+            type="email"
+            name="email"
+            id="email"
+            class="custom-form-control"
+            placeholder="Email"
+            value="{{ old('email', $user->email) }}"
+            required>
+        <small id="email-error" class="text-danger" style="display:none;">
+            Vui lòng nhập email
+        </small>
+    </div>
+</div>
 
-                        <!-- Số điện thoại -->
-                        <div class="form-group">
-                            <label for="phone" class="form-label">Số điện thoại</label>
-                            <input
-                                type="text"
-                                name="phone"
-                                id="phone"
-                                class="form-control"
-                                placeholder="Số điện thoại"
-                                value="{{ old('phone', $user->phone) }}"
-                                required>
-                            <small id="phone-error" class="text-danger" style="display:none;">
-                                Vui lòng nhập số điện thoại
-                            </small>
-                        </div>
+<div class="custom-row">
+    <!-- Số điện thoại -->
+    <div class="custom-form-group">
+        <label for="phone" class="form-label">Số điện thoại</label>
+        <input
+            type="text"
+            name="phone"
+            id="phone"
+            class="custom-form-control"
+            placeholder="Số điện thoại"
+            value="{{ old('phone', $user->phone) }}"
+            required>
+        <small id="phone-error" class="text-danger" style="display:none;">
+            Vui lòng nhập số điện thoại
+        </small>
+    </div>
 
-                        <!-- Địa chỉ -->
-                        <div class="form-group">
-                            <label for="name" class="form-label">Địa chỉ</label>
-                            <input
-                                type="text"
-                                name="address"
-                                id="street"
-                                class="form-control"
-                                placeholder="Địa chỉ"
-                                value="{{ old('street', $user->street) }}"
-                                required>
-                            <small id="street-error" class="text-danger" style="display:none;">
-                                Vui lòng nhập địa chỉ
-                            </small>
-                        </div>
+    <!-- Địa chỉ -->
+    <div class="custom-form-group">
+        <label for="name" class="form-label">Địa chỉ</label>
+        <input
+            type="text"
+            name="address"
+            id="street"
+            class="custom-form-control"
+            placeholder="Địa chỉ"
+            value="{{ old('street', $user->street) }}"
+            required>
+        <small id="street-error" class="text-danger" style="display:none;">
+            Vui lòng nhập địa chỉ
+        </small>
+    </div>
+</div>
 
-                        <!-- Tỉnh/Thành phố -->
-                        <div class="form-group">
-                            <label for="name" class="form-label">Tỉnh/Thành phố</label>
-                            <select class="form-control" name="province_id" id="province" required>
-                                <option value="{{ $user->province_id }}">
-                                    {{ $user->province->name ?? 'Vui lòng chọn Tỉnh/Thành phố' }}
-                                </option>
-                                @foreach ($provinces as $province)
-                                    <option value="{{ $province->province_id }}" {{ $province->province_id == $user->province_id ? 'selected' : '' }}>
-                                        {{ $province->name }}
-                                    </option>
-                                @endforeach
-                            </select>
-                        </div>
+<div class="custom-row">
+    <!-- Tỉnh/Thành phố -->
+    <div class="custom-form-group">
+        <label for="name" class="form-label">Tỉnh/Thành phố</label>
+        <select class="custom-form-control" name="province_id" id="province" required>
+            <option value="{{ $user->province_id }}">
+                {{ $user->province->name ?? 'Vui lòng chọn Tỉnh/Thành phố' }}
+            </option>
+            @foreach ($provinces as $province)
+                <option value="{{ $province->province_id }}" {{ $province->province_id == $user->province_id ? 'selected' : '' }}>
+                    {{ $province->name }}
+                </option>
+            @endforeach
+        </select>
+    </div>
 
-                        <!-- Quận/Huyện -->
-                        <div class="form-group">
-                            <label for="name" class="form-label">Quận/Huyện</label>
-                            <select class="form-control district" name="district_id" id="district"required >
-                                <option value="{{ $user->district_id }}">
-                                    {{ $user->district->name ?? 'Vui lòng chọn Quận/Huyện' }}
-                                </option>
-                            </select>
-                        </div>
+    <!-- Quận/Huyện -->
+    <div class="custom-form-group">
+        <label for="name" class="form-label">Quận/Huyện</label>
+        <select class="custom-form-control district" name="district_id" id="district" required>
+            <option value="{{ $user->district_id }}">
+                {{ $user->district->name ?? 'Vui lòng chọn Quận/Huyện' }}
+            </option>
+        </select>
+    </div>
+</div>
 
-                        <!-- Phường/Xã -->
-                        <div class="form-group">
-                            <label for="name" class="form-label">Phường/Xã</label>
-                            <select class="form-control" name="ward_id" id="ward" required >
+<div class="custom-row">
+    <!-- Phường/Xã -->
+    <div class="custom-form-group">
+        <label for="name" class="form-label">Phường/Xã</label>
+        <select class="custom-form-control" name="ward_id" id="ward" required>
+            <option value="{{ $user->wards_id }}">
+                {{ $user->ward->name ?? 'Vui lòng chọn Phường/Xã' }}
+            </option>
+        </select>
+    </div>
+</div>
 
-                                <option value="{{ $user->wards_id }}">
-                                    {{ $user->ward->name ?? 'Vui lòng chọn Phường/Xã' }}
-                                </option>
-                            </select>
-                        </div>
-                    </div>
+
 
 
 
