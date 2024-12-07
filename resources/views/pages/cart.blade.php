@@ -89,7 +89,7 @@
                                                     }
                                                 @endphp
                                                     <li> 
-                                                        <img style="width: 40px; height: 40px;" src="{{ asset($imagePath) }}" alt=""> {{ $fruit_details['quantity'] }}g
+                                                        <img style="width: 40px; height: 40px;" src="{{ asset($imagePath) }}" alt=""> {{ $fruit_details['quantity'] }}Kg
                                                     </li>
                                                 @endif
                                             @endforeach
