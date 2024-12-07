@@ -294,24 +294,32 @@ class CheckoutController extends Controller
         // Bước 3: Tính tổng giá trị sản phẩm trong giỏ hàng từ session
         $cart = session()->get('cart', []);
         $totalPrice = 0;
-    
+         // In ra tổng giá trị của giỏ hàng
         foreach ($cart as $item) {
-            if (isset($item['fruits'])) {
+            if (isset($item['fruits']) && is_array($item['fruits'])) {
                 // Giỏ quà
                 foreach ($item['fruits'] as $fruit) {
-                    $price = (float) $fruit['price'];
-                    $quantity = (int) $fruit['quantity'];
+                    $price = (float) ($fruit['price'] ?? 0); // Giá từng loại trái cây
+                    $quantity = (float) ($fruit['quantity'] ?? 0); // Số lượng trái cây
                     $totalPrice += $price * $quantity;
                 }
-              
-                
-            } else {
+            } elseif (isset($item['gift_id']) && isset($item['price_gift'])) {
+                // Sản phẩm giỏ quà (gift)
+                $price = (float) ($item['price_gift'] ?? 0); // Giá của giỏ quà
+                $quantity = (float) ($item['quantity'] ?? 0); // Số lượng giỏ quà
+                $totalPrice += $price * $quantity;
+            } elseif (isset($item['gift_id']) && $item['price_gift'] === null) {
                 // Sản phẩm thông thường
-                $price = (float) $item['price'];
-                $quantity = (int) $item['quantity'];
+                $price = (float) ($item['price'] ?? 0);
+                // Giá sản phẩm thông thường
+                $quantity = (float) ($item['quantity'] ?? 0);
+                // Số lượng sản phẩm
                 $totalPrice += $price * $quantity;
             }
+           
         }
+        
+        // In ra tổng giá trị của giỏ hàng
 
         // Bước 4: Áp dụng giảm giá
         $discountPercentage = $discount->discount_percent;
