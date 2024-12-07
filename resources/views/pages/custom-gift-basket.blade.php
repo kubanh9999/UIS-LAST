@@ -155,17 +155,23 @@
 
         // Hàm tính tổng giá
         function calculateTotal() {
-            totalPrice = 0; // Khởi tạo giá trị tổng là 0
-            // Lặp qua tất cả các checkbox
-            checkboxes.forEach(function(checkbox) {
-                if (checkbox.checked) {
-                    const price = parseFloat(checkbox.dataset.price); // Lấy giá của sản phẩm từ thuộc tính data-price
-                    const quantity = checkbox.closest('.product-item').querySelector('select').value; // Lấy số lượng từ select
-                    totalPrice += price * (parseInt(quantity) / 1000); // Tính giá tổng dựa trên số lượng (kg)
+        let totalPrice = 0; // Khởi tạo giá trị tổng là 0
+        checkboxes.forEach(function (checkbox) {
+            if (checkbox.checked) {
+                const price = parseFloat(checkbox.dataset.price); // Lấy giá của sản phẩm từ thuộc tính data-price
+                const quantity = checkbox.closest('.product-item').querySelector('select').value; // Lấy số lượng từ select
+                const itemPrice = price * (parseInt(quantity) / 1000); // Tính giá dựa trên số lượng (kg)
+                totalPrice += itemPrice; // Cộng vào tổng giá
+
+                // Cập nhật giá hiển thị của sản phẩm
+                const dynamicPriceElement = checkbox.closest('.product-item').querySelector('.dynamic-price');
+                if (dynamicPriceElement) {
+                    dynamicPriceElement.textContent = itemPrice.toLocaleString(); // Cập nhật giá động
                 }
-            });
-            totalPriceElement.textContent = totalPrice.toLocaleString(); // Cập nhật giá trị tổng vào DOM
-        }
+            }
+        });
+        totalPriceElement.textContent = totalPrice.toLocaleString(); // Cập nhật tổng giá vào DOM
+    }
 
         // Lắng nghe sự kiện thay đổi checkbox hoặc select
         checkboxes.forEach(function(checkbox) {
