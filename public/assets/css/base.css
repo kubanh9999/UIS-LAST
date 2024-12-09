@@ -1,0 +1,51 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
+
+:root {
+    --color-first:#74c36f ; 
+    --color-second: #231f20;
+    --color-three: #ffffff;
+    --color-border: #e5e7eb;
+    --color-background: #f0f2f5;
+    --font: "Montserrat", sans-serif;
+}
+
+/* rgb(49, 159, 37) */
+
+body {
+    font-family: var(--font);
+    font-size: 13px;
+    line-height: 1.5;
+    scroll-behavior: smooth;
+}
+
+a {
+    color: var(--color-second);
+    text-decoration: none;
+}
+
+a:hover {
+    color: var(--color-first);
+}
+
+.container {
+    padding-left: 50px;
+    padding-right: 50px;
+}
+
+main {
+    padding: 15px 0px;
+    background:  var(--color-background);
+}
+
+.btn-cart { 
+    margin-bottom: 0;
+    padding: 5px;
+    font-size: 12px;
+    background-color: var(--color-first);
+    color: var(--color-three);
+    border-radius: 10px;
+    cursor: pointer;
+}
+.btn-cart:hover {
+    color: var(--color-three);
+}
