@@ -221,6 +221,38 @@ span.status.DaHuy {
 span.status.HoanThanh {
     background-color: #28a745;
 }
+.card {
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.card-header {
+    background-color: #f8f9fa;
+    font-size: 1.2em;
+}
+
+.card-body {
+    font-size: 1em;
+    color: #555;
+}
+
+.card-body p {
+    margin: 5px 0;
+}
+
+.card-body .badge {
+    font-size: 0.9em;
+}
+
+.card-body .btn {
+    margin-top: 10px;
+}
+
+.card-body .btn-sm {
+    font-size: 0.7em;
+}
+
 
     </style>
 
@@ -258,18 +290,19 @@ span.status.HoanThanh {
             <div class="row">
                 <!-- Sidebar -->
                 <div class="col-md-3">
-                    <ul class="list-group list-group-flush">
-                        <li class="list-group-item">
-                            <a href="#" class="text-main" data-target="#info"  style="color: #333">Thông tin tài khoản</a>
-                        </li>
-                        <li class="list-group-item">
-                            <a href="#" class="text-main" data-target="#password"  style="color: #333">Thay đổi mật khẩu</a>
-                        </li>
-                        <li class="list-group-item">
-                            <a href="#" class="text-main" data-target="#orders"  style="color: #333">Lịch sử mua hàng</a>
-                        </li>
-                    </ul>
-                </div>
+    <ul class="list-group list-group-flush">
+        <li class="list-group-item">
+            <a href="#" class="text-main" data-target="#info" style="color: #333">Thông tin tài khoản</a>
+        </li>
+        <li class="list-group-item">
+            <a href="#" class="text-main" data-target="#password" style="color: #333">Thay đổi mật khẩu</a>
+        </li>
+        <li class="list-group-item">
+            <a href="#" class="text-main" data-target="#orders" style="color: #333">Lịch sử mua hàng</a>
+        </li>
+    </ul>
+</div>
+
 
                 <!-- Nội dung chính -->
                 <div class="col-md-9">
@@ -388,60 +421,29 @@ span.status.HoanThanh {
 
                     <!-- Lịch sử mua hàng -->
                     <div id="orders" class="content-section">
-                        <h3  style="color: #333">Lịch sử mua hàng</h3>
-                        <table class="table table-bordered">
-                            <thead>
-                                <tr>
-                                    <th scope="col">#ID</th>
-                                    <th scope="col">Tên người mua</th>
-                                   {{--  <th scope="col">Địa chỉ giao hàng</th> --}}
-                                    <th scope="col">Số điện thoại</th>
-                                    <th scope="col">Ngày đặt hàng</th>
-
-                                    <th scope="col">Trạng thái</th>
-                                    <th scope="col">Phương thức thanh toán</th>
-                                    <th scope="col">Hành động</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach ($orders as $item)
-                                    <tr>
-                                        <td>#{{ $item->id }}</td>
-                                        <td>{{ $item->user->name }}</td> <!-- Hiển thị tên người mua -->
-                                       {{--  <td>  {{ $orders->province->name  }}
-                                            {{ $orders->district->name  }},
-                                            {{ $orders->ward->name  }},
-                                            {{ $orders->street }}, </td> --}} <!-- Hiển thị địa chỉ giao hàng -->
-                                        <td>{{ $item->phone }}</td> <!-- Hiển thị số điện thoại -->
-                                        <td>{{ \Carbon\Carbon::parse($item->order_date)->format('d/m/Y') }}</td>
-
-                                        <td>
-                                            <span class="" >
-                                                {{ $item->status }}
-                                            </span>
-                                        </td>
-                                        <td>{{ $item->payment_method }}</td>
-                                        <td>
-                                            <a href="{{ route('account.management.order.detail', $item->id) }}"
-                                                class="btn btn-success btn-sm"><i class="fa-solid fa-eye"></i></a>
-                                            @if ($item->status == 'Đang xử lý')
-                                                <!-- Chỉ hiển thị nút hủy nếu trạng thái là "Đang xử lý" -->
-                                                <a href="{{ route('account.order.cancel', $item->id) }}"
-                                                    class="btn btn-danger btn-sm cancel-order" data-method="POST"
-                                                    data-confirm="Bạn có chắc chắn muốn hủy đơn hàng này?">
-                                                    <i class="fa-solid fa-trash"></i>
-                                                </a>
-                                            @else
-                                                <button class="btn btn-secondary btn-sm" disabled> <i
-                                                        class="fa-solid fa-trash"></i></button>
-                                            @endif
-                                        </td>
-                                    </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
+                       
+                        @foreach ($orders as $item)
+                            <div class="card mb-3">
+                                <div class="card-header">
+                                    <strong>#{{ $item->id }} | {{ \Carbon\Carbon::parse($item->order_date)->timezone('Asia/Ho_Chi_Minh')->format('H:i:s | d/m/Y') }}</strong>
+                                </div>
+                                <div class="card-body">
+                                    <p><strong>Tên người mua:</strong> {{ $item->user->name }}</p>
+                                    <p><strong>Số điện thoại:</strong> {{ $item->phone }}</p>
+                                    <p><strong>Trạng thái:</strong> <span class="badge {{ $item->status == 'Đang xử lý' ? 'bg-warning' : 'bg-success' }}">{{ $item->status }}</span></p>
+                                    <p><strong>Phương thức thanh toán:</strong> {{ $item->payment_method }}</p>
+                                    <div class="justify-content-between">
+                                        <a href="{{ route('account.management.order.detail', $item->id) }}" class="btn btn-success btn-sm"><i class="fa-solid fa-eye"></i> Xem chi tiết</a>
+                                        @if ($item->status == 'Đang xử lý')
+                                            <a href="{{ route('account.order.cancel', $item->id) }}" class="btn btn-danger btn-sm cancel-order" data-method="POST" data-confirm="Bạn có chắc chắn muốn hủy đơn hàng này?"><i class="fa-solid fa-trash"></i> Hủy đơn hàng</a>
+                                        @else
+                                            <button class="btn btn-secondary btn-sm" disabled><i class="fa-solid fa-trash"></i> Đã hủy</button>
+                                        @endif
+                                    </div>
+                                </div>
+                            </div>
+                        @endforeach
                     </div>
-
                 </div>
             </div>
         </div>

@@ -157,12 +157,12 @@ class ProductController extends Controller
 
         // Xây dựng query sản phẩm
         $productsQuery = DB::table('products')
-            ->select('id', 'name', 'price', 'image', 'category_id');
+            ->select('id', 'name', 'price', 'image', 'category_id','sales');
 
         if ($id == 'all') {
             // Kết hợp bảng product_types mà không cần lọc giá
             $productTypesQuery = DB::table('product_types')
-                ->select('id', 'name', 'price_gift as price', 'image', 'category_id');
+            ->select('id', 'name', 'price_gift as price', 'image', 'category_id', DB::raw('NULL as sales'));
 
             // Lọc theo giá cho products nếu có
             if ($request->has('price')) {
