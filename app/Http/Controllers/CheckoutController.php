@@ -482,12 +482,12 @@ class CheckoutController extends Controller
                     // Kiểm tra và xử lý số lượng từ 100g đến 1000g (1kg)
                     if ($quantity >= 100 && $quantity <= 900) {
                         // Chuyển đổi số lượng từ gram sang kg
-                        $quantityInKg = $quantity / 1000;
+                        $quantityInKg = $quantity;
                         // Chia giá cho 1000 để tính giá theo kg
                         $pricePerKg = $price / 1000;
                     } else {
                         // Nếu số lượng lớn hơn 900g, giữ nguyên giá
-                        $quantityInKg = $quantity / 1000; // Chuyển số lượng từ gram sang kg
+                        $quantityInKg = $quantity; // Chuyển số lượng từ gram sang kg
                         $pricePerKg = $price; // Giữ nguyên giá (giá cho 1kg)
                     } // In ra giá trị quantity, price và quantityInKg
 /* dd($pricePerKg); */
@@ -534,7 +534,23 @@ class CheckoutController extends Controller
                         'price' => $item['price'],
                         'total_price' => $item['price'] * $item['quantity'],
                     ]);
+                    $product = Product::find($item['id']);
+                    if ($product) {
+                        // Chuyển đổi quantity (giả sử quantity là gram)
+                        $quantityInKg = $item['quantity']; // Chuyển đổi từ gram sang kg (hoặc đơn vị thập phân như yêu cầu)
+
+                        // Kiểm tra tồn kho và giảm số lượng
+                        if ($product->stock >= $quantityInKg) {
+                            $product->stock -= $quantityInKg; // Giảm số lượng tồn kho
+                            $product->sales += $quantityInKg; // Tăng số lượng đã bán
+                            $product->save();
+                        } else {
+                            // Nếu không đủ tồn kho
+                            return redirect()->back()->with('error', 'Số lượng yêu cầu vượt quá tồn kho!');
+                        }
+                    }
                 }
+                
             }
         }
         Mail::to($order->email)->send(new OrderMail($order));
@@ -668,12 +684,12 @@ class CheckoutController extends Controller
                     // Kiểm tra và xử lý số lượng từ 100g đến 1000g (1kg)
                     if ($quantity >= 100 && $quantity <= 900) {
                         // Chuyển đổi số lượng từ gram sang kg
-                        $quantityInKg = $quantity / 1000;
+                        $quantityInKg = $quantity;
                         // Chia giá cho 1000 để tính giá theo kg
                         $pricePerKg = $price / 1000;
                     } else {
                         // Nếu số lượng lớn hơn 900g, giữ nguyên giá
-                        $quantityInKg = $quantity / 1000; // Chuyển số lượng từ gram sang kg
+                        $quantityInKg = $quantity; // Chuyển số lượng từ gram sang kg
                         $pricePerKg = $price; // Giữ nguyên giá (giá cho 1kg)
                     } 
                             // Lưu sản phẩm trong giỏ quà, chỉ cần lưu một bản ghi
