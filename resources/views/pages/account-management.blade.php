@@ -253,6 +253,7 @@ span.status.HoanThanh {
     font-size: 0.7em;
 }
 
+
     </style>
 
     <body>
@@ -289,18 +290,19 @@ span.status.HoanThanh {
             <div class="row">
                 <!-- Sidebar -->
                 <div class="col-md-3">
-                    <ul class="list-group list-group-flush">
-                        <li class="list-group-item">
-                            <a href="#" class="text-main" data-target="#info"  style="color: #333">Thông tin tài khoản</a>
-                        </li>
-                        <li class="list-group-item">
-                            <a href="#" class="text-main" data-target="#password"  style="color: #333">Thay đổi mật khẩu</a>
-                        </li>
-                        <li class="list-group-item">
-                            <a href="#" class="text-main" data-target="#orders"  style="color: #333">Lịch sử mua hàng</a>
-                        </li>
-                    </ul>
-                </div>
+    <ul class="list-group list-group-flush">
+        <li class="list-group-item">
+            <a href="#" class="text-main" data-target="#info" style="color: #333">Thông tin tài khoản</a>
+        </li>
+        <li class="list-group-item">
+            <a href="#" class="text-main" data-target="#password" style="color: #333">Thay đổi mật khẩu</a>
+        </li>
+        <li class="list-group-item">
+            <a href="#" class="text-main" data-target="#orders" style="color: #333">Lịch sử mua hàng</a>
+        </li>
+    </ul>
+</div>
+
 
                 <!-- Nội dung chính -->
                 <div class="col-md-9">
@@ -423,7 +425,7 @@ span.status.HoanThanh {
                         @foreach ($orders as $item)
                             <div class="card mb-3">
                                 <div class="card-header">
-                                    <strong>#{{ $item->id }} - {{ \Carbon\Carbon::parse($item->order_date)->format('d/m/Y H:i:s') }}</strong>
+                                    <strong>#{{ $item->id }} | {{ \Carbon\Carbon::parse($item->order_date)->timezone('Asia/Ho_Chi_Minh')->format('H:i:s | d/m/Y') }}</strong>
                                 </div>
                                 <div class="card-body">
                                     <p><strong>Tên người mua:</strong> {{ $item->user->name }}</p>
