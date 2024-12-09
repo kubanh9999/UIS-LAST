@@ -99,7 +99,7 @@
     </style>
 
     <div class="order-details-container mt-5 w-500">
-       
+
    {{--  <div class="detai" style="background: #319f25; height: 30px;">
         <h2 class="order-detail-title">Chi tiết đơn hàng # {{ $orders->id }}</h2>
     </div> --}}
@@ -107,12 +107,12 @@
         <div class="row text-center justify-content-center" >
             <div class="col-8 order-details">
                 <div class="order-summary">
-                           
+
                     <table class="table table-borderless">
                         <h3>Hóa đơn</h3>
                         <div class="print" style="float: right ;color: #319f25 ;width: 30px">
                             <button onclick="printOrderDetails()" style="background: #319f25; width: 30px;border: 1px solid #319f25">
-                                <i class="fa-solid fa-print" style="color: #fff"></i> 
+                                <i class="fa-solid fa-print" style="color: #fff"></i>
                             </button>
                         </div>
                         <table class="table table-borderless">
@@ -133,7 +133,16 @@
                                 </tr>
                                 <tr>
                                     <td><strong>Địa chỉ:</strong></td>
-                                    <td class="text-right">{{ $orders->address }}</td>
+
+                                    <td class="text-right">
+                                        {{ $orders->province->name  }}
+                                        {{ $orders->district->name  }},
+                                        {{ $orders->ward->name  }},
+                                        {{ $orders->street }},
+
+
+
+                                    </td>
                                 </tr>
                                 <tr>
                                     <td><strong>Thanh toán:</strong></td>
@@ -147,17 +156,7 @@
                                 <tr>
                                     <td><strong>Trạng thái:</strong></td>
                                     <td class="text-right">
-                                        @if ($orders->status == -1)
-                                            <span class="text-danger">Đơn hàng đã hủy</span>
-                                        @elseif ($orders->status == 0)
-                                            <span class="text-warning">Đang được xử lý</span>
-                                        @elseif ($orders->status == 1)
-                                            <span class="text-primary">Đang vận chuyển</span>
-                                        @elseif ($orders->status == 2)
-                                            <span class="text-success">Đã giao thành công</span>
-                                        @else
-                                            <span class="text-secondary">Chưa xác định</span>
-                                        @endif
+                                      {{$orders->status}}
                                     </td>
                                 </tr>
 
@@ -209,7 +208,7 @@
                                                         <img style="width: 40px;"
                                                             src="{{ asset($imagePath) }}"
                                                             alt="">
-                                                        {{ $giftItem->product->name }} x {{ $giftItem->quantity .'g' }}
+                                                        {{ $giftItem->product->name }} x {{ $giftItem->quantity .'kg' }}
                                                         @php $customGiftTotal += $giftItem->price * $giftItem->quantity; @endphp
                                                     </li>
                                                 @endif
@@ -226,7 +225,7 @@
                             <tr>
                                 <td><strong>Tên sản phẩm:</strong></td>
                                 <td>{{ $item->gift->name }}</td>
-                              
+
                             </tr>
                             <tr class="">
                                 <td><strong>Hình ảnh sản phẩm:</strong></td>
@@ -238,12 +237,12 @@
                                     }
                                 @endphp
                                 <td><img src="{{ asset($imagePath) }}" class="img-thumbnail" style="width: 50px"></td>
-                                
+
                             </tr>
                             <tr>
                                 <td><strong>Số lượng</strong></td>
                                 <td>{{ $item->quantity }}</td>
-                              
+
                             </tr>
                             @elseif ($item->product_id && !$item->gift_id)
                                 <tr>
@@ -276,13 +275,13 @@
                                 </tr>
                                 <tr>
                                     <td><strong>Tổng giá đơn hàng:</strong></td>
-                                    <td class="text-right"><strong>{{ number_format($orders->total_amount - 30000) }} VNĐ</strong>
+                                    <td class="text-right"><strong>{{ number_format($orders->total_amount) }} VNĐ</strong>
                                     </td>
                                 </tr>
-                               
+
                                 <tr>
                                     <td><strong>Phí vận chuyển:</strong></td>
-                                    <td class="text-right">30,000 VNĐ</td>
+                                    <td class="text-right">0 VNĐ</td>
                                 </tr>
                                 <tr>
                                     <td><strong>Tổng tiền hàng:</strong></td>
@@ -371,7 +370,7 @@
             // Ẩn tất cả nội dung khác ngoại trừ chi tiết đơn hàng
             var content = document.querySelector('.order-details').outerHTML;  // Chọn div chứa chi tiết đơn hàng
             var originalContent = document.body.innerHTML;  // Lưu lại nội dung gốc của trang
-            
+
             document.body.innerHTML = content;  // Thay thế nội dung trang bằng chi tiết đơn hàng
             window.print();  // In trang hiện tại (bây giờ chỉ có chi tiết đơn hàng)
             document.body.innerHTML = originalContent;  // Khôi phục lại nội dung gốc sau khi in

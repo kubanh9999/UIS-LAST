@@ -25,7 +25,7 @@ class CartController extends Controller
     public function addToCart(Request $request, $id)
 {
     /* dd($request->all()); */
- 
+
     if (!Auth::check()) {
         return redirect()->route('login')->with('error', 'Bạn cần đăng nhập để mua hàng.');
     }
@@ -80,23 +80,23 @@ class CartController extends Controller
     }
 }
 
-    
+
 
     // Cập nhật số lượng giỏ hàng
    // Cập nhật số lượng giỏ hàng
    public function updateCart(Request $request, $id)
    {
        $cart = Session::get('cart', []);
-   
+
        // Xây dựng khóa đầy đủ từ id sản phẩm, ví dụ: product_19
        $productKey = 'product_' . $id; // Đây là cho các sản phẩm thông thường
        $giftKey = 'gift_' . $id; // Đây là cho giỏ quà
-   
+
        // Kiểm tra xem sản phẩm có tồn tại trong giỏ hàng hay không
        if (isset($cart[$productKey])) {
            // Cập nhật số lượng sản phẩm thông thường
            $quantity = (int) $request->quantity;
-   
+
            if ($quantity > 0) {
                // Cập nhật số lượng cho sản phẩm thông thường
                $cart[$productKey]['quantity'] = $quantity;
@@ -104,11 +104,11 @@ class CartController extends Controller
                // Nếu quantity không hợp lệ, xóa sản phẩm khỏi giỏ
                unset($cart[$productKey]);
            }
-   
+
        } elseif (isset($cart[$giftKey])) {
            // Cập nhật số lượng giỏ quà
            $quantity = (int) $request->quantity;
-   
+
            if ($quantity > 0) {
                // Cập nhật số lượng cho giỏ quà
                $cart[$giftKey]['quantity'] = $quantity;
@@ -116,7 +116,7 @@ class CartController extends Controller
                // Nếu quantity không hợp lệ, xóa giỏ quà khỏi giỏ
                unset($cart[$giftKey]);
            }
-   
+
        } else {
            return response()->json([
                'success' => false,
@@ -146,11 +146,11 @@ class CartController extends Controller
 
        // Lưu giỏ hàng lại vào session
        Session::put('cart', $cart);
-   
+
        // Tính lại tổng tiền và số lượng
        $total = $this->calculateTotal();
        $cartItemCount = array_sum(array_column($cart, 'quantity'));
-   
+
        return response()->json([
            'success' => true,
            'totalPrice' => $total,
@@ -196,7 +196,7 @@ class CartController extends Controller
     private function calculateTotal()
     {
         $cart = Session::get('cart', []);
-    
+
         return array_reduce($cart, function ($carry, $item) {
             // Trường hợp 1: Giỏ quà tùy chọn, dùng 'total'
             if (isset($item['fruits']) && isset($item['total']) && is_numeric($item['total'])) {
@@ -210,14 +210,13 @@ class CartController extends Controller
             elseif (isset($item['price']) && is_numeric($item['price']) && isset($item['quantity']) && is_numeric($item['quantity'])) {
                 $carry += $item['price'] * (int) $item['quantity'];
             }
-    
+
             return $carry;
         }, 0);
     }
-    
+
     public function addGiftBasketToCart(Request $request, $basket_id)
     {
-  /*      dd() */
         if (!Auth::check()) {
             return redirect()->route('login')->with('error', 'Bạn cần đăng nhập mua hàng.');
         }
@@ -225,7 +224,7 @@ class CartController extends Controller
         // Khởi tạo giỏ hàng từ session
         $cart = Session::get('cart', []);
         $quantities = $request->input('quantities', []);
-    
+        
         // Kiểm tra giỏ quà
         $giftBasket = ProductType::find($basket_id);
         if (!$giftBasket) {
@@ -240,16 +239,21 @@ class CartController extends Controller
                 if ($fruit) {
                     // Lấy giá trị quantity từ form, ép kiểu về số nguyên
                     $quantity = (int)($quantities[$fruit_id] ?? 0); // Đảm bảo quantity là số nguyên
+                    $quantityKg = $quantity / 1000; // Chuyển đổi quantity từ gam sang kg
     
                     // Lấy giá trị price từ sản phẩm, ép kiểu về số thập phân
                     $price = (float)$fruit->price; // Đảm bảo price là số thập phân
+    
+                    if ($quantityKg > $fruit->stock) {  // Giả sử `stock` là trường lưu trữ số lượng tồn kho
+                        return back()->with('error', 'Số lượng trái cây ' . $fruit->name . ' vượt quá số lượng tồn kho.');
+                    }
     
                     if ($quantity > 0) {
                         $fruits[$fruit_id] = [
                             'product_id' => $fruit->id,
                             'name' => $fruit->name,
                             'image' => $fruit->image,
-                            'quantity' => $quantity,
+                            'quantity' => $quantityKg, // Lưu số lượng theo kg
                             'price' => $price
                         ];
                     }
@@ -258,20 +262,21 @@ class CartController extends Controller
         }
     
         // Tính tổng giỏ quà
-        $total = $this->calculateBasketTotal($fruits);  // Hàm tính tổng có thể được cập nhật để tính đúng
-   /*  dd($total); */
+        $totalPrice = $this->calculateBasketTotal($fruits); // Tính tổng giỏ quà
+        /* dd($totalPrice); */ // Debug totalPrice
+    
         $basket = [
             'gift_id' => $giftBasket->id,
             'basket_name' => $giftBasket->name,
             'basket_image' => $giftBasket->image,
             'fruits' => $fruits,
-            'total' => $total
+            'total' => $totalPrice // Đảm bảo sử dụng totalPrice
         ];
     
         // Thêm giỏ quà vào giỏ hàng trong session
         $cart[] = $basket;
         Session::put('cart', $cart);
-       /*  dd($cart); */
+    
         if ($request->input('action') === 'buy_now') {
             return redirect()->route('cart.index')->with('success', 'Sản phẩm đã được thêm vào giỏ hàng và chuyển tới trang giỏ hàng.');
         } else {
@@ -284,15 +289,14 @@ class CartController extends Controller
     {
         $total = 0;
         foreach ($fruits as $fruit) {
-            // Nếu giá trị quantity là trong đơn vị gam và bạn muốn tính giá theo kg
-            // Đảm bảo rằng quantity là số nguyên và bạn tính đúng theo đơn vị
-            $weightInKg = $fruit['quantity'] / 1000; // Chuyển đổi gam sang kg nếu cần
+            // Nếu quantity đã là kg thì không cần chia thêm nữa
+            $weightInKg = $fruit['quantity'];
     
             // Cộng dồn tổng theo trọng lượng và giá trị
-            $total += $weightInKg * $fruit['price'];  // Giá sản phẩm tính theo trọng lượng (kg)
+            $total += $weightInKg * $fruit['price'];
         }
+    
         return $total;
     }
-    
-    
+
 }

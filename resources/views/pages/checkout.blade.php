@@ -15,6 +15,54 @@
 .user-info-group .form-group {
     margin-bottom: 15px; /* Khoảng cách giữa các input */
 }
+.custom-row {
+    display: flex;
+    gap: 20px;
+    margin-bottom: 20px;
+}
+
+.custom-form-group {
+    display: flex;
+    flex-direction: column;
+    flex: 1; /* Đảm bảo các trường input chiếm đều không gian */
+}
+
+.custom-form-group label {
+    font-weight: bold;
+    margin-bottom: 8px;
+    font-size: 14px;
+}
+
+.custom-form-group .custom-form-control {
+    padding: 10px;
+    font-size: 14px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    transition: border-color 0.3s ease;
+}
+
+.custom-form-group .custom-form-control:focus {
+    border-color: #66afe9;
+    outline: none;
+}
+
+.custom-form-group select.custom-form-control {
+    padding: 10px;
+    font-size: 14px;
+    border-radius: 8px;
+    border: 1px solid #ccc
+    background-color: #fff;
+}
+
+.custom-form-group small {
+    color: #ff0000;
+    font-size: 12px;
+    display: none;
+}
+
+.custom-form-control::placeholder {
+    color: #888;
+}
 
 </style>
 
@@ -33,28 +81,128 @@
         <div class="input-group">
             <input type="text" name="discount_code" id="discount_code" class="form-control" placeholder="Nhập mã giảm giá" required>
             <div class="input-group-append">
-                <button type="submit" class="btn btn-primary">Áp dụng</button>
+                <button type="submit" class="btn btn-success">Áp dụng</button>
             </div>
         </div>
     </div>
 </form>
 
 <!-- Form thanh toán chính -->
-        <form id="checkout-form" action="{{ route('checkout.complete') }}" method="POST" class="mb-4" data-shipping-cost="{{ $shippingCost }}">
+        <form id="checkout-form" action="{{ route('checkout.complete') }}" method="POST" class="mb-4">
             @csrf
-            <div class="row">
+            <div class="row" >
                 <!-- Thông tin người nhận hàng -->
-                <div class="checkout-left col-lg-7 p-3 border-right">
+                <div class="checkout-left col-lg-7 p-3 border-right" >
                     <h2 class="info-title">Thông tin nhận hàng</h2>
+                    <div class="custom-row">
+    <!-- Họ và tên -->
+    <div class="custom-form-group">
+        <label for="name" class="form-label">Họ và tên</label>
+        <input
+            type="text"
+            name="name"
+            id="name"
+            class="custom-form-control"
+            placeholder="Họ và tên"
+            value="{{ old('name', $user->name) }}"
+            required>
+        <small id="name-error" class="text-danger" style="display:none;">
+            Vui lòng nhập họ và tên
+        </small>
+    </div>
 
-                    <div class="user-info-group">
-                        @foreach (['email' => 'Email', 'name' => 'Họ và tên', 'phone' => 'Số điện thoại', 'address' => 'Địa chỉ'] as $field => $placeholder)
-                            <div class="form-group" style="margin-bottom: 15px;">
-                                <input type="{{ $field === 'email' ? 'email' : 'text' }}" name="{{ $field }}" class="form-control" placeholder="{{ $placeholder }}" required>
-                                <small id="{{ $field }}-error" class="text-danger" style="display:none;">Vui lòng nhập {{ strtolower($placeholder) }}</small>
-                            </div>
-                        @endforeach
-                    </div>
+    <!-- Email -->
+    <div class="custom-form-group">
+        <label for="email" class="form-label">Email</label>
+        <input
+            type="email"
+            name="email"
+            id="email"
+            class="custom-form-control"
+            placeholder="Email"
+            value="{{ old('email', $user->email) }}"
+            required>
+        <small id="email-error" class="text-danger" style="display:none;">
+            Vui lòng nhập email
+        </small>
+    </div>
+</div>
+
+<div class="custom-row">
+    <!-- Số điện thoại -->
+    <div class="custom-form-group">
+        <label for="phone" class="form-label">Số điện thoại</label>
+        <input
+            type="text"
+            name="phone"
+            id="phone"
+            class="custom-form-control"
+            placeholder="Số điện thoại"
+            value="{{ old('phone', $user->phone) }}"
+            required>
+        <small id="phone-error" class="text-danger" style="display:none;">
+            Vui lòng nhập số điện thoại
+        </small>
+    </div>
+
+    <!-- Địa chỉ -->
+    <div class="custom-form-group">
+        <label for="name" class="form-label">Địa chỉ</label>
+        <input
+            type="text"
+            name="address"
+            id="street"
+            class="custom-form-control"
+            placeholder="Địa chỉ"
+            value="{{ old('street', $user->street) }}"
+            required>
+        <small id="street-error" class="text-danger" style="display:none;">
+            Vui lòng nhập địa chỉ
+        </small>
+    </div>
+</div>
+
+<div class="custom-row">
+    <!-- Tỉnh/Thành phố -->
+    <div class="custom-form-group">
+        <label for="name" class="form-label">Tỉnh/Thành phố</label>
+        <select class="custom-form-control" name="province_id" id="province" required>
+            <option value="{{ $user->province_id }}">
+                {{ $user->province->name ?? 'Vui lòng chọn Tỉnh/Thành phố' }}
+            </option>
+            @foreach ($provinces as $province)
+                <option value="{{ $province->province_id }}" {{ $province->province_id == $user->province_id ? 'selected' : '' }}>
+                    {{ $province->name }}
+                </option>
+            @endforeach
+        </select>
+    </div>
+
+    <!-- Quận/Huyện -->
+    <div class="custom-form-group">
+        <label for="name" class="form-label">Quận/Huyện</label>
+        <select class="custom-form-control district" name="district_id" id="district" required>
+            <option value="{{ $user->district_id }}">
+                {{ $user->district->name ?? 'Vui lòng chọn Quận/Huyện' }}
+            </option>
+        </select>
+    </div>
+</div>
+
+<div class="custom-row">
+    <!-- Phường/Xã -->
+    <div class="custom-form-group">
+        <label for="name" class="form-label">Phường/Xã</label>
+        <select class="custom-form-control" name="ward_id" id="ward" required>
+            <option value="{{ $user->wards_id }}">
+                {{ $user->ward->name ?? 'Vui lòng chọn Phường/Xã' }}
+            </option>
+        </select>
+    </div>
+</div>
+
+
+
 
 
                     <h2 class="shipping-title mt-4">Vận chuyển</h2>
@@ -76,7 +224,7 @@
                 @if(isset($cart) && count($cart) > 0)
                     @php
                         $totalPrice = 0;
-                        $shippingCost = 30000; // Phí vận chuyển
+                        $shippingCost = 0; // Phí vận chuyển
                     @endphp
 
                     <div class="checkout-right col-lg-5 px-4">
@@ -88,38 +236,38 @@
                                 $price = $item['price_gift'] ?? $item['price'] ?? 0;
 
                                 // Tính tổng giá cho từng sản phẩm hoặc giỏ quà
-                                $itemTotal = isset($item['fruits']) 
-                                                ? $item['total'] 
+                                $itemTotal = isset($item['fruits'])
+                                                ? $item['total']
                                                 : $price * ($item['quantity'] ?? 1);
 
                                 $totalPrice += $itemTotal;
 
                                 // Lấy số lượng sản phẩm
-                                $quantity = isset($item['fruits']) 
-                                                ? 1 
+                                $quantity = isset($item['fruits'])
+                                                ? 1
                                                 : ($item['quantity'] ?? 0);
                             @endphp
                             @php
                             // Xử lý đường dẫn hình ảnh
-                            $imagePath = isset($item['fruits']) 
-                                ? (strpos($item['basket_image'], 'uploads/products/') === 0 
+                            $imagePath = isset($item['fruits'])
+                                ? (strpos($item['basket_image'], 'uploads/products/') === 0
                                     ? asset($item['basket_image']) // Nếu đường dẫn bắt đầu bằng 'uploads/products/', không thêm 'layouts/img/'
                                     : asset('layouts/img/' . $item['basket_image'])
-                                ) 
-                                : (is_array($item) && isset($item['image']) 
-                                    ? (strpos($item['image'], 'uploads/products/') === 0 
+                                )
+                                : (is_array($item) && isset($item['image'])
+                                    ? (strpos($item['image'], 'uploads/products/') === 0
                                         ? asset($item['image']) // Nếu đường dẫn bắt đầu bằng 'uploads/products/', không thêm 'layouts/img/'
                                         : asset('layouts/img/' . $item['image'])
-                                    ) 
+                                    )
                                     : asset('layouts/img/default-image.jpg')); // Đảm bảo có hình ảnh mặc định
                         @endphp
-                        
+
 
                             <div class="info-order-product d-flex align-items-center mb-3 border p-2 rounded shadow-sm">
-                              <img 
-                                src="{{ $imagePath }}" 
-                                alt="{{ isset($item['fruits']) ? 'Gift Basket Image' : 'Product lll' }}" 
-                                class="img-fluid" 
+                              <img
+                                src="{{ $imagePath }}"
+                                alt="{{ isset($item['fruits']) ? 'Gift Basket Image' : 'Product lll' }}"
+                                class="img-fluid"
                                 style="width: 80px; height: 80px;">
 
                                 {{-- Hiển thị số lượng sản phẩm --}}
@@ -130,10 +278,10 @@
                             </div>
 
 
-                            
+
                         @endforeach
-                      
-                                
+
+
                         @php
                             if (isset($productData['price']) && isset($productData['quantity'])) {
                             // Tính tổng giá cho sản phẩm mới
@@ -144,8 +292,8 @@
                             Log::error('Product price or quantity is null or invalid', ['productData' => $productData]);
                         }
                         @endphp
-                    
-   
+
+
                         <div class="order-summary mt-3">
                             <div class="d-flex justify-content-between">
                                 <p class="mb-0">Tạm tính</p>
@@ -161,7 +309,7 @@
                             <p class="mb-0">Giảm giá (%)</p>
                             <span id="discount-percentage">{{ $discountPercentage ?? 0 }}</span>
                         </div>
-                        
+
                         <div class="total-summary d-flex justify-content-between mt-4">
                             <p class="mb-0 font-weight-bold">Tổng cộng</p>
                             <span id="total-remaining" class="font-weight-bold">{{ number_format($totalPrice + $shippingCost - ($totalPrice * ($discountPercentage ?? 0) / 100)) }} VND</span>
@@ -187,6 +335,9 @@
             <input type="hidden" name="email" id="vnpay_email">
             <input type="hidden" name="phone" id="vnpay_phone">
             <input type="hidden" name="address" id="vnpay_address">
+            <input type="hidden" name="province_id" id="vnpay_province_id">
+            <input type="hidden" name="district_id" id="vnpay_district_id">
+            <input type="hidden" name="ward_id" id="vnpay_ward_id">
             <!-- <input type="hidden" name="note" id="note"> -->
             <input type="hidden" name="price" id="vnpay_price" value="{{ number_format($totalPrice + $shippingCost) ?? 0 }}">
         </form>
@@ -200,6 +351,9 @@
             <input type="hidden" name="phone" id="momo_phone">
             <!-- <input type="hidden" name="note" id="note"> -->
             <input type="hidden" name="address" id="momo_address">
+            <input type="hidden" name="province_id" id="momo_province_id">
+            <input type="hidden" name="district_id" id="momo_district_id">
+            <input type="hidden" name="ward_id" id="momo_ward_id">
             <input type="hidden" name="price" id="momo_price" value="{{ number_format($totalPrice + $shippingCost) ?? 0}}">
         </form>
 
@@ -209,48 +363,52 @@
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
+    const provinceId = $('#province').val();
+    console.log('provinceId',provinceId);
+
     $(document).ready(function () {
         // Lấy dữ liệu từ server thông qua data attributes
         let totalPrice = document.getElementById('total-price').getAttribute('data-price');
-        let shippingCost = parseFloat($('#checkout-form').data('shipping-cost'));
+        let shippingCost = 0;
         totalPrice = parseFloat(totalPrice);
         totalPrice = totalPrice + shippingCost;
         let selectedPaymentMethod = null;
 
         // Xử lý áp dụng mã giảm giá
         $('#discount-form').on('submit', function (event) {
-            event.preventDefault();
+    event.preventDefault();
 
-            $.ajax({
-                url: $(this).attr('action'),
-                method: 'POST',
-                data: $(this).serialize(),
-                success: function (response) {
-                    let discountPercent = response.discount
-                        ? Math.min(Math.max(response.discount, 1), 100)
-                        : 0;
-
-                    let discountAmount = (discountPercent / 100) * totalPrice;
-                    let totalAfterDiscount = totalPrice - discountAmount;
-
-                    $('#discount-percentage').text(discountPercent);
-                    $('#total-remaining').text(totalAfterDiscount.toFixed(0) + " VND");
-                    $('#message')
-                        .text('Áp dụng mã thành công!')
-                        .removeClass('alert-danger')
-                        .addClass('alert alert-success')
-                        .show();
-                },
-                error: function (xhr) {
-                    $('#message')
-                        .text('Mã giảm giá đã hết hạn hoặc không tồn tại!')
-                        .removeClass('alert-success')
-                        .addClass('alert alert-danger')
-                        .show();
-                    console.error(xhr.responseJSON?.message || "Lỗi không xác định.");
-                }
+    $.ajax({
+        url: $(this).attr('action'),
+        method: 'POST',
+        data: $(this).serialize(),
+        success: function (response) {
+            let totalAfterDiscount = parseFloat(response.total_price).toLocaleString('vi-VN', {
+                style: 'currency',
+                currency: 'VND',
             });
-        });
+
+            $('#discount-percentage').text(response.discount + '%');
+            $('#total-remaining').text(totalAfterDiscount);
+            $('#message')
+                .text(response.message)
+                .removeClass('alert-danger')
+                .addClass('alert alert-success')
+                .show();
+        },
+        error: function (xhr) {
+            $('#message')
+                .text(xhr.responseJSON?.message || 'Mã giảm giá không hợp lệ hoặc đã hết hạn.')
+                .removeClass('alert-success')
+                .addClass('alert alert-danger')
+                .show();
+        },
+    });
+});
+
+
+
+
 
         // Theo dõi lựa chọn phương thức thanh toán
         $('input[name="payment_method"]').on('change', function () {
@@ -272,8 +430,12 @@
                 email: $('input[name="email"]').val(),
                 phone: $('input[name="phone"]').val(),
                 address: $('input[name="address"]').val(),
+                ward_id: $('#ward').val(),
+                district_id: $('#district').val(),
+                province_id: $('#province').val(),
                 price: totalPrice
             };
+
 
             // Xử lý thanh toán theo từng phương thức
             if (selectedPaymentMethod === 'momo') {
@@ -314,5 +476,119 @@
     });
 </script>
 
+<script>
+    $(document).ready(function() {
+        // Khi tỉnh thành thay đổi
+        $('#province').change(function() {
+            var provinceId = $(this).val();
+            console.log(provinceId);
+            console.log('dữ liệu district:', district.id);
+            // Nếu tỉnh thành được chọn
+            if (provinceId) {
+                console.log('Sending request to:', '/get-districts/' + provinceId);
+                $.ajax({
 
+                    url: '/get-districts/' + provinceId, // Đường dẫn tới controller Laravel
+                    method: 'GET',
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr(
+                            'content') // Gửi CSRF token
+                    },
+                    success: function(data) {
+                        console.log('Dữ liệu trả về từ server:', data);
+                        // Xóa các option hiện tại trong select quận/huyện và phường/xã
+                        $('#district').empty();
+                        $('#ward').empty();
+
+                        // Thêm option mặc định cho quận/huyện
+                        $('#district').append(
+                            '<option value="">Vui lòng chọn Quận/Huyện</option>');
+
+                        // Thêm các quận/huyện mới vào select
+                        if (data.districts && data.districts.length > 0) {
+                            $.each(data.districts, function(index, district) {
+                                $('#district').append('<option value="' + district
+                                    .district_id + '">' + district.name +
+                                    '</option>');
+                            });
+                        } else {
+                            alert('Không tìm thấy quận/huyện nào.');
+                        }
+                    },
+                    error: function() {
+                        alert('Có lỗi xảy ra khi tải quận huyện.');
+                    }
+                });
+            } else {
+                $('#district').empty();
+                $('#ward').empty();
+            }
+        });
+        /* $('.ward').chance(function(){
+            var ward = $(this).val;
+            console.log('ward',ward);
+
+        }) */
+        // Khi quận huyện thay đổi
+        $('.district').change(function() {
+            console.log('Sự kiện change đã được gọi');
+            var districtId = $(this).val();
+
+            console.log('districtId:', districtId);
+            /* console.log('ward',wards.wards_id); */
+
+
+            // Nếu quận huyện được chọn
+            if (districtId) {
+                $.ajax({
+                    url: '/get-wards/' + districtId, // Đường dẫn tới controller Laravel
+                    method: 'GET',
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr(
+                            'content') // Gửi CSRF token
+                    },
+                    success: function(data) {
+                        // Xóa các option hiện tại trong select phường/xã
+                        $('#ward').empty();
+
+                        // Thêm option mặc định cho phường/xã
+                        $('#ward').append(
+                            '<option value="">Vui lòng chọn Phường/Xã</option>');
+                        // Thêm các phường/xã mới vào select
+                        $.each(data.wards, function(index, ward) {
+                            if (ward.wards_id) {
+                                $('#ward').append('<option value="' + ward
+                                    .wards_id + '">' + ward.name + '</option>');
+                                console.log('aaa:', ward.wards_id);
+                            }
+                        });
+
+                        // Gắn sự kiện change sau khi thêm các option vào dropdown
+                        $('#ward').change(function() {
+                            var selectedWardId = $(this).val();
+                            console.log('Ward selected:', selectedWardId);
+                        });
+                    },
+                    error: function() {
+                        alert('Có lỗi xảy ra khi tải phường xã.');
+                    }
+                });
+            } else {
+                $('#ward').empty();
+            }
+        });
+
+    });
+    /* $('#district').change(function() {
+        console.log('Sự kiện change đã được gọi');
+        var districtId = $(this).val();  // Lấy giá trị của select theo id
+        console.log('districtId:', districtId);  // Kiểm tra giá trị districtId
+
+        if (districtId) {
+            // Tiến hành xử lý nếu districtId hợp lệ
+        } else {
+            console.log('Không có giá trị districtId');
+        }
+    }); */
+</script>
 @endsection

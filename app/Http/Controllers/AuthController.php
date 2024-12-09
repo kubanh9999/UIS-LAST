@@ -170,6 +170,7 @@ class AuthController extends Controller
     public function logout(Request $request)
     {
         Auth::logout();
+        session()->forget(['cart']);
         return redirect()->route('home.index'); // Điều hướng về trang login
     }
 
