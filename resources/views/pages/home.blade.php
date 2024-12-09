@@ -267,6 +267,9 @@
                     <div class="price">
                         {{ number_format($item->price, 0) }} VND
                     </div>      
+                    <div class="sales" style="{{ $item->sales > 0 ? '' : 'display: none;' }}">
+                        Đã bán: {{ number_format($item->sales, 1) }} kg
+                    </div>
                     <div class="add-to-cart">
                         <i class="fa-solid fa-basket-shopping"></i>
                         <form action="{{ route('cart.add', ['id' => $item->id]) }}" method="post" style="display: inline;">

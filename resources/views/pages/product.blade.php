@@ -109,6 +109,9 @@
                                     <div class="price">
                                         {{ number_format($product->price, 0) }} VND
                                     </div>
+                                    <div class="sales" style="{{ $product->sales > 0 ? '' : 'display: none;' }}">
+                                        Đã bán: {{ number_format($product->sales, 1) }} kg
+                                    </div>
                                 </div>
                             @endforeach
                         </div>
