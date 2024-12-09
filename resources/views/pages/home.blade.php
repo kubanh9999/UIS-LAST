@@ -150,7 +150,10 @@
 
     <div class="container p-3 p-md-4 bg-white">
     <h2 class="section-title"> Giỏ Quà</h2>
+
     <div class="">
+
+
         @foreach ($giftBaskets as $basket)
             <div class="product-card">
                 <a href="{{ route('product.giftDetail', $basket->id) }}">
@@ -232,14 +235,15 @@
 @endif
 
 <section class="best-sellers mb-4">
-    <div class="products-news container p-3 p-md-4 bg-white">
+    <div class="products-sale container p-3 p-md-4 bg-white">
         <div class="d-flex justify-content-between align-items-center mb-3">
             <h2 class="section-title">Sản phẩm bán chạy</h2>
-            <ul class="category-title mb-0">
-                @if ($newProductsGrouped->isNotEmpty())
-                @foreach ($newProductsGrouped as $categoryName => $products)
+            <ul class="category-title category-best">
+                @if ($topProductsGrouped->isNotEmpty())
+                @foreach ($topProductsGrouped as $categoryName => $products)
                     <li>
-                        <a href="javascript:void(0);" class="category-link" data-category="{{ $categoryName }}">{{ $categoryName }}</a> <!-- Hiển thị danh mục duy nhất -->
+                        <a href="javascript:void(0);" class="category-link category-link-best" data-category="{{ $categoryName }}" data-section="sale">{{ $categoryName }}</a>
+
                     </li>
                 @endforeach
             @else
@@ -251,7 +255,7 @@
             </div>
         </div>
 
-        <div class="product-grid">
+        <div class="product-grid product-grid-best">
             @foreach ($topProducts as $item)
                 <div class="product-card">
                     <a href="{{ route('product.detail', $item->id) }}">
@@ -306,12 +310,13 @@
         <div class="products-news container p-3 p-md-4 bg-white">
             <div class="d-flex justify-content-between align-items-center mb-3">
                 <h2 class="section-title">Sản phẩm mới</h2>
-                <ul class="category-title mb-0">
+                <ul class="category-title category-new">
                     <!-- Nếu bạn có nhiều danh mục, bạn có thể lặp qua danh sách các danh mục ở đây -->
                     @if ($newProductsGrouped->isNotEmpty())
                     @foreach ($newProductsGrouped as $categoryName => $products)
                         <li>
-                            <a href="javascript:void(0);" class="category-link" data-category="{{ $categoryName }}">{{ $categoryName }}</a> <!-- Hiển thị danh mục duy nhất -->
+                            <a href="javascript:void(0);" class="category-link category-link-new" data-category="{{ $categoryName }}" data-section="new">{{ $categoryName }}</a>
+
                         </li>
                     @endforeach
                 @else
@@ -322,7 +327,7 @@
                     <i class="fa-solid fa-bars"></i>
                 </div>
             </div>
-            <div class="product-grid  " class="product-grid">
+            <div class="product-grid product-grid-new" class="product-grid">
     
                 @foreach ($newProducts  as $item)
                     <div class="product-card">
@@ -461,41 +466,74 @@
 @endforeach
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
-   // Khi người dùng ấn vào danh mục
-   $(document).on('click', '.category-link', function() {
-    var categoryName = $(this).data('category'); // Lấy tên danh mục từ data attribute
-    var currentUrl = window.location.href.split('?')[0]; // URL hiện tại không có query string
+$(document).on('click', '.category-link-new', function() {
+    var categoryName = $(this).data('category');
+    var currentUrl = window.location.href.split('?')[0];
 
-    // Gửi yêu cầu AJAX tới server
     $.ajax({
         url: '{{ route("products.category.name", ":categoryName") }}'.replace(':categoryName', categoryName),
         type: 'GET',
         success: function(response) {
-            console.log('categories: ',categoryName);
-            
-            // Tạo danh sách sản phẩm mới
             var html = '';
-            $.each(response, function(index, product) {
-                html += `
-                    <div class="product-card">
-                        <div class="new-badge">New</div>
-                        <a href="/product/${product.id}">
-                            <img src="/layouts/img/${product.image}" alt="${product.name}">
-                        </a>
-                        <h5 class="product-name">
-                            <a href="/product/${product.id}">${product.name}</a>
-                        </h5>
-                        <div class="price">
-                            ${new Intl.NumberFormat('vi-VN').format(product.price)} VND
+            if (response.length > 0) {
+                $.each(response, function(index, product) {
+                    html += `
+                        <div class="product-card">
+                            <a href="/product/${product.id}">
+                                <img src="/layouts/img/${product.image}" alt="${product.name}">
+                            </a>
+                            <h5 class="product-name">
+                                <a href="/product/${product.id}">${product.name}</a>
+                            </h5>
+                            <div class="price">
+                                ${new Intl.NumberFormat('vi-VN').format(product.price)} VND
+                            </div>
                         </div>
-                    </div>
-                `;
-            });
-            // Hiển thị danh sách sản phẩm vào khu vực `product-grid`
-            $('.product-grid').html(html);
+                    `;
+                });
+            } else {
+                html = '<p>Không có sản phẩm nào trong danh mục này.</p>';
+            }
+            $('.product-grid-new').html(html);
+            window.history.pushState({ category: categoryName }, '', currentUrl + '?category=' + categoryName);
+        },
+        error: function() {
+            alert('Có lỗi xảy ra khi tải sản phẩm.');
+        }
+    });
+});
 
-            // Thay đổi URL để lưu trạng thái
-            window.history.pushState({category: categoryName}, '', currentUrl + '?category=' + categoryName);
+// Xử lý danh mục sản phẩm bán chạy
+$(document).on('click', '.category-link-best', function() {
+    var categoryName = $(this).data('category');
+    var currentUrl = window.location.href.split('?')[0];
+
+    $.ajax({
+        url: '{{ route("products.category.name", ":categoryName") }}'.replace(':categoryName', categoryName),
+        type: 'GET',
+        success: function(response) {
+            var html = '';
+            if (response.length > 0) {
+                $.each(response, function(index, product) {
+                    html += `
+                        <div class="product-card">
+                            <a href="/product/${product.id}">
+                                <img src="/layouts/img/${product.image}" alt="${product.name}">
+                            </a>
+                            <h5 class="product-name">
+                                <a href="/product/${product.id}">${product.name}</a>
+                            </h5>
+                            <div class="price">
+                                ${new Intl.NumberFormat('vi-VN').format(product.price)} VND
+                            </div>
+                        </div>
+                    `;
+                });
+            } else {
+                html = '<p>Không có sản phẩm nào trong danh mục này.</p>';
+            }
+            $('.product-grid-best').html(html);
+            window.history.pushState({ category: categoryName }, '', currentUrl + '?category=' + categoryName);
         },
         error: function() {
             alert('Có lỗi xảy ra khi tải sản phẩm.');
