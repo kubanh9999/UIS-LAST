@@ -378,7 +378,6 @@ class CheckoutController extends Controller
                 }
             }
         }
-        dd($totalAmount);
         $shippingCost = 0;
         $totalAmount += $shippingCost;
 
