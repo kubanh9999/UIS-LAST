@@ -166,4 +166,37 @@ class DashboardController extends Controller
 
         return response()->json($discounts);
     }
+    public function getOrderStats() {
+        // Lấy số lượng đơn hàng theo từng trạng thái
+        $orderStats = DB::table('orders')
+        ->select(DB::raw('MONTH(created_at) as month'), 'status', DB::raw('count(*) as count'))
+        ->whereYear('created_at', Carbon::now()->year)  // Lọc đơn hàng theo năm hiện tại
+        ->groupBy(DB::raw('MONTH(created_at)'), 'status')
+        ->orderBy(DB::raw('MONTH(created_at)'))
+        ->get()
+        ->map(function($item) {
+            // Thay thế mã trạng thái với tên trạng thái
+            switch ($item->status) {
+                case -1:
+                    $item->status = 'Đã hủy';
+                    break;
+                case 0:
+                    $item->status = 'Đang xử lý';
+                    break;
+                case 1:
+                    $item->status = 'Đang vận chuyển';
+                    break;
+                case 2:
+                    $item->status = 'Đã nhận hàng';
+                    break;
+                default:
+                    $item->status = 'Không xác định'; // Trường hợp không xác định trạng thái
+                    break;
+            }
+            return $item;
+        });
+    
+
+return response()->json($orderStats);
+    }
 }

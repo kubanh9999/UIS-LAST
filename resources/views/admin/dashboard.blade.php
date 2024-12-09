@@ -1,38 +1,58 @@
 @extends('admin.layout')
 
 <style>
-  
     .pagination-link {
         display: inline-block;
-        background-color: #4CAF50; /* Màu xanh lá cây */
-        color: white; /* Màu chữ */
-        padding: 10px 15px; /* Khoảng cách trong */
-        margin: 5px; /* Khoảng cách ngoài */
-        text-decoration: none; /* Bỏ gạch chân */
-        border-radius: 5px; /* Bo góc */
-        transition: background-color 0.3s; /* Hiệu ứng chuyển màu */
+        background-color: #4CAF50;
+        /* Màu xanh lá cây */
+        color: white;
+        /* Màu chữ */
+        padding: 10px 15px;
+        /* Khoảng cách trong */
+        margin: 5px;
+        /* Khoảng cách ngoài */
+        text-decoration: none;
+        /* Bỏ gạch chân */
+        border-radius: 5px;
+        /* Bo góc */
+        transition: background-color 0.3s;
+        /* Hiệu ứng chuyển màu */
     }
 
     .pagination-link:hover {
-        background-color: #45a049; /* Màu xanh lá đậm khi hover */
+        background-color: #45a049;
+        /* Màu xanh lá đậm khi hover */
     }
+
     .close-button {
-        position: absolute; /* Thay đổi từ fixed sang absolute */
-    bottom: 20px; /* Cách dưới cùng 20px */
-    right: 20px; /* Cách bên phải 20px */
-    background-color: #f44336; /* Màu đỏ */
-    color: white; /* Màu chữ */
-    border: none; /* Không viền */
-    padding: 10px 15px; /* Khoảng cách trong */
-    border-radius: 5px; /* Bo góc */
-    cursor: pointer; /* Con trỏ chuột khi hover */
-    z-index: 1000; /* Để nó ở trên cùng */
+        position: absolute;
+        /* Thay đổi từ fixed sang absolute */
+        bottom: 20px;
+        /* Cách dưới cùng 20px */
+        right: 20px;
+        /* Cách bên phải 20px */
+        background-color: #f44336;
+        /* Màu đỏ */
+        color: white;
+        /* Màu chữ */
+        border: none;
+        /* Không viền */
+        padding: 10px 15px;
+        /* Khoảng cách trong */
+        border-radius: 5px;
+        /* Bo góc */
+        cursor: pointer;
+        /* Con trỏ chuột khi hover */
+        z-index: 1000;
+        /* Để nó ở trên cùng */
     }
 
     .close-button:hover {
-        background-color: #d32f2f; /* Màu đỏ đậm khi hover */
+        background-color: #d32f2f;
+        /* Màu đỏ đậm khi hover */
     }
-    .white{
+
+    .white {
         color: aliceblue;
     }
 </style>
@@ -43,13 +63,37 @@
             <div class="row">
                 @php
                     $dashboardItems = [
-                        ['count' => $userCount, 'label' => 'Người dùng', 'icon' => 'user', 'type' => 'user', 'route' => route('admin.users.index')],
-                        ['count' => $productCount, 'label' => 'Sản phẩm', 'icon' => 'user-check', 'type' => 'product', 'route' => route('admin.products.index')],
-                        ['count' => $discountCount, 'label' => 'Mã giảm giá', 'icon' => 'file-text', 'type' => 'discount','route' => route('admin.discount.index')],
-                        ['count' => $orderCount, 'label' => 'Đơn hàng', 'icon' => 'file', 'type' => 'order', 'route' => route('admin.orders.index')],
+                        [
+                            'count' => $userCount,
+                            'label' => 'Người dùng',
+                            'icon' => 'user',
+                            'type' => 'user',
+                            'route' => route('admin.users.index'),
+                        ],
+                        [
+                            'count' => $productCount,
+                            'label' => 'Sản phẩm',
+                            'icon' => 'user-check',
+                            'type' => 'product',
+                            'route' => route('admin.products.index'),
+                        ],
+                        [
+                            'count' => $discountCount,
+                            'label' => 'Mã giảm giá',
+                            'icon' => 'file-text',
+                            'type' => 'discount',
+                            'route' => route('admin.discount.index'),
+                        ],
+                        [
+                            'count' => $orderCount,
+                            'label' => 'Đơn hàng',
+                            'icon' => 'file',
+                            'type' => 'order',
+                            'route' => route('admin.orders.index'),
+                        ],
                     ];
                 @endphp
-            
+
                 @foreach ($dashboardItems as $item)
                     <div class="col-lg-3 col-sm-6 col-12 d-flex">
                         <div class="dash-count" style="background: #45a049;color: aliceblue">
@@ -69,8 +113,8 @@
                         </div>
                     </div>
                 @endforeach
-            </div>        
-                
+            </div>
+
             <div class="card mb-0" id="dataCard" style="display: none">
                 <div class="card-body">
                     <h4 class="card-title">danh sách</h4>
@@ -81,19 +125,31 @@
                         </table>
                         <div id="pagination" style="margin-top: 10px;"></div>
                     </div>
-                    <button class="close-button" id="closeButton" onclick="toggleDataCard()">Đóng</button> <!-- Đảm bảo nút ở đây -->
+                    <button class="close-button" id="closeButton" onclick="toggleDataCard()">Đóng</button>
+                    <!-- Đảm bảo nút ở đây -->
                 </div>
             </div>
-           
 
             <div class="row">
-                <div class="col-lg-12 col-md-12">
+                <!-- Hai phần chung một hàng -->
+                <div class="col-lg-7 col-md-7">
                     <div class="card">
                         <div class="card-body">
                             <div id="line_chart"></div>
                         </div>
                     </div>
                 </div>
+                <div class="col-lg-5 col-md-5">
+                    <div class="card">
+                        <div class="card-body">
+                            <div id="piechart_3d"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+
                 <div class="col-lg-12 col-md-12">
                     <div class="card">
                         <div class="card-body">
@@ -104,14 +160,66 @@
             </div>
         </div>
     </div>
-
-
 @endsection
 
 
 <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+
+
+
 <script>
-    google.charts.load('current', { packages: ['corechart'] });
+     google.charts.load("current", {
+        packages: ["corechart"]
+    });
+    google.charts.setOnLoadCallback(drawChart);
+
+    // Hàm vẽ biểu đồ
+    google.charts.load("current", {
+    packages: ["corechart"]
+});
+google.charts.setOnLoadCallback(drawChart);
+
+function drawChart() {
+    // Gọi API lấy dữ liệu từ backend
+    fetch('/api/order-stats')  // Địa chỉ API bạn đã tạo ở trên
+        .then(response => response.json())
+        .then(data => {
+            // Chuyển đổi dữ liệu từ backend thành định dạng Google Charts
+            var chartData = [['Status', 'Number of Orders']];
+            data.forEach(function(orderStat) {
+                chartData.push([orderStat.status, orderStat.count]);
+            });
+
+            // Tạo dữ liệu cho biểu đồ
+            var dataTable = google.visualization.arrayToDataTable(chartData);
+
+            // Tùy chọn cho biểu đồ
+            var options = {
+                title: 'tổng đơn hàng trong 1 tháng',
+                is3D: true,
+                trigger: 'both',  // Hiển thị tooltip khi hover và khi chọn
+                    textStyle: {
+                        fontSize: 14,
+                        color: 'black'
+                    }
+                  // Hiển thị tooltip khi hover
+            };
+
+            // Tạo biểu đồ
+            var chart = new google.visualization.PieChart(document.getElementById('piechart_3d'));
+
+            // Vẽ biểu đồ
+            chart.draw(dataTable, options);
+
+            // Tùy chỉnh để hiển thị số lượng khi hover
+           
+        })
+        .catch(error => console.error('Error fetching data: ', error));
+}
+    //line
+    google.charts.load('current', {
+        packages: ['corechart']
+    });
     google.charts.setOnLoadCallback(drawLineChart);
 
     function drawLineChart() {
@@ -121,24 +229,36 @@
                 ['Tháng {{ $sale['month'] }}', {{ $sale['total'] }}],
             @endforeach
         ]);
-/* console.log('data',data); */
+        /* console.log('data',data); */
 
         var options = {
             title: 'Tổng doanh thu hàng tháng trong năm',
             curveType: 'function',
-            legend: { position: 'bottom' },
+            legend: {
+                position: 'bottom'
+            },
             hAxis: {
                 title: 'Tháng',
                 showTextEvery: 1,
-                textStyle: { fontSize: 12, bold: true, color: '#000' }
+                textStyle: {
+                    fontSize: 12,
+                    bold: true,
+                    color: '#000'
+                }
             },
             vAxis: {
                 title: 'Doanh thu',
                 minValue: 0,
                 format: 'currency',
-                textStyle: { fontSize: 12, color: '#000' }
+                textStyle: {
+                    fontSize: 12,
+                    color: '#000'
+                }
             },
-            chartArea: { width: '80%', height: '70%' },
+            chartArea: {
+                width: '80%',
+                height: '70%'
+            },
             colors: ['#1b9e77'],
             pointSize: 5
         };
@@ -146,86 +266,103 @@
         var chart = new google.visualization.LineChart(document.getElementById('line_chart'));
         chart.draw(data, options);
     }
-    google.charts.load('current', {packages: ['corechart']});
+    google.charts.load('current', {
+        packages: ['corechart']
+    });
     google.charts.setOnLoadCallback(drawBarChart);
 
     function drawBarChart() {
-        google.charts.load('current', { packages: ['corechart'] });
+        google.charts.load('current', {
+            packages: ['corechart']
+        });
 
-// Thiết lập callback để vẽ biểu đồ khi thư viện được tải
-google.charts.setOnLoadCallback(drawBarChart);
+        // Thiết lập callback để vẽ biểu đồ khi thư viện được tải
+        google.charts.setOnLoadCallback(drawBarChart);
 
-// Hàm vẽ biểu đồ
-function drawBarChart() {
-    google.charts.load('current', { packages: ['corechart'] });
+        // Hàm vẽ biểu đồ
+        function drawBarChart() {
+            google.charts.load('current', {
+                packages: ['corechart']
+            });
 
-google.charts.setOnLoadCallback(drawBarChart);
+            google.charts.setOnLoadCallback(drawBarChart);
 
-function drawBarChart() {
-    // Dữ liệu truyền từ PHP, cần đảm bảo rằng $chartData đã đúng cấu trúc (mảng 2 chiều)
-    var data = google.visualization.arrayToDataTable(<?php echo json_encode($chartData); ?>);
-    
-    // Kiểm tra dữ liệu trên console để đảm bảo đúng cấu trúc
-    console.log('Dữ liệu cho biểu đồ:', data);
+            function drawBarChart() {
+                // Dữ liệu truyền từ PHP, cần đảm bảo rằng $chartData đã đúng cấu trúc (mảng 2 chiều)
+                var data = google.visualization.arrayToDataTable(<?php echo json_encode($chartData); ?>);
 
-    // Tùy chọn hiển thị biểu đồ
-    var options = {
-        title: 'Doanh thu theo từng sản phẩm mỗi ngày',
-        isStacked: true, // Tùy chọn xếp chồng các giá trị
-        bar: { groupWidth: '75%' }, 
-    hAxis: {
-        title: 'Ngày',
-        textStyle: { fontSize: 8 },
-        slantedText: true,
-        slantedTextAngle: 45 // Xoay trục ngang để dễ đọc hơn
-    },
-    vAxis: {
-        title: 'Giá trị',
-        textStyle: { fontSize: 8 },
-    },
-    legend: {
-        position: 'top',
-        textStyle: { fontSize: 10 }
-    },
-    chartArea: {
-        width: '120%', // Mở rộng chiều rộng
-        height: '75%'
-    },
-    width: 1400,
-    height: 700,
-    colors: ['#4CAF50', '#FFC107', '#2196F3'],
-    animation: {
-        startup: true,
-        duration: 1000,
-        easing: 'out'
+                // Kiểm tra dữ liệu trên console để đảm bảo đúng cấu trúc
+                console.log('Dữ liệu cho biểu đồ:', data);
+
+                // Tùy chọn hiển thị biểu đồ
+                var options = {
+                    title: 'Doanh thu theo từng sản phẩm mỗi ngày trong 1 tháng',
+                    isStacked: true, // Tùy chọn xếp chồng các giá trị
+                    bar: {
+                        groupWidth: '75%'
+                    },
+                    hAxis: {
+                        title: 'Ngày',
+                        textStyle: {
+                            fontSize: 8
+                        },
+                        slantedText: true,
+                        slantedTextAngle: 45 // Xoay trục ngang để dễ đọc hơn
+                    },
+                    vAxis: {
+                        title: 'Giá trị',
+                        textStyle: {
+                            fontSize: 8
+                        },
+                    },
+                    legend: {
+                        position: 'top',
+                        textStyle: {
+                            fontSize: 10
+                        }
+                    },
+                    chartArea: {
+                        width: '120%', // Mở rộng chiều rộng
+                        height: '75%'
+                    },
+                    width: 1400,
+                    height: 700,
+                    colors: ['#4CAF50', '#FFC107', '#2196F3'],
+                    animation: {
+                        startup: true,
+                        duration: 1000,
+                        easing: 'out'
+                    }
+                };
+
+                // Tạo biểu đồ cột và vẽ nó lên trong phần tử có id 'bar_chart'
+                var chart = new google.visualization.ColumnChart(document.getElementById('bar_chart'));
+                chart.draw(data, options);
+
+
+
+            }
+
+            function drawTableChart() {
+                google.charts.load('current', {
+                    packages: ['table']
+                });
+                google.charts.setOnLoadCallback(function() {
+                    var data = google.visualization.arrayToDataTable(<?php echo json_encode($chartData); ?>);
+
+                    var options = {
+                        showRowNumber: true,
+                        width: '100%',
+                        height: '100%'
+                    };
+
+                    var table = new google.visualization.Table(document.getElementById('bar_chart'));
+                    table.draw(data, options);
+                });
+            }
+        }
+
     }
-    };
-    
-    // Tạo biểu đồ cột và vẽ nó lên trong phần tử có id 'bar_chart'
-    var chart = new google.visualization.ColumnChart(document.getElementById('bar_chart'));
-    chart.draw(data, options);
-
-
-    
-}
-function drawTableChart() {
-    google.charts.load('current', { packages: ['table'] });
-    google.charts.setOnLoadCallback(function () {
-        var data = google.visualization.arrayToDataTable(<?php echo json_encode($chartData); ?>);
-
-        var options = {
-            showRowNumber: true,
-            width: '100%',
-            height: '100%'
-        };
-
-        var table = new google.visualization.Table(document.getElementById('bar_chart'));
-        table.draw(data, options);
-    });
-}
-}
-
-}
 
     function loadData(type, page = 1) {
         let url = '';
@@ -297,7 +434,7 @@ function drawTableChart() {
             url: url,
             method: 'GET',
             success: function(response) {
-                $('#tableData').empty(); 
+                $('#tableData').empty();
                 response.data.forEach(function(item) {
                     let row = '';
 
@@ -325,17 +462,18 @@ function drawTableChart() {
                                 </tr>`;
                             break;
                         case 'order':
-                        let statusClass = '';
-    let statusText = item.status; // Mặc định hiển thị status như bình thường
+                            let statusClass = '';
+                            let statusText = item
+                            .status; // Mặc định hiển thị status như bình thường
 
-    // Xử lý trạng thái nếu status = 0
-    if (item.status == 0) {
-        statusText = 'Đang xử lý';
-        statusClass = 'text-warning'; // Thêm lớp CSS để đổi màu
-    } else if (item.status == 1) {
-        statusText = 'Đã hoàn thành';
-        statusClass = 'text-success'; // Thêm lớp CSS để đổi màu
-    }
+                            // Xử lý trạng thái nếu status = 0
+                            if (item.status == 0) {
+                                statusText = 'Đang xử lý';
+                                statusClass = 'text-warning'; // Thêm lớp CSS để đổi màu
+                            } else if (item.status == 1) {
+                                statusText = 'Đã hoàn thành';
+                                statusClass = 'text-success'; // Thêm lớp CSS để đổi màu
+                            }
                             row = `
                                 <tr>
                                     <td>${item.id}</td>
@@ -366,7 +504,8 @@ function drawTableChart() {
                 // Xử lý phân trang
                 let pagination = '';
                 for (let i = 1; i <= response.last_page; i++) {
-                    pagination += `<a class="pagination-link" href="javascript:void(0);" onclick="loadData('${type}', ${i})">${i}</a>`;
+                    pagination +=
+                        `<a class="pagination-link" href="javascript:void(0);" onclick="loadData('${type}', ${i})">${i}</a>`;
                 }
                 $('#pagination').html(pagination);
 
