@@ -78,9 +78,9 @@ class AccountManagementController extends Controller
         $order = Order::find($orderId);
 
         // Kiểm tra nếu đơn hàng tồn tại và trạng thái là "Đang xử lý" (status = 0)
-        if ($order && $order->status == 0) {
+        if ($order && $order->status == 'Đang xử lý') {
             // Thay đổi trạng thái đơn hàng thành "Đã hủy"
-            $order->status = -1;
+            $order->status = 'Đã hủy';
             $order->save();
 
             // Quay lại trang account-management với thông báo thành công

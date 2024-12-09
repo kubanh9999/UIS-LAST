@@ -208,7 +208,7 @@
                                                         <img style="width: 40px;"
                                                             src="{{ asset($imagePath) }}"
                                                             alt="">
-                                                        {{ $giftItem->product->name }} x {{ $giftItem->quantity .'g' }}
+                                                        {{ $giftItem->product->name }} x {{ $giftItem->quantity .'kg' }}
                                                         @php $customGiftTotal += $giftItem->price * $giftItem->quantity; @endphp
                                                     </li>
                                                 @endif
