@@ -1,3 +1,4 @@
+
 @extends('layouts.master')
 @section('title', 'Sản phẩm')
 @section('content')
@@ -108,6 +109,9 @@
                                     <div class="price">
                                         {{ number_format($product->price, 0) }} VND
                                     </div>
+                                    <div class="sales" style="{{ $product->sales > 0 ? '' : 'display: none;' }}">
+                                        Đã bán: {{ number_format($product->sales, 1) }} kg
+                                    </div>
                                 </div>
                             @endforeach
                         </div>
@@ -117,7 +121,14 @@
                                 @foreach ($productTypes as $productType)
                                     <div class="product-card">
                                         <a href="{{ route('product.giftDetail', $productType->id) }}">
-                                            <img src="{{ asset('layouts/img/' . $productType->image) }}" alt="{{ $productType->name }}" class="card-img-top">
+                                            @php
+                                                $imagePath = $productType->image;
+                                                // Nếu đường dẫn ảnh chứa 'uploads/posts', không cần thêm 'layouts/img'
+                                                if (strpos($imagePath, 'uploads/products') === false) {
+                                                    $imagePath = 'layouts/img/' . $imagePath; // Nếu không chứa, thêm 'layouts/img'
+                                                }
+                                            @endphp
+                                            <img src="{{ asset($imagePath) }}" alt="{{ $productType->name }}" class="card-img-top">
                                         </a>
                                         <h5 class="product-name">
                                             <a href="{{ route('product.giftDetail', $productType->id) }}">

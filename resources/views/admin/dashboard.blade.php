@@ -121,9 +121,10 @@
                 ['Tháng {{ $sale['month'] }}', {{ $sale['total'] }}],
             @endforeach
         ]);
+/* console.log('data',data); */
 
         var options = {
-            title: 'Doanh thu hàng tháng trong năm',
+            title: 'Tổng doanh thu hàng tháng trong năm',
             curveType: 'function',
             legend: { position: 'bottom' },
             hAxis: {
@@ -156,50 +157,73 @@ google.charts.setOnLoadCallback(drawBarChart);
 
 // Hàm vẽ biểu đồ
 function drawBarChart() {
-    // Dữ liệu truyền từ PHP
+    google.charts.load('current', { packages: ['corechart'] });
+
+google.charts.setOnLoadCallback(drawBarChart);
+
+function drawBarChart() {
+    // Dữ liệu truyền từ PHP, cần đảm bảo rằng $chartData đã đúng cấu trúc (mảng 2 chiều)
     var data = google.visualization.arrayToDataTable(<?php echo json_encode($chartData); ?>);
-console.log(data);
+    
+    // Kiểm tra dữ liệu trên console để đảm bảo đúng cấu trúc
+    console.log('Dữ liệu cho biểu đồ:', data);
 
     // Tùy chọn hiển thị biểu đồ
     var options = {
-        title: 'Doanh thu theo từng sản phẩm mỗi tháng',
-        hAxis: {
-            title: 'Ngày',
-            textStyle: { fontSize: 10 }, // Kích thước chữ trục X nhỏ hơn để dễ đọc
-            slantedText: true, // Góc nghiêng cho chữ trên trục X nếu có nhiều dữ liệu
-            slantedTextAngle: 45 // Góc nghiêng
-        },
-        vAxis: {
-            title: 'Giá trị',
-            textStyle: { fontSize: 10 }, // Kích thước chữ trục Y nhỏ hơn
-            scaleType: 'log', // Sử dụng scale logarithmic nếu giá trị chênh lệch quá lớn
-        },
-        legend: {
-            position: 'top',
-            textStyle: { fontSize: 10 } // Kích thước chữ chú thích nhỏ hơn
-        },
-        chartArea: {
-            width: '85%', // Vùng hiển thị biểu đồ
-            height: '75%' // Tăng chiều cao của vùng hiển thị biểu đồ
-        },
-        bar: {
-            groupWidth: '70%' // Giảm bớt groupWidth (giảm 150% xuống còn 70%) để các cột vừa phải
-        },
-        width: 1200, // Chiều rộng biểu đồ (tăng để có thêm không gian cho nhiều cột)
-        height: 700, // Chiều cao biểu đồ
-        colors: ['#4CAF50', '#FFC107', '#2196F3'], // Màu sắc cột
-        animation: {
-            startup: true, // Hiệu ứng khi tải biểu đồ
-            duration: 1000, // Thời gian hiệu ứng
-            easing: 'out' // Kiểu hiệu ứng
-        }
+        title: 'Doanh thu theo từng sản phẩm mỗi ngày',
+        isStacked: true, // Tùy chọn xếp chồng các giá trị
+        bar: { groupWidth: '75%' }, 
+    hAxis: {
+        title: 'Ngày',
+        textStyle: { fontSize: 8 },
+        slantedText: true,
+        slantedTextAngle: 45 // Xoay trục ngang để dễ đọc hơn
+    },
+    vAxis: {
+        title: 'Giá trị',
+        textStyle: { fontSize: 8 },
+    },
+    legend: {
+        position: 'top',
+        textStyle: { fontSize: 10 }
+    },
+    chartArea: {
+        width: '120%', // Mở rộng chiều rộng
+        height: '75%'
+    },
+    width: 1400,
+    height: 700,
+    colors: ['#4CAF50', '#FFC107', '#2196F3'],
+    animation: {
+        startup: true,
+        duration: 1000,
+        easing: 'out'
+    }
     };
-
-    // Tạo biểu đồ cột và vẽ
+    
+    // Tạo biểu đồ cột và vẽ nó lên trong phần tử có id 'bar_chart'
     var chart = new google.visualization.ColumnChart(document.getElementById('bar_chart'));
     chart.draw(data, options);
-}
 
+
+    
+}
+function drawTableChart() {
+    google.charts.load('current', { packages: ['table'] });
+    google.charts.setOnLoadCallback(function () {
+        var data = google.visualization.arrayToDataTable(<?php echo json_encode($chartData); ?>);
+
+        var options = {
+            showRowNumber: true,
+            width: '100%',
+            height: '100%'
+        };
+
+        var table = new google.visualization.Table(document.getElementById('bar_chart'));
+        table.draw(data, options);
+    });
+}
+}
 
 }
 
@@ -230,7 +254,7 @@ console.log(data);
                         <th>Tên sản phẩm</th>
                         <th>Hình ảnh</th>
                         <th>Giá</th>
-                        <th>Giảm giá</th>
+                       
                         <th>Tồn kho</th>
                         <th>Ngày tạo</th>
                     </tr>`;
@@ -295,7 +319,7 @@ console.log(data);
                                     <td>${item.name}</td>
                                     <td><img src="${baseUrl}/${item.image}" alt="image" width="50"></td>
                                     <td>${Math.round(item.price).toLocaleString('vi-VN')} VND</td>
-                                    <td>${item.discount}</td>
+                                   
                                     <td>${item.stock}</td>
                                     <td>${item.created_at}</td>
                                 </tr>`;

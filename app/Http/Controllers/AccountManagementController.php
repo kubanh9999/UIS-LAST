@@ -8,17 +8,26 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-
+use App\Models\District;
+use App\Models\Province;
+use App\Models\Ward;
+use Illuminate\Support\Facades\DB;
 class AccountManagementController extends Controller
 {
     public function management()
     {
-        $user = Auth::user();
+        $user = Auth::user(); 
+        $provinces = Province::all();
+        $districts = District::where('province_id', $user->province_id)->get();
+        $wards = Ward::where('district_id', $user->district_id)->get();
+        $user->load('province', 'district', 'ward'); // Lấy thông tin người dùng hiện tại
+
+    
         $orders = Order::orderBy('id', 'DESC')
             ->where('user_id', $user->id)
             ->with(['orderDetails', 'orderDetails.product', 'orderDetails.gift', 'orderDetails.productInGift.product']) // Nạp dữ liệu liên quan
             ->get();
-        return view('pages.account-management', compact('orders', 'user'));
+        return view('pages.account-management', compact('orders','provinces', 'user','districts','wards'));
     }
 
     public function changePassword()
@@ -47,8 +56,11 @@ class AccountManagementController extends Controller
     }
     public function orderDetail($id)
     {
-        $user = Auth::user(); // Lấy thông tin người dùng đã đăng nhập
-        // Lấy đơn hàng theo user_id và id của đơn hàng
+        $user = Auth::user(); 
+        $provinces = Province::all();
+        $districts = District::where('province_id', $user->province_id)->get();
+        $wards = Ward::where('district_id', $user->district_id)->get();
+        $user->load('province', 'district', 'ward'); // Lấy thông tin người dùng hiện tại
         $orders = Order::with([
             'orderDetails.product',
             'orderDetails.gift',
@@ -57,7 +69,7 @@ class AccountManagementController extends Controller
             }
         ])->find($id);
 
-        return view('pages.account-check-orderDetail', compact('orders'));
+        return view('pages.account-check-orderDetail', compact('orders','provinces', 'user','districts','wards'));
     }
 
     public function cancelOrder($orderId)
@@ -66,9 +78,9 @@ class AccountManagementController extends Controller
         $order = Order::find($orderId);
 
         // Kiểm tra nếu đơn hàng tồn tại và trạng thái là "Đang xử lý" (status = 0)
-        if ($order && $order->status == 0) {
+        if ($order && $order->status == 'Đang xử lý') {
             // Thay đổi trạng thái đơn hàng thành "Đã hủy"
-            $order->status = -1;
+            $order->status = 'Đã hủy';
             $order->save();
 
             // Quay lại trang account-management với thông báo thành công
@@ -83,29 +95,32 @@ class AccountManagementController extends Controller
 
     public function showUserInfo()
     {
-        $user = Auth::user();  // Lấy thông tin người dùng hiện tại
-        return view('account.management', compact('user'));
+        $user = Auth::user(); 
+        $provinces = Province::all();
+        $districts = District::where('province_id', $user->province_id)->get();
+        $wards = Ward::where('district_id', $user->district_id)->get();
+        $user->load('province', 'district', 'ward'); // Lấy thông tin người dùng hiện tại
+        return view('account.management', compact('user','wards','districts ','provinces'));
     }
 
 
     public function updateUserInfo(Request $request)
     {
+       /*  dd(vars: $request->ward_id); */
         $user = Auth::user(); // Lấy thông tin người dùng hiện tại
 
         // Validate dữ liệu nhập
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|email|unique:users,email,' . $user->id,
-            'phone' => 'nullable|string|max:255',
-            'address' => 'nullable|string|max:255',
-        ]);
+       
 
         // Cập nhật thông tin người dùng
         $user->update([
             'name' => $request->name,
             'email' => $request->email,
             'phone' => $request->phone,
-            'address' => $request->address,
+            'street' => $request->street,
+            'province_id' => $request->province_id,
+            'district_id' => $request->district_id,
+            'wards_id' => $request->ward_id,
         ]);
 
         return redirect()->route('account.management')->with('success', 'Cập nhật thông tin thành công!');

@@ -150,7 +150,10 @@
 
     <div class="container p-3 p-md-4 bg-white">
     <h2 class="section-title"> Giỏ Quà</h2>
-    <div class="product-grid">
+
+    <div class="">
+
+
         @foreach ($giftBaskets as $basket)
             <div class="product-card">
                 <a href="{{ route('product.giftDetail', $basket->id) }}">
@@ -232,66 +235,63 @@
 @endif
 
 <section class="best-sellers mb-4">
-    <div class="products-news container p-3 p-md-4 bg-white">
+    <div class="products-sale container p-3 p-md-4 bg-white">
         <div class="d-flex justify-content-between align-items-center mb-3">
             <h2 class="section-title">Sản phẩm bán chạy</h2>
-            <ul class="category-title mb-0">
+            <ul class="category-title category-best">
                 @if ($topProductsGrouped->isNotEmpty())
                 @foreach ($topProductsGrouped as $categoryName => $products)
                     <li>
-                        <a href="javascript:void(0);" class="category-link" data-category="{{ $categoryName }}" data-target="best-sellers">{{ $categoryName }}</a>
+                        <a href="javascript:void(0);" class="category-link category-link-best" data-category="{{ $categoryName }}" data-section="sale">{{ $categoryName }}</a>
+
                     </li>
                 @endforeach
-                @else
+            @else
                 <li><a href="">Chưa có danh mục</a></li>
-                @endif
-                </ul>
-                <div class="category-title-mb">
-                    <i class="fa-solid fa-bars"></i>
-                </div>
-            </div>
-    
-            <div class="product-grid">
-                @foreach ($topProducts as $item)
-                    <div class="product-card">
-                        <a href="{{ route('product.detail', $item->id) }}">
-                            @php
-                                $imagePath = $item->image;
-                                // Nếu đường dẫn ảnh chứa 'uploads/posts', không cần thêm 'layouts/img'
-                                if (strpos($imagePath, 'uploads/products') === false) {
-                                    $imagePath = 'layouts/img/' . $item->image; // Nếu không chứa, thêm 'layouts/img'
-                                }
-                            @endphp
-                            <img src="{{ asset($imagePath) }}" alt="{{ $item->name }}">
-                        </a>
-                        <h5 class="product-name">
-                            <a href="{{ route('product.detail', $item->id) }}">{{ $item->name }}</a>
-                        </h5>
-                        <div class="price">
-                            {{ number_format($item->price, 0) }} VND
-                        </div>      
-                        <div class="add-to-cart">
-                            <i class="fa-solid fa-basket-shopping"></i>
-                            <form action="{{ route('cart.add', ['id' => $item->id]) }}" method="post" style="display: inline;">
-                                @csrf
-                                <input type="hidden" name="product[id]" value="{{ $item->id }}">
-                                <input type="hidden" name="product[name]" value="{{ $item->name }}">
-                                <input type="hidden" name="product[image]" value="{{ $item->image }}">
-                                <input type="hidden" name="product[price]" value="{{ $item->price }}">
-                                <input type="hidden" name="quantity" value="1">
-                                <a href="#" onclick="this.closest('form').submit();" class="cart-text" style="display: inline-flex; align-items: center;">
-                                    <span style="margin-left: 5px;">Thêm giỏ hàng</span>
-                                </a>
-                            </form>
-                        </div>     
-                    </div>
-                @endforeach
-            </div>
-    
-            <div class="view-all">
-                <a class="btn" href="/product">Xem tất cả <i class="fa-solid fa-chevron-right"></i></a>
+            @endif
+            </ul>
+            <div class="category-title-mb">
+                <i class="fa-solid fa-bars"></i>
             </div>
         </div>
+
+        <div class="product-grid product-grid-best">
+            @foreach ($topProducts as $item)
+                <div class="product-card">
+                    <a href="{{ route('product.detail', $item->id) }}">
+                        <img src="{{ asset('layouts/img/' . $item->image) }}" alt="{{ $item->name }}">
+                    </a>
+                    <h5 class="product-name">
+                        <a href="{{ route('product.detail', $item->id) }}">{{ $item->name }}</a>
+                    </h5>
+                    <div class="price">
+                        {{ number_format($item->price, 0) }} VND
+                    </div>      
+                    <div class="sales" style="{{ $item->sales > 0 ? '' : 'display: none;' }}">
+                        Đã bán: {{ number_format($item->sales, 1) }} kg
+                    </div>
+                    <div class="add-to-cart">
+                        <i class="fa-solid fa-basket-shopping"></i>
+                        <form action="{{ route('cart.add', ['id' => $item->id]) }}" method="post" style="display: inline;">
+                            @csrf
+                            <input type="hidden" name="product[id]" value="{{ $item->id }}">
+                            <input type="hidden" name="product[name]" value="{{ $item->name }}">
+                            <input type="hidden" name="product[image]" value="{{ $item->image }}">
+                            <input type="hidden" name="product[price]" value="{{ $item->price }}">
+                            <input type="hidden" name="quantity" value="1">
+                            <a href="#" onclick="this.closest('form').submit();" class="cart-text" style="display: inline-flex; align-items: center;">
+                                <span style="margin-left: 5px;">Thêm giỏ hàng</span>
+                            </a>
+                        </form>
+                    </div>     
+                </div>
+            @endforeach
+        </div>
+
+        <div class="view-all">
+            <a class="btn" href="/product">Xem tất cả <i class="fa-solid fa-chevron-right"></i></a>
+        </div>
+    </div>
     </section>
     
 
@@ -313,34 +313,30 @@
         <div class="products-news container p-3 p-md-4 bg-white">
             <div class="d-flex justify-content-between align-items-center mb-3">
                 <h2 class="section-title">Sản phẩm mới</h2>
-                <ul class="category-title mb-0">
+                <ul class="category-title category-new">
+                    <!-- Nếu bạn có nhiều danh mục, bạn có thể lặp qua danh sách các danh mục ở đây -->
                     @if ($newProductsGrouped->isNotEmpty())
                     @foreach ($newProductsGrouped as $categoryName => $products)
                         <li>
-                            <a href="javascript:void(0);" class="category-link" data-category="{{ $categoryName }}" data-target="new-arrivals">{{ $categoryName }}</a>
+                            <a href="javascript:void(0);" class="category-link category-link-new" data-category="{{ $categoryName }}" data-section="new">{{ $categoryName }}</a>
+
                         </li>
                     @endforeach
-                    @else
+                @else
                     <li><a href="">Chưa có danh mục</a></li>
-                    @endif
+                @endif
                 </ul>
                 <div class="category-title-mb">
                     <i class="fa-solid fa-bars"></i>
                 </div>
             </div>
+            <div class="product-grid product-grid-new" class="product-grid">
     
                 @foreach ($newProducts  as $item)
                     <div class="product-card">
                         <div class="new-badge">New</div>
                         <a href="{{ route('product.detail', $item->id) }}">
-                            @php
-                                $imagePath = $item->image;
-                                // Nếu đường dẫn ảnh chứa 'uploads/posts', không cần thêm 'layouts/img'
-                                if (strpos($imagePath, 'uploads/products') === false) {
-                                    $imagePath = 'layouts/img/' . $item->image; // Nếu không chứa, thêm 'layouts/img'
-                                }
-                            @endphp
-                        <img src="{{ asset($imagePath) }}" alt="{{ $item->name }}">
+                        <img src="{{ asset('layouts/img/' . $item->image) }}" alt="{{ $item->name }}">
                         </a>
                         <h5 class="product-name">
                             <a href="{{ route('product.detail', $item->id) }}">{{ $item->name }}</a>
@@ -365,43 +361,10 @@
                     </div>
                     
                 @endforeach
-            </div>
     
+            </div>
             <div class="view-all">
                 <a class="btn" href="/product">Xem tất cả <i class="fa-solid fa-chevron-right"></i></a>
-            </div>
-        </div>
-    </section>
-    
-
-    <section class="banner-section-2 mb-4">
-        <div class="container p-0">
-            <div class="row">
-                @if($tertiaryBanner && $tertiaryBanner->isNotEmpty())
-                    @foreach($tertiaryBanner as $index => $banner)
-                        @if($index == 0)
-                            <div class="col-md-3 d-md-block d-none">
-                                <a href="{{ $banner->link ?? '#' }}" target="_self">
-                                    <img src="{{ asset($banner->image_path) }}" alt="{{ $banner->alt_text }}" class="banner-image">
-                                </a>
-                            </div>
-                        @elseif($index == 1)
-                            <div class="col-md-6 d-block">
-                                <a href="{{ $banner->link ?? '#' }}" target="_self">
-                                    <img src="{{ asset($banner->image_path) }}" alt="{{ $banner->alt_text }}" class="banner-image">
-                                </a>
-                            </div>
-                        @elseif($index == 2)
-                            <div class="col-md-3 d-md-block d-none">
-                                <a href="{{ $banner->link ?? '#' }}" target="_self">
-                                    <img src="{{ asset($banner->image_path) }}" alt="{{ $banner->alt_text }}" class="banner-image">
-                                </a>
-                            </div>
-                        @endif
-                    @endforeach
-                @else
-                    <p>No banners found.</p> <!-- Display message if no banners are available -->
-                @endif
             </div>
         </div>
     </section>
@@ -506,55 +469,77 @@
 @endforeach
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
-   $(document).on('click', '.category-link', function() {
-    var categoryName = $(this).data('category'); // Lấy tên danh mục từ data attribute
-    var targetSection = $(this).data('target'); // Lấy phần cần cập nhật (best-sellers hoặc new-arrivals)
-    var currentUrl = window.location.href.split('?')[0]; // URL hiện tại không có query string
+$(document).on('click', '.category-link-new', function() {
+    var categoryName = $(this).data('category');
+    var currentUrl = window.location.href.split('?')[0];
 
-    // Gửi yêu cầu AJAX tới server
     $.ajax({
         url: '{{ route("products.category.name", ":categoryName") }}'.replace(':categoryName', categoryName),
         type: 'GET',
         success: function(response) {
-            console.log('categories: ', categoryName);
-
-            // Tạo danh sách sản phẩm mới
             var html = '';
-            $.each(response, function(index, product) {
-                html += `
-                    <div class="product-card">
-                        <div class="new-badge">New</div>
-                        <a href="/product/${product.id}">
-                            <img src="/layouts/img/${product.image}" alt="${product.name}">
-                        </a>
-                        <h5 class="product-name">
-                            <a href="/product/${product.id}">${product.name}</a>
-                        </h5>
-                        <div class="price">
-                            ${new Intl.NumberFormat('vi-VN').format(product.price)} VND
+            if (response.length > 0) {
+                $.each(response, function(index, product) {
+                    html += `
+                        <div class="product-card">
+                            <a href="/product/${product.id}">
+                                <img src="/layouts/img/${product.image}" alt="${product.name}">
+                            </a>
+                            <h5 class="product-name">
+                                <a href="/product/${product.id}">${product.name}</a>
+                            </h5>
+                            <div class="price">
+                                ${new Intl.NumberFormat('vi-VN').format(product.price)} VND
+                            </div>
                         </div>
-                        <div class="add-to-cart">
-                            <i class="fa-solid fa-basket-shopping"></i>
-                            <form action="/cart/add/${product.id}" method="post" style="display: inline;">
-                                <input type="hidden" name="product[id]" value="${product.id}">
-                                <input type="hidden" name="product[name]" value="${product.name}">
-                                <input type="hidden" name="product[image]" value="${product.image}">
-                                <input type="hidden" name="product[price]" value="${product.price}">
-                                <input type="hidden" name="quantity" value="1">
-                                <a href="#" onclick="this.closest('form').submit();" class="cart-text" style="display: inline-flex; align-items: center;">
-                                    <span style="margin-left: 5px;">Thêm giỏ hàng</span>
-                                </a>
-                            </form>
-                        </div>
-                    </div>
-                `;
-            });
-
-            // Hiển thị danh sách sản phẩm mới cho đúng phần
-            $("#" + targetSection).html(html);
+                    `;
+                });
+            } else {
+                html = '<p>Không có sản phẩm nào trong danh mục này.</p>';
+            }
+            $('.product-grid-new').html(html);
+            window.history.pushState({ category: categoryName }, '', currentUrl + '?category=' + categoryName);
         },
         error: function() {
-            alert('Đã có lỗi xảy ra khi tải danh mục sản phẩm.');
+            alert('Có lỗi xảy ra khi tải sản phẩm.');
+        }
+    });
+});
+
+// Xử lý danh mục sản phẩm bán chạy
+$(document).on('click', '.category-link-best', function() {
+    var categoryName = $(this).data('category');
+    var currentUrl = window.location.href.split('?')[0];
+
+    $.ajax({
+        url: '{{ route("products.category.name", ":categoryName") }}'.replace(':categoryName', categoryName),
+        type: 'GET',
+        success: function(response) {
+            var html = '';
+            if (response.length > 0) {
+                $.each(response, function(index, product) {
+                    html += `
+                        <div class="product-card">
+                            <a href="/product/${product.id}">
+                                <img src="/layouts/img/${product.image}" alt="${product.name}">
+                            </a>
+                            <h5 class="product-name">
+                                <a href="/product/${product.id}">${product.name}</a>
+                            </h5>
+                            <div class="price">
+                                ${new Intl.NumberFormat('vi-VN').format(product.price)} VND
+                            </div>
+                        </div>
+                    `;
+                });
+            } else {
+                html = '<p>Không có sản phẩm nào trong danh mục này.</p>';
+            }
+            $('.product-grid-best').html(html);
+            window.history.pushState({ category: categoryName }, '', currentUrl + '?category=' + categoryName);
+        },
+        error: function() {
+            alert('Có lỗi xảy ra khi tải sản phẩm.');
         }
     });
 });

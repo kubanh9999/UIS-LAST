@@ -23,7 +23,19 @@ use App\Http\Controllers\CommentController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\SubscriberController;
+use App\Http\Controllers\LocationController;
+use App\Models\Product; 
 
+
+Route::get('/api/product-count', function() {
+    return response()->json(['count' => Product::count()]);
+});
+
+
+Route::get('/get-districts/{provinceId}', [LocationController::class, 'getDistricts']);
+Route::get('/get-provinces', [LocationController::class, 'getProvinces']);
+
+Route::get('/get-wards/{districtId}', [LocationController::class, 'getWards']);
 
 // gửi gmail check otp
 Route::post('/send-verification-code', [AuthController::class, 'sendVerificationCode'])->name('verification.send');

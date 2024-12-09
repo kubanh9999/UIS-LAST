@@ -89,7 +89,7 @@
                                                     }
                                                 @endphp
                                                     <li> 
-                                                        <img style="width: 40px; height: 40px;" src="{{ asset($imagePath) }}" alt=""> {{ $fruit_details['quantity'] }}kg
+                                                        <img style="width: 40px; height: 40px;" src="{{ asset($imagePath) }}" alt=""> {{ $fruit_details['quantity'] }}Kg
                                                     </li>
                                                 @endif
                                             @endforeach
@@ -152,7 +152,7 @@
                 </div>
                 @else
                 <div class="continue">
-                    <a href="{{ route('home.index') }}" class="btn btn-success">Tiếp tục mua hàng</a>
+                    <a href="{{ route('home.index') }}" class="btn btn-light">Tiếp tục mua hàng</a>
                 </div>
                 @endif
             </div>
@@ -163,16 +163,9 @@
                         <h3 class="text-left mb-0">Tổng tiền</h3>
                         <span id="totalPrice" class="text-right">{{ number_format($total) }}VND</span>
                     </div>
-                    @if(empty($cart))
-                    <div class=" btn btn-success ">
-                        <button class="btn" type="submit" disabled>Tiến hành thanh toán</button>
+                    <div class="checkoutbtn btn btn-success">
+                        <button class="btn btn-success" type="submit" @if(empty($cart)) disabled @endif>Tiến hành thanh toán</button>
                     </div>
-                   
-                @else
-                    <div class="checkoutbtn btn btn-outline-success">
-                        <button class="btn" type="submit">Tiến hành thanh toán</button>
-                    </div>
-                @endif
                 </div>
             </div>
         </div>
