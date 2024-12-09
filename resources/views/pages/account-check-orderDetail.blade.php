@@ -150,7 +150,7 @@
                                 </tr>
                                 <tr>
                                     <td><strong>Ngày đặt hàng:</strong></td>
-                                    <td class="text-right">{{ \Carbon\Carbon::parse($orders->order_date)->format('d/m/Y') }}
+                                    <td class="text-right">  {{ \Carbon\Carbon::parse($orders->order_date)->timezone('Asia/Ho_Chi_Minh')->format('H:i:s - d/m/Y') }}
                                     </td>
                                 </tr>
                                 <tr>
