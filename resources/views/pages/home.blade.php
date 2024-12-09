@@ -150,7 +150,10 @@
 
     <div class="container p-3 p-md-4 bg-white">
     <h2 class="section-title"> Giỏ Quà</h2>
-    <div class="product-grid-all">
+
+    <div class="">
+
+
         @foreach ($giftBaskets as $basket)
             <div class="product-card">
                 <a href="{{ route('product.giftDetail', $basket->id) }}">
