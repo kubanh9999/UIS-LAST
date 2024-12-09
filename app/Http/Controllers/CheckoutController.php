@@ -89,7 +89,7 @@ class CheckoutController extends Controller
         }
         /*     dd($totalPrice); */
         // Tính phí vận chuyển (nếu có)
-        $shippingCost = 30000; // Ví dụ: phí vận chuyển là 1000, thay thế bằng logic của bạn nếu cần
+        $shippingCost = 0; // Ví dụ: phí vận chuyển là 1000, thay thế bằng logic của bạn nếu cần
 
         return view('pages.checkout', compact('wards', 'districts', 'provinces', 'products', 'selectedGift', 'totalPrice', 'shippingCost', 'cart', 'productData', 'user'));
 
@@ -197,7 +197,7 @@ class CheckoutController extends Controller
                     $product = Product::find($fruit['product_id']);
                     if ($product) {
                         // Chuyển đổi quantity (giả sử quantity là gram)
-                        $quantityInKg = $fruit['quantity'] / 1000; // Chuyển đổi từ gram sang kg (hoặc đơn vị thập phân như yêu cầu)
+                        $quantityInKg = $fruit['quantity'] ; // Chuyển đổi từ gram sang kg (hoặc đơn vị thập phân như yêu cầu)
 
                         // Kiểm tra tồn kho và giảm số lượng
                         if ($product->stock >= $quantityInKg) {
@@ -345,7 +345,7 @@ class CheckoutController extends Controller
     // Xử lý thanh toán vnpay
     public function payment(Request $request)
     {
-        /*  dd($request->all()); */
+        
 
         // Thiết lập báo lỗi và múi giờ
         error_reporting(E_ALL & ~E_NOTICE & ~E_DEPRECATED);
@@ -378,7 +378,7 @@ class CheckoutController extends Controller
                 }
             }
         }
-        /* dd($totalAmount); */
+        dd($totalAmount);
         $shippingCost = 0;
         $totalAmount += $shippingCost;
 
@@ -414,6 +414,7 @@ class CheckoutController extends Controller
                 return redirect()->back()->with('error', 'Mã giảm giá không hợp lệ hoặc đã hết hạn.');
             }
         }
+        /* dd($discountAmount); */
         // Tạo mã giao dịch và các thông tin liên quan
         $vnp_TxnRef = Str::random(12);
         $vnp_OrderInfo = 'Thanh toán cho đơn hàng';
@@ -484,10 +485,10 @@ class CheckoutController extends Controller
                         // Chuyển đổi số lượng từ gram sang kg
                         $quantityInKg = $quantity / 1000;
                         // Chia giá cho 1000 để tính giá theo kg
-                        $pricePerKg = $price / 1000;
+                        $pricePerKg = $price;
                     } else {
                         // Nếu số lượng lớn hơn 900g, giữ nguyên giá
-                        $quantityInKg = $quantity / 1000; // Chuyển số lượng từ gram sang kg
+                        $quantityInKg = $quantity; // Chuyển số lượng từ gram sang kg
                         $pricePerKg = $price; // Giữ nguyên giá (giá cho 1kg)
                     } // In ra giá trị quantity, price và quantityInKg
 /* dd($pricePerKg); */
@@ -503,7 +504,7 @@ class CheckoutController extends Controller
                     $product = Product::find($fruit['product_id']);
                     if ($product) {
                         // Chuyển đổi quantity (giả sử quantity là gram)
-                        $quantityInKg = $fruit['quantity'] / 1000; // Chuyển đổi từ gram sang kg (hoặc đơn vị thập phân như yêu cầu)
+                        $quantityInKg = $fruit['quantity'] ; // Chuyển đổi từ gram sang kg (hoặc đơn vị thập phân như yêu cầu)
 
                         // Kiểm tra tồn kho và giảm số lượng
                         if ($product->stock >= $quantityInKg) {
@@ -551,13 +552,14 @@ class CheckoutController extends Controller
     /* thanh toán momo */
     public function momo(Request $request)
     {
-        /*  dd($request->all()); */
+       /*   dd($request->all()); */
         $cart = session()->get('cart');
         if (!$cart) {
             return redirect()->back()->with('error', 'Giỏ hàng trống!');
         }
 
         $totalAmount = session()->get('discounted_total', 0);
+        
         if ($totalAmount === 0) {
             foreach ($cart as $item) {
                 if (isset($item['total'])) {
@@ -574,7 +576,7 @@ class CheckoutController extends Controller
         }
         $shippingCost = 0;
         $totalAmount += $shippingCost;
-
+       /*  dd( $totalAmount); */
         // Kiểm tra tổng số tiền không âm
         if ($totalAmount < 0) {
             return redirect()->back()->with('error', 'Tổng số tiền không hợp lệ!');
@@ -622,7 +624,7 @@ class CheckoutController extends Controller
                 'partnerName' => "Test",
                 'storeId' => "MomoTestStore",
                 'requestId' => $requestId,
-                'amount' => $totalAmountAfterDiscount,
+                'amount' => $totalAmount,
                 'orderId' => $orderId,
                 'orderInfo' => $orderInfo,
                 'redirectUrl' => $redirectUrl,
@@ -668,12 +670,12 @@ class CheckoutController extends Controller
                     // Kiểm tra và xử lý số lượng từ 100g đến 1000g (1kg)
                     if ($quantity >= 100 && $quantity <= 900) {
                         // Chuyển đổi số lượng từ gram sang kg
-                        $quantityInKg = $quantity / 1000;
+                        $quantityInKg = $quantity ;
                         // Chia giá cho 1000 để tính giá theo kg
-                        $pricePerKg = $price / 1000;
+                        $pricePerKg = $price ;
                     } else {
                         // Nếu số lượng lớn hơn 900g, giữ nguyên giá
-                        $quantityInKg = $quantity / 1000; // Chuyển số lượng từ gram sang kg
+                        $quantityInKg = $quantity ; // Chuyển số lượng từ gram sang kg
                         $pricePerKg = $price; // Giữ nguyên giá (giá cho 1kg)
                     } 
                             // Lưu sản phẩm trong giỏ quà, chỉ cần lưu một bản ghi
@@ -689,7 +691,7 @@ class CheckoutController extends Controller
                             $product = Product::find($fruit['product_id']);
                             if ($product) {
                                 // Chuyển đổi quantity (giả sử quantity là gram)
-                                $quantityInKg = $fruit['quantity'] / 1000; // Chuyển đổi từ gram sang kg (hoặc đơn vị thập phân như yêu cầu)
+                                $quantityInKg = $fruit['quantity'] ; // Chuyển đổi từ gram sang kg (hoặc đơn vị thập phân như yêu cầu)
 
                                 // Kiểm tra tồn kho và giảm số lượng
                                 if ($product->stock >= $quantityInKg) {
