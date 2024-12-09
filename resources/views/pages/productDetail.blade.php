@@ -112,7 +112,7 @@ input#quantity:focus {
                         <li class="status">Tình trạng:
                             <span>
                                 @if ($product_detail->stock > 0)
-                                    <span style="color: green;">Còn {{$product_detail->stock}} kg/g</span>
+                                    <span style="color: green;">Còn {{ number_format($product_detail->stock, 1) }} kg</span>
                                 @else
                                     <span style="color: red;">Hết hàng</span>
                                 @endif
