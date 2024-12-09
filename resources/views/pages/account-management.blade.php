@@ -130,6 +130,98 @@
         .list-group-item.active a {
             color: #fff;
         }
+        /* Giao diện tổng quan của bảng */
+table.table-bordered {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.1);
+    background-color: #fff;
+}
+
+/* Header bảng */
+table.table-bordered thead {
+    background-color: #f8f9fa;
+    color: #333;
+    text-transform: uppercase;
+    font-weight: bold;
+}
+
+table.table-bordered thead th {
+    padding: 12px;
+    border: 1px solid #ddd;
+    text-align: center;
+}
+
+/* Nội dung bảng */
+table.table-bordered tbody td {
+    padding: 10px;
+    border: 1px solid #ddd;
+    text-align: center;
+    vertical-align: middle;
+}
+
+/* Hàng bảng khi di chuột */
+table.table-bordered tbody tr:hover {
+    background-color: #f1f1f1;
+}
+
+/* Nút hành động */
+.btn {
+    padding: 5px 10px;
+    font-size: 14px;
+    border-radius: 5px;
+    transition: all 0.3s ease;
+}
+
+.btn-success {
+    background-color: #28a745;
+    border: none;
+}
+
+.btn-success:hover {
+    background-color: #218838;
+}
+
+.btn-danger {
+    background-color: #dc3545;
+    border: none;
+}
+
+.btn-danger:hover {
+    background-color: #c82333;
+}
+
+.btn-secondary {
+    background-color: #6c757d;
+    border: none;
+}
+
+.btn-secondary:disabled {
+    background-color: #ced4da;
+    cursor: not-allowed;
+}
+
+/* Thay đổi màu trạng thái */
+span.status {
+    padding: 5px 10px;
+    border-radius: 15px;
+    font-size: 13px;
+    color: #fff;
+}
+
+span.status.DangXuLy {
+    background-color: #ffc107;
+}
+
+span.status.DaHuy {
+    background-color: #dc3545;
+}
+
+span.status.HoanThanh {
+    background-color: #28a745;
+}
+
     </style>
 
     <body>
@@ -332,7 +424,7 @@
                                         <td>
                                             <a href="{{ route('account.management.order.detail', $item->id) }}"
                                                 class="btn btn-success btn-sm"><i class="fa-solid fa-eye"></i></a>
-                                            @if ($item->status == 0)
+                                            @if ($item->status == 'Đang xử lý')
                                                 <!-- Chỉ hiển thị nút hủy nếu trạng thái là "Đang xử lý" -->
                                                 <a href="{{ route('account.order.cancel', $item->id) }}"
                                                     class="btn btn-danger btn-sm cancel-order" data-method="POST"
