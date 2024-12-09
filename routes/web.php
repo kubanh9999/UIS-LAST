@@ -30,8 +30,16 @@ use App\Models\Product;
 Route::get('/api/product-count', function() {
     return response()->json(['count' => Product::count()]);
 });
+Route::get('/api/order-stats', [DashboardController::class, 'getOrderStats']);
 
 
+Route::get('/api/products', action: function() {
+    return response()->json(['products' => Product::all()]);
+});
+/* Route::get('/api/product-stock', function() {
+    $productsInStock = Product::where('stock', '>', 0)
+    return response()->json(['stock' => $productsInStock]);
+}); */
 Route::get('/get-districts/{provinceId}', [LocationController::class, 'getDistricts']);
 Route::get('/get-provinces', [LocationController::class, 'getProvinces']);
 
