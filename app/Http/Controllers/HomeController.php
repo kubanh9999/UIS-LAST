@@ -37,7 +37,7 @@ class HomeController extends Controller
         /*    dd($recommendedProducts); */
         $newProducts = Product::select('products.id', 'products.name', 'products.price', 'products.image', 'products.stock', 'products.discount', 'categories.name as category_name')
             ->join('categories', 'products.category_id', '=', 'categories.id')
-            ->where('products.created_at', '>=', now()->subDays(15)) // Chọn sản phẩm được tạo trong 30 ngày qua
+            ->where('products.created_at', '>=', now()->subDays(30)) // Chọn sản phẩm được tạo trong 30 ngày qua
             ->where('products.stock', '>', 0) // Chỉ lấy sản phẩm có số lượng tồn kho > 0
             ->orderBy('products.created_at', 'desc')
             ->take(5) // Lấy 5 sản phẩm mới nhất

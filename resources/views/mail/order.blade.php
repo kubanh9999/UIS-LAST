@@ -24,25 +24,39 @@
 
         .header {
             text-align: center;
-            padding: 10px 0;
+            padding: 20px 0;
+            height: 50px;
+            background-color: #28a745;
+            color: #ffffff;
+            border-radius: 5px 5px 0 0;
         }
 
         .header img {
-            max-width: 150px;
+            max-width: 120px;
+            margin-bottom: 10px;
         }
 
-        .order-details {
+        .header h1 {
+            font-size: 24px;
+            margin: 0;
+        }
+
+        .content {
+            padding: 20px 0;
+        }
+
+        .content h2 {
+            color: #28a745;
+        }
+
+        .button {
+            display: inline-block;
+            background-color: #28a745;
+            color: #fff;
+            text-decoration: none;
+            padding: 10px 20px;
+            border-radius: 4px;
             margin: 20px 0;
-        }
-
-        .order-details th,
-        .order-details td {
-            padding: 8px;
-            border-bottom: 1px solid #e9ecef;
-        }
-
-        .order-details th {
-            background-color: #f8f9fa;
         }
 
         .footer {
@@ -50,14 +64,18 @@
             padding: 20px 0;
             font-size: 14px;
             color: #6c757d;
+            background-color: #f8f9fa;
+            border-top: 1px solid #e9ecef;
+            border-radius: 0 0 5px 5px;
         }
-        .button {
-            display: inline-block;
-            background-color: #007bff;
-            color: #fff;
+
+        .footer a {
+            color: #28a745;
             text-decoration: none;
-            padding: 10px 20px;
-            border-radius: 4px;
+        }
+
+        .footer a:hover {
+            text-decoration: underline;
         }
     </style>
 </head>
@@ -65,45 +83,27 @@
 <body>
     <div class="email-container">
         <div class="header">
-        <!-- <img src="{{ asset('assets/img/logo/logo.jpg.png') }}" alt="Logo"> <br> -->
+          <h1>UIS Fruits</h1>
+         
         </div>
-        <h2>Thư Xác Nhận Đơn Hàng</h2>
-        <p>Gửi {{$order->name}},</p>
-        <p>Cảm ơn khách hàng <b>{{$order->name}}</b> đã tin tưởng và đặt hàng tại shop chúng tôi - Đơn hàng đã được đặt thành công.</p>
-
-        <p><a href="{{ route('confirm.order',['token'=> $order->token]) }}" class="button" style="color:white;">Xác nhận đơn hàng</a></p>
-        <!-- <table class="table table-striped order-details">
-            <thead>
-                <tr>
-                    <th>Item</th>
-                    <th>Quantity</th>
-                    <th>Price</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>Product 1</td>
-                    <td>1</td>
-                    <td>$50.00</td>
-                </tr>
-                <tr>
-                    <td>Product 2</td>
-                    <td>2</td>
-                    <td>$30.00</td>
-                </tr>
-                <tr>
-                    <td colspan="2" class="text-right"><strong>Total</strong></td>
-                    <td><strong>$110.00</strong></td>
-                </tr>
-            </tbody>
-        </table> -->
-
-        <p>Nếu bạn có câu hỏi gì về sản phẩm hãy gửi mail về bvphuc2004@gmail.com để được shop hỗ trợ.</p>
-        <p>Trân trọng,</p>
-        <p>Bùi Văn Phúc - PS33476</p>
+        <div class="content">
+            <h2>Chúc Mừng Bạn Đã Đặt Hàng Thành Công!</h2>
+            <p>Xin chào <strong>{{$order->name}}</strong>,</p>
+            <p>Cảm ơn bạn đã lựa chọn <strong>UIS Fruits</strong> cho nhu cầu mua sắm trái cây của mình. Chúng tôi rất vui khi được phục vụ bạn!</p>
+            <p>Thông tin đơn hàng của bạn đã được ghi nhận thành công. Để xác nhận đơn hàng, vui lòng nhấn vào nút bên dưới:</p>
+            <p style="text-align:center">
+                <a href="{{ route('confirm.order', ['token' => $order->token]) }}" class="button" style="color: #fff; ">Xác Nhận Đơn Hàng</a>
+            </p>
+            <p>Nếu bạn có bất kỳ thắc mắc hoặc yêu cầu hỗ trợ nào, đừng ngần ngại liên hệ với chúng tôi qua email: <a href="mailto:uisfruits@gmail.com">uisfruits@gmail.com</a>.</p>
+            <p>Một lần nữa, cảm ơn bạn đã tin tưởng UIS Fruits. Chúng tôi mong chờ được phục vụ bạn trong tương lai!</p>
+            <p>Trân trọng,</p>
+            <p><strong>Đội ngũ UIS Fruits</strong></p>
+        </div>
         <div class="footer">
-            <p>&copy; 2024 ps33476 . Đã đăng ký bản quyền.</p>
+            <p>&copy; 2024 UIS FRUITS. Đã đăng ký bản quyền.</p>
+            <p><a href="#">Chính sách bảo mật</a> | <a href="#">Điều khoản dịch vụ</a></p>
         </div>
     </div>
 </body>
+
 </html>

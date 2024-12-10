@@ -209,6 +209,7 @@ class CheckoutController extends Controller
                             return redirect()->back()->with('error', 'Số lượng yêu cầu vượt quá tồn kho!');
                         }
                     }
+                    /* dd( $quantityInKg); */
                 }
 
 
@@ -489,8 +490,7 @@ class CheckoutController extends Controller
                         // Nếu số lượng lớn hơn 900g, giữ nguyên giá
                         $quantityInKg = $quantity; // Chuyển số lượng từ gram sang kg
                         $pricePerKg = $price; // Giữ nguyên giá (giá cho 1kg)
-                    } // In ra giá trị quantity, price và quantityInKg
-/* dd($pricePerKg); */
+                    } 
                     OrderDetail::create([
                         'user_id' => Auth::id(),
                         'order_id' => $order->id,
