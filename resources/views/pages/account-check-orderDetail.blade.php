@@ -274,19 +274,15 @@
 
                                 </tr>
                                 <tr>
-                                    <td><strong>Tổng giá đơn hàng:</strong></td>
-                                    <td class="text-right"><strong>{{ number_format($orders->total_amount) }} VNĐ</strong>
-                                    </td>
-                                </tr>
-
-                                <tr>
                                     <td><strong>Phí vận chuyển:</strong></td>
                                     <td class="text-right">0 VNĐ</td>
                                 </tr>
                                 <tr>
-                                    <td><strong>Tổng tiền hàng:</strong></td>
-                                    <td class="text-right">{{ number_format($orders->total_amount) }} VNĐ</td>
+                                    <td><strong>Tổng giá đơn hàng:</strong></td>
+                                    <td class="text-right"><strong>{{ number_format($orders->total_amount, 0, ',', '.') }}đ</strong></td>
+                                    </td>
                                 </tr>
+                            
                             </tbody>
 
                         </table>
