@@ -42,7 +42,7 @@
                     <div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel">
                         <div class="carousel-inner">
                             @foreach ($mainBanners as $index => $banner)
-                                <a href="{{ $banner->link }}" rel="noopener noreferrer"
+                                <a href="{{ $banner->link }}" target="_blank" rel="noopener noreferrer"
                                     class="carousel-item {{ $index === 0 ? 'active' : '' }}" data-bs-interval="10000">
                                     <img src="{{ asset($banner->image_path) }}" alt="{{ $banner->alt_text }}"
                                         class="d-block w-100">
@@ -115,8 +115,7 @@
                         @if ($topProductsGrouped->isNotEmpty())
                             @foreach ($topProductsGrouped as $categoryName => $products)
                                 <li>
-                                    <a href="javascript:void(0);" class="category-link-best"
-                                        data-category="{{ $categoryName }}" data-section="sale">{{ $categoryName }}</a>
+                                    <a href="javascript:void(0);" class="category-link category-link-best" data-category="{{ $categoryName }}" data-section="sale">{{ $categoryName }}</a>
                                 </li>
                             @endforeach
                         @else
@@ -124,7 +123,7 @@
                         @endif
                     </ul>
                 </div>
-                <div class="inner-content">
+                <div class="inner-content product-grid product-grid-best">
                     @foreach ($topProducts as $item)
                         <div class="inner-box">
                             <a href="{{ route('product.detail', $item->id) }}">
@@ -163,7 +162,7 @@
         <div class="container">
             <div class="inner-banner">
                 @if ($secondaryBanners && $secondaryBanners->isNotEmpty())
-                    <a href="{{ $secondaryBanners->first()->link }}">
+                    <a href="{{ $secondaryBanners->first()->link }}" target="_blank">
                         <img src="{{ asset($secondaryBanners->first()->image_path) }}"
                             alt="{{ $secondaryBanners->first()->alt_text }}">
                     </a>
@@ -173,16 +172,15 @@
     </section>
 
     <section class="section-five">
-        <div class="container">
+        <div class=" container">
             <div class="swapper">
                 <div class="inner-title">
                     <h3>Sản phẩm mới</h3>
-                    <ul class="load-category">
+                    <ul class="load-category category-title category-new">
                         @if ($newProductsGrouped->isNotEmpty())
-                            @foreach ($newProductsGrouped as $categoryName => $products)
+                        @foreach ($newProductsGrouped as $categoryName => $products)
                                 <li>
-                                    <a href="javascript:void(0);" class="category-link-new"
-                                        data-category="{{ $categoryName }}" data-section="new">{{ $categoryName }}</a>
+                                   <a href="javascript:void(0);" class="category-link category-link-new" data-category="{{ $categoryName }}" data-section="new">{{ $categoryName }}</a>
                                 </li>
                             @endforeach
                         @else
@@ -190,6 +188,7 @@
                         @endif
                     </ul>
                 </div>
+                <div class="product-grid product-grid-new" class="product-grid">
                 <div class="inner-content">
                     @foreach ($newProducts as $item)
                         <div class="inner-box">
@@ -270,11 +269,20 @@
                             <h4>{{ $latestPost->title }}</h4>
                         </a>
                         <div class="inner-media">
-                            <h6>{{ $latestPost->author }}</h6>
+                      {{--  --}}
                             <small>{{ $latestPost->created_at }}</small>
                         </div>
                         <div class="inner-text">
-                            <p>{{ $latestPost->content }}</p>
+                            <p> @php
+                                $clearBreakLineArrStr = Str::replace('&nbsp;', '', $latestPost->content);
+                                $clearImgArrStr = preg_replace("<img([\w\W]+?)/>", "", $clearBreakLineArrStr);
+                            @endphp
+                            @foreach (explode("\n", $clearImgArrStr) as $key => $item)
+                                {!! $item !!}
+                                @if ($key === 3)
+                                    @break
+                                @endif
+                            @endforeach</p>
                         </div>
                     </div>
                     <div class="inner-right">
@@ -294,10 +302,19 @@
                                         <h4>{{ $post->title }}</h4>
                                     </a>
                                     <div class="inner-media">
-                                        <h6>{{ $post->author }}</h6>
+                                        {{-- <h6>{{ $post->author }}</h6> --}}
                                         <small>{{ $post->created_at }}</small>
                                     </div>
-                                    <p>{{ $post->content }}</p>
+                                    <p>  @php
+                                        $clearBreakLineArrStr = Str::replace('&nbsp;', '', $latestPost->content);
+                                        $clearImgArrStr = preg_replace("<img([\w\W]+?)/>", "", $clearBreakLineArrStr);
+                                    @endphp
+                                    @foreach (explode("\n", $clearImgArrStr) as $key => $item)
+                                        {!! $item !!}
+                                        @if ($key === 3)
+                                            @break
+                                        @endif
+                                    @endforeach</p>
                                 </div>
                             </div>
                         @endforeach
@@ -307,11 +324,16 @@
         </div>
     </section>
 
- 
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
 <script>
     // Xử lý danh mục sản phẩm mới
     $(document).on('click', '.category-link-new', function() {
+       console.log('aa');
+       
         var categoryName = $(this).data('category');
+        console.log('categoryName',categoryName);
+        
         var currentUrl = window.location.href.split('?')[0];
 
         $.ajax({
@@ -319,24 +341,33 @@
                 .replace(':categoryName', categoryName),
             type: 'GET',
             success: function(response) {
+                console.log(response);
                 var html = '';
 
                 if (response.length > 0) {
                     $.each(response, function(index, product) {
                         html += `
-                            <div class="product-card">
-                                <a href="/product/${product.id}">
-                                    <img src="/layouts/img/${product.image}" alt="${product.name}">
-                                </a>
-                                <h5 class="product-name">
-                                    <a href="/product/${product.id}">${product.name}</a>
-                                </h5>
-                                <div class="price">
-                                    ${new Intl.NumberFormat('vi-VN').format(product.price)} VND
-                                </div>
+                          
+                <div class="inner-content">
+                          <div class="inner-box">
+                            <div class="badge">Mới</div>
+                            <a href="/product/${product.id}">
+                              <img src="/layouts/img/${product.image}" alt="${product.name}">
+                            </a>
+                            <h5>
+                                <a href="/product/${product.id}"</a>
+                            </h5>
+                            <div class="inner-foot">
+                               ${new Intl.NumberFormat('vi-VN').format(product.price)} VND
+                                
                             </div>
+                        </div>
+                        
+                         
+                        </div> 
                         `;
                     });
+                    
                 } else {
                     html = '<p>Không có sản phẩm nào trong danh mục này.</p>';
                 }
