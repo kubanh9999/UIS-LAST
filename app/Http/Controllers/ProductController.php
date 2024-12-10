@@ -145,7 +145,7 @@ class ProductController extends Controller
         })->paginate(6);
 
         // Trả về view với dữ liệu
-        return view('pages.product', compact('products', 'categories', 'productTypes'));
+        return view('pages.product2', compact('products', 'categories', 'productTypes'));
     }
 
 

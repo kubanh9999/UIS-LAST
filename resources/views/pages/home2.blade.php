@@ -225,7 +225,7 @@
         </div>
     </section>
 
-    <section class="section-six">
+    {{-- <section class="section-six">
         <div class="container">
             <div class="inner-banner">
                 <div class="banner-left">
@@ -245,7 +245,7 @@
                 </div>
             </div>
         </div>
-    </section>
+    </section> --}}
 
     <section class="section-seven">
         <div class="container">
