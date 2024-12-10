@@ -34,7 +34,7 @@
         <section class=" mb-4">
 
             <div class="container bg-white p-4">
-                <input type="text" id="search" placeholder="Tìm kiếm trái cây..." class="form-control mb-3">
+             {{--    <input type="text" id="search" placeholder="Tìm kiếm trái cây..." class="form-control mb-3"> --}}
                 <form id="giftBasketForm" action="{{ route('cart.addGiftBasketToCart', $basket->id) }}" method="POST">
                     @csrf
                     <div class="row">
@@ -102,52 +102,7 @@
     </main>
 
 <script>
-    document.getElementById("search").addEventListener("input", function () {
-        const searchTerm = this.value.toLowerCase(); // Lấy từ khóa tìm kiếm và chuyển thành chữ thường
-
-        // Lấy tất cả các sản phẩm
-        const productContainer = document.querySelector(".gift-basket-right");
-        const products = Array.from(productContainer.querySelectorAll(".product-item"));
-
-        // Lưu lại các ID của các trái cây đã được chọn trước khi tìm kiếm
-        let checkedFruits = [];
-        const checkboxes = document.querySelectorAll('input[type="checkbox"]:checked');
-        checkboxes.forEach(checkbox => {
-            checkedFruits.push(checkbox.id); // Lưu ID của checkbox đã chọn
-        });
-
-        // Sắp xếp lại các sản phẩm
-        const filteredProducts = products.filter(product => {
-            const label = product.querySelector('label');
-            const fruitName = label ? label.textContent.toLowerCase() : '';
-            return fruitName.includes(searchTerm); // Kiểm tra nếu tên sản phẩm có chứa từ khóa tìm kiếm
-        });
-
-        // Các sản phẩm không khớp tìm kiếm
-        const nonFilteredProducts = products.filter(product => {
-            const label = product.querySelector('label');
-            const fruitName = label ? label.textContent.toLowerCase() : '';
-            return !fruitName.includes(searchTerm);
-        });
-
-        // Di chuyển các sản phẩm tìm thấy lên đầu
-        productContainer.innerHTML = ''; // Xóa nội dung hiện tại
-
-        filteredProducts.forEach(product => productContainer.appendChild(product)); // Thêm sản phẩm tìm thấy lên đầu
-        nonFilteredProducts.forEach(product => productContainer.appendChild(product)); // Thêm các sản phẩm không khớp vào sau
-
-        // Cập nhật lại trạng thái checkbox
-        filteredProducts.forEach(product => {
-            const checkbox = product.querySelector('input[type="checkbox"]');
-            if (checkedFruits.includes(checkbox.id)) {
-                checkbox.checked = true; // Đánh dấu lại checkbox đã được chọn trước đó
-            }
-        });
-
-        // Gọi lại hàm tính tổng giá sau khi tìm kiếm
-        calculateTotal();
-    });
-
+  
     document.addEventListener("DOMContentLoaded", function() {
         const checkboxes = document.querySelectorAll('input[type="checkbox"]'); // Chọn tất cả các checkbox
         const totalPriceElement = document.getElementById("totalPrice"); // Lấy phần tử hiển thị tổng giá
@@ -168,6 +123,7 @@
                 if (dynamicPriceElement) {
                     dynamicPriceElement.textContent = itemPrice.toLocaleString(); // Cập nhật giá động
                 }
+                
             }
         });
         totalPriceElement.textContent = totalPrice.toLocaleString(); // Cập nhật tổng giá vào DOM
