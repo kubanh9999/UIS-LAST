@@ -86,7 +86,7 @@ class HomeController extends Controller
         $nextPosts = DB::table('posts')
             ->where('id', '!=', $latestPost->id) // Bỏ qua bài viết mới nhất
             ->orderBy('created_at', 'desc')
-            ->take(3)
+            ->take(4)
             ->get();
         $content = strip_tags($latestPost->content); // Xóa HTML tags
         $words = explode(' ', $content); // Tách nội dung thành các từ
