@@ -111,6 +111,24 @@
             <div class="swapper">
                 <div class="inner-title">
                     <h3>Sản phẩm bán chạy</h3>
+
+                    {{-- Load danh mục mobile --}}
+                    <button class="dropdown-toggle load-category-mobile" type="button" id="dropdownLoadCategory"
+                        data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="fa-solid fa-bars"></i>
+                    </button>
+                    <ul class="dropdown-menu" aria-labelledby="dropdownLoadCategory">
+                        @if ($topProductsGrouped->isNotEmpty())
+                            @foreach ($topProductsGrouped as $categoryName => $products)
+                                <li><a class="dropdown-item" href="javascript:void(0);" class="category-link-best"
+                                        data-category="{{ $categoryName }}" data-section="sale">{{ $categoryName }}</a>
+                                </li>
+                            @endforeach
+                        @else
+                            <li><a class="dropdown-item" href="#">Không có danh mục</a></li>
+                        @endif
+                    </ul>
+
                     <ul class="load-category">
                         @if ($topProductsGrouped->isNotEmpty())
                             @foreach ($topProductsGrouped as $categoryName => $products)
@@ -177,6 +195,24 @@
             <div class="swapper">
                 <div class="inner-title">
                     <h3>Sản phẩm mới</h3>
+
+                    {{-- Load danh mục mobile --}}
+                    <button class="dropdown-toggle load-category-mobile" type="button" id="dropdownLoadCategoryBest"
+                        data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="fa-solid fa-bars"></i>
+                    </button>
+                    <ul class="dropdown-menu" aria-labelledby="dropdownLoadCategoryBest">
+                        @if ($newProductsGrouped->isNotEmpty())
+                            @foreach ($newProductsGrouped as $categoryName => $products)
+                                <li><a class="dropdown-item" href="javascript:void(0);" class="category-link-new"
+                                        data-category="{{ $categoryName }}" data-section="new">{{ $categoryName }}</a>
+                                </li>
+                            @endforeach
+                        @else
+                            <li><a class="dropdown-item" href="#">Không có danh mục</a></li>
+                        @endif
+                    </ul>
+
                     <ul class="load-category">
                         @if ($newProductsGrouped->isNotEmpty())
                             @foreach ($newProductsGrouped as $categoryName => $products)
