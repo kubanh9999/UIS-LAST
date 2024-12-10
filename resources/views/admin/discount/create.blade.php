@@ -4,8 +4,8 @@
         <div class="content">
             <div class="page-header">
                 <div class="page-title">
-                    <h4>Product Add Category</h4>
-                    <h6>Create new product Category</h6>
+                    <h4>Thêm mã giảm giá</h4>
+                    <h6>Tạo mới một mã giảm giá</h6>
                 </div>
             </div>
             <form action="{{ route('admin.discount.store') }}" method="post">
