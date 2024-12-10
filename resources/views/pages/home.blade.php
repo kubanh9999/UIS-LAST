@@ -127,7 +127,13 @@
                     @foreach ($topProducts as $item)
                         <div class="inner-box">
                             <a href="{{ route('product.detail', $item->id) }}">
-                                <img src="{{ asset('layouts/img/' . $item->image) }}" alt="{{ $item->name }}">
+                                @php
+                                        $imagePath = $item->image;
+                                        if (strpos($imagePath, 'uploads/products') === false) {
+                                            $imagePath = 'layouts/img/' . $imagePath;
+                                        }
+                                    @endphp
+                                <img src="{{ asset($imagePath) }}" alt="{{ $item->name }}">
                             </a>
                             <h5><a href="{{ route('product.detail', $item->id) }}">{{ $item->name }}</a></h5>
                             <div class="inner-foot">
@@ -194,7 +200,13 @@
                         <div class="inner-box">
                             <div class="badge">Mới</div>
                             <a href="{{ route('product.detail', $item->id) }}">
-                                <img src="{{ asset('layouts/img/' . $item->image) }}" alt="{{ $item->name }}">
+                                    @php
+                                        $imagePath = $item->image;
+                                        if (strpos($imagePath, 'uploads/products') === false) {
+                                            $imagePath = 'layouts/img/' . $imagePath;
+                                        }
+                                    @endphp
+                                <img src="{{ asset($imagePath) }}" alt="{{ $item->name }}">
                             </a>
                             <h5>
                                 <a href="{{ route('product.detail', $item->id) }}">{{ $item->name }}</a>
@@ -346,13 +358,16 @@
 
                 if (response.length > 0) {
                     $.each(response, function(index, product) {
+                        var imagePath = product.image.includes('uploads/products') 
+                        ? product.image  // Nếu có, giữ nguyên đường dẫn
+                        : 'layouts/img/' + product.image;  // Nếu không, thay thế bằng 'layouts/img/'
                         html += `
                           
                 <div class="inner-content">
                           <div class="inner-box">
                             <div class="badge">Mới</div>
                             <a href="/product/${product.id}">
-                              <img src="/layouts/img/${product.image}" alt="${product.name}">
+                              <img src="${imagePath}" alt="${product.name}">
                             </a>
                             <h5>
                                 <a href="/product/${product.id}"</a>
@@ -399,10 +414,13 @@
 
                 if (response.length > 0) {
                     $.each(response, function(index, product) {
+                        var imagePath = product.image.includes('uploads/products') 
+                        ? product.image  // Nếu có, giữ nguyên đường dẫn
+                        : 'layouts/img/' + product.image;  // Nếu không, thay thế bằng 'layouts/img/'
                         html += `
                             <div class="product-card">
                                 <a href="/product/${product.id}">
-                                    <img src="/layouts/img/${product.image}" alt="${product.name}">
+                                    <img src="=${imagePath}" alt="${product.name}">
                                 </a>
                                 <h5 class="product-name">
                                     <a href="/product/${product.id}">${product.name}</a>
