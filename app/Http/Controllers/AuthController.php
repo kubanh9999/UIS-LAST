@@ -171,6 +171,8 @@ class AuthController extends Controller
     {
         Auth::logout();
         session()->forget(['cart']);
+        $request->session()->invalidate();  // Hủy session
+$request->session()->regenerateToken(); 
         return redirect()->route('home.index'); // Điều hướng về trang login
     }
 
