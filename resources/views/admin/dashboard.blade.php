@@ -168,54 +168,56 @@
 
 
 <script>
-     google.charts.load("current", {
+    google.charts.load("current", {
         packages: ["corechart"]
     });
     google.charts.setOnLoadCallback(drawChart);
 
     // Hàm vẽ biểu đồ
     google.charts.load("current", {
-    packages: ["corechart"]
-});
-google.charts.setOnLoadCallback(drawChart);
+        packages: ["corechart"]
+    });
+    google.charts.setOnLoadCallback(drawChart);
 
-function drawChart() {
-    // Gọi API lấy dữ liệu từ backend
-    fetch('/api/order-stats')  // Địa chỉ API bạn đã tạo ở trên
-        .then(response => response.json())
-        .then(data => {
-            // Chuyển đổi dữ liệu từ backend thành định dạng Google Charts
-            var chartData = [['Status', 'Number of Orders']];
-            data.forEach(function(orderStat) {
-                chartData.push([orderStat.status, orderStat.count]);
-            });
+    function drawChart() {
+        // Gọi API lấy dữ liệu từ backend
+        fetch('/api/order-stats') // Địa chỉ API bạn đã tạo ở trên
+            .then(response => response.json())
+            .then(data => {
+                // Chuyển đổi dữ liệu từ backend thành định dạng Google Charts
+                var chartData = [
+                    ['Status', 'Number of Orders']
+                ];
+                data.forEach(function(orderStat) {
+                    chartData.push([orderStat.status, orderStat.count]);
+                });
 
-            // Tạo dữ liệu cho biểu đồ
-            var dataTable = google.visualization.arrayToDataTable(chartData);
+                // Tạo dữ liệu cho biểu đồ
+                var dataTable = google.visualization.arrayToDataTable(chartData);
 
-            // Tùy chọn cho biểu đồ
-            var options = {
-                title: 'tổng đơn hàng trong 1 tháng',
-                is3D: true,
-                trigger: 'both',  // Hiển thị tooltip khi hover và khi chọn
+                // Tùy chọn cho biểu đồ
+                var options = {
+                    title: 'tổng đơn hàng trong 1 tháng',
+                    is3D: true,
+                    trigger: 'both', // Hiển thị tooltip khi hover và khi chọn
                     textStyle: {
                         fontSize: 14,
                         color: 'black'
                     }
-                  // Hiển thị tooltip khi hover
-            };
+                    // Hiển thị tooltip khi hover
+                };
 
-            // Tạo biểu đồ
-            var chart = new google.visualization.PieChart(document.getElementById('piechart_3d'));
+                // Tạo biểu đồ
+                var chart = new google.visualization.PieChart(document.getElementById('piechart_3d'));
 
-            // Vẽ biểu đồ
-            chart.draw(dataTable, options);
+                // Vẽ biểu đồ
+                chart.draw(dataTable, options);
 
-            // Tùy chỉnh để hiển thị số lượng khi hover
-           
-        })
-        .catch(error => console.error('Error fetching data: ', error));
-}
+                // Tùy chỉnh để hiển thị số lượng khi hover
+
+            })
+            .catch(error => console.error('Error fetching data: ', error));
+    }
     //line
     google.charts.load('current', {
         packages: ['corechart']
@@ -464,7 +466,7 @@ function drawChart() {
                         case 'order':
                             let statusClass = '';
                             let statusText = item
-                            .status; // Mặc định hiển thị status như bình thường
+                                .status; // Mặc định hiển thị status như bình thường
 
                             // Xử lý trạng thái nếu status = 0
                             if (item.status == 0) {
