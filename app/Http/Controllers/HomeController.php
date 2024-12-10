@@ -106,7 +106,7 @@ class HomeController extends Controller
         // Lấy banner thứ 3 (1 ảnh)
         $tertiaryBanner = DB::table('banners')->where('type', 'third')->orderBy('position')->get();
 
-        return view('pages.home2', compact('newProducts', 'topSellingProducts', 'recommendedProducts', 'orders', 'giftBaskets', 'categories', 'latestPost', 'nextPosts', 'limitedContent', 'mainBanners', 'secondaryBanners', 'tertiaryBanner', 'topProducts', 'newProductsGrouped', 'topProductsGrouped'));
+        return view('pages.home', compact('newProducts', 'topSellingProducts', 'recommendedProducts', 'orders', 'giftBaskets', 'categories', 'latestPost', 'nextPosts', 'limitedContent', 'mainBanners', 'secondaryBanners', 'tertiaryBanner', 'topProducts', 'newProductsGrouped', 'topProductsGrouped'));
     }
     public function markAsRead($id)
     {
