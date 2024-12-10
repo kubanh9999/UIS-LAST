@@ -5,8 +5,13 @@
     .product-item {
     display: flex; /* Hoặc bạn có thể cần điều chỉnh tùy thuộc vào cấu trúc HTML của bạn */
 }
+#search {
+    width: 650px;
+    display: flex;
+    margin-left: 490px;
+}
 </style>
-    <main class="main-content">
+
 
         <section class="breadcrumb">
             <div class="container">
@@ -99,7 +104,7 @@
             </div>
         </section>
 
-    </main>
+
 
 <script>
   
