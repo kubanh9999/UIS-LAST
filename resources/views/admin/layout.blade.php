@@ -10,6 +10,9 @@
     <meta name="author" content="Dreamguys - Bootstrap Admin Template">
     <meta name="robots" content="noindex, nofollow">
     <meta name="csrf-token" content="{{ csrf_token() }}">
+    <meta http-equiv="Cache-Control" content="no-store, no-cache, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
     <title>Admin</title>
 
     <link rel="shortcut icon" type="image/x-icon" href="{{ asset('assets/img/favicon.jpg') }}">
@@ -35,7 +38,19 @@
 <!-- Thêm JS của SweetAlert2 -->
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.16/dist/sweetalert2.min.js"></script>
 
-    
+<script>
+ window.onload = function() {
+    if (!{{ Auth::check() ? 'true' : 'false' }}) {
+        window.location.href = '/';  // Chuyển hướng về trang chủ nếu chưa đăng nhập
+    } else {
+        // Đảm bảo không cho quay lại trang trước đó
+        history.pushState(null, null, location.href);
+        window.onpopstate = function() {
+            history.go(1); // Khi ấn nút "quay lại", chuyển hướng người dùng
+        };
+    }
+};
+</script>
 </head>
 
 <body>
@@ -72,32 +87,32 @@
                 <li class="nav-item dropdown has-arrow main-drop">
                     
                     
-                            <div class="profileset">
-                                @if (Auth::check())
-                                <ul class="nav user-menu">
-                                    <li class="nav-item d-flex align-items-center">
-                                        <a class="login" href="{{ route('account.management') }}">
-                                            <span class="login">Xin chào {{ Auth::user()->name }}</span>
-                                        </a>
-                                    </li>
-                                    <li class="nav-item">|</li>
-                                    <br>
-                                  
-                                </ul>
-                                <li class="nav-item d-flex align-items-center">
-                                    <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                    <div class="inner-topright">
+                        <div class="dropdown">
+                            @if (Auth::check())
+                                <button class="btn dropdown-toggle" type="button" id="dropdownMenuButton1"
+                                    data-bs-toggle="dropdown" aria-expanded="false">
+                                    <img src="assets/icons/user.svg" alt=""> {{ Auth::user()->name }}
+                                </button>
+                                <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+    
+                                    <li><form id="logout-form" action="{{ route('logout') }}" method="POST"
+                                        style="display: none;">
                                         @csrf
                                     </form>
-                                    <a href="#" class="login" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-                                        <i class="fa-solid fa-right-to-bracket"></i> 
-                                    </a>
-                                </li>
+                                    <a class="dropdown-item" href="#"
+                                        onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Đăng
+                                        Xuất
+                                    </a></li>
+                                    <li>
+                                     
+                                       
+                                    </li>
+                                </ul>
                                 @endif
                             </div>
-                            <hr class="m-0">
-                            <a class="dropdown-item logout pb-0" href="signin.html">
-                                <img src="{{ asset('assets/img/icons/log-out.svg') }}" class="me-2">Logout
-                            </a>
+                    </div>
+                           
                        
                     
                 </li>
@@ -175,73 +190,7 @@
         @yield('content')
 
     </div>
-    {{-- <style>
-        /* Sidebar */
-        #sidebar {
-            margin-top: 60px;
-    width: 250px;
-    background-color:white; /* Primary green color */
-    color: black;
-    height: 100vh;
-    font-family: Arial, sans-serif;
-    position: fixed;
-    top: 0;
-    left: 0;
-    overflow-y: auto;
-    z-index: 1000; /* Ensures sidebar stays on top */
-}
-
-#sidebar-menu {
-    list-style-type: none;
-    padding: 0;
-    margin: 0;
-}
-
-#sidebar-menu ul li {
-    padding: 15px 20px;
-    font-size: 16px;
-    transition: background 0.3s;
-}
-
-#sidebar-menu ul li.active,
-#sidebar-menu ul li:hover {
-    background-color: #1b5e20; /* Darker green on hover/active */
-}
-
-#sidebar-menu ul li a {
-    color: black;
-    text-decoration: none;
-    display: flex;
-    align-items: center;
-}
-
-#sidebar-menu ul li a img {
-    margin-right: 15px;
-    width: 20px;
-}
-
-#sidebar-menu ul li a span {
-    font-weight: bold;
-}
-
-#sidebar-menu ul li a:hover {
-    color: #a5d6a7; /* Light green hover effect */
-}
-
-#sidebar-menu ul li.submenu a i {
-    margin-right: 15px;
-    color: white;
-}
-
-/* Slimscroll style */
-.sidebar-inner.slimscroll {
-    overflow-y: auto;
-    max-height: calc(100vh - 20px);
-    padding: 10px 0;
-}
-
-    </style> --}}
-<!-- Thêm CSS của Toastr -->
+   
 <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" rel="stylesheet" />
 
 <!-- Thêm JS của Toastr -->
