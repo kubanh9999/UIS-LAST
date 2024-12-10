@@ -19,7 +19,7 @@
 
 <body>
 
-    @include('layouts.header2')
+    @include('layouts.header')
     
     <main>
         @yield('content')
@@ -83,7 +83,7 @@
         
     </main>
 
-    @include('layouts.footer2')
+    @include('layouts.footer')
 
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>

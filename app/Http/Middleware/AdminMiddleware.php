@@ -20,6 +20,9 @@ class AdminMiddleware
         // Kiểm tra nếu người dùng chưa xác thực hoặc không phải là admin
         if (!Auth::check() || Auth::user()->role != 1) {
             return redirect('/login'); // Chuyển hướng đến trang đăng nhập
+        } 
+          if (!Auth::check()) {
+            return redirect('/'); 
         }
 
         return $next($request);
