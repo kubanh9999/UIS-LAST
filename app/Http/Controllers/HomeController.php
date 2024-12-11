@@ -132,13 +132,16 @@ class HomeController extends Controller
     public function giftDetail($id)
     {
         $basket = DB::table('product_types')->where('id', $id)->first();
+        
+        $sku = 'I' . str_pad($basket->id, 5, '0', STR_PAD_LEFT);
+
         $comments = Comment::with(['user', 'replies.user'])
             ->where('product_id', $id)
             ->where('status', '!=', 2)
             ->whereNull('parent_id')
             ->get();
 
-        return view('pages.giftDetailt', compact('basket', 'comments'));
+        return view('pages.gift-detail', compact('basket','sku', 'comments'));
     }
     // Giới thiệu
     public function introduction()

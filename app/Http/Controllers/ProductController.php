@@ -319,7 +319,7 @@ class ProductController extends Controller
         $products = $products->paginate(12);
 
         // Truyền dữ liệu vào view
-        return view('pages.product', compact('products', 'categories', 'productTypes'));
+        return view('pages.product2', compact('products', 'categories', 'productTypes'));
     }
 
     public function detail($id)
@@ -356,7 +356,7 @@ class ProductController extends Controller
 
         $sku = 'I' . str_pad($product_detail->id, 5, '0', STR_PAD_LEFT);
 
-        return view('pages.productDetail', compact('product_detail', 'sku', 'approvedComments', 'relatedProducts'));
+        return view('pages.product-detail', compact('product_detail', 'sku', 'approvedComments', 'relatedProducts'));
     }
 
     // Tìm kiếm sản phẩm 
@@ -501,7 +501,7 @@ class ProductController extends Controller
     // Phân trang ProductType (Giỏ quà)
     $productTypes = $productTypes->paginate(6);
 
-    return view('pages.product', compact('products', 'categories', 'productTypes'))
+    return view('pages.product2', compact('products', 'categories', 'productTypes'))
         ->with('query', $query);
 }
 

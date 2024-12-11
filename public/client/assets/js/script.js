@@ -34,3 +34,39 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 });
+
+$(document).ready(function () {
+    $('.slick-related').slick({
+        slidesToShow: 5,
+        slidesToScroll: 1,
+        arrows: true,
+        prevArrow: $('#prev-justforyou'),
+        nextArrow: $('#next-justforyou'),
+        infinite: false,
+        dots: false,
+        responsive: [
+            {
+                breakpoint: 1024,
+                settings: {
+                    slidesToShow: 3,
+                    arrows: true,
+                }
+            },
+            {
+                breakpoint: 768,
+                settings: {
+                    slidesToShow: 2,
+                    arrows: true,
+                }
+            },
+            {
+                breakpoint: 480,
+                settings: {
+                    slidesToShow: 2,
+                    arrows: true,
+                    dots: false
+                }
+            }
+        ]
+    });
+});
