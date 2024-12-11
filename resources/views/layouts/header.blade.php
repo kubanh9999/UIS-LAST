@@ -15,35 +15,45 @@
                 <div class="inner-topright">
                     <div class="dropdown">
                         @if (Auth::check())
-                            <button class="btn dropdown-toggle" type="button" id="dropdownMenuButton1"
-                                data-bs-toggle="dropdown" aria-expanded="false">
-                                <img src="{{asset('client/assets/icons/user.svg')}}" alt=""> {{ Auth::user()->name }}
-                            </button>
-                            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
 
-                                <li><a class="dropdown-item" href="#">Quản lý tài khoản</a></li>
-                                <li>
-                                    <form id="logout-form" action="{{ route('logout') }}" method="POST"
-                                        style="display: none;">
-                                        @csrf
-                                    </form>
-                                    <a class="dropdown-item" href="#"
-                                        onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Đăng
-                                        Xuất
-                                    </a>
-                                </li>
-                            </ul>
-                        @else
-                            <button class="btn dropdown-toggle" type="button" id="dropdownMenuButton1"
-                                data-bs-toggle="dropdown" aria-expanded="false">
-                                <img src="{{asset('client/assets/icons/user.svg')}}" alt=""> Tài khoản
-                            </button>
+    @if (Auth::user()->role == 1)
+        <button class="btn dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+            <img src="assets/icons/user.svg" alt=""> {{ Auth::user()->name }}
+        </button>
+        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+            <li><a class="dropdown-item" href="#">Quản lý tài khoản</a></li>
+            <li><a class="dropdown-item" href="{{ url('admin') }}">Đến trang Admin</a></li>
+            <li>
+                <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                    @csrf
+                </form>
+                <a class="dropdown-item" href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Đăng Xuất</a>
+            </li>
+        </ul>
+    @else
+        <button class="btn dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+            <img src="assets/icons/user.svg" alt=""> {{ Auth::user()->name }}
+        </button>
+        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+            <li><a class="dropdown-item" href="#">Quản lý tài khoản</a></li>
+            <li>
+                <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                    @csrf
+                </form>
+                <a class="dropdown-item" href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Đăng Xuất</a>
+            </li>
+        </ul>
+            @endif
+        @else
+            <button class="btn dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                <img src="assets/icons/user.svg" alt=""> Tài khoản
+            </button>
+            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                <li><a class="dropdown-item" href="{{ route('login') }}">Đăng Nhập</a></li>
+                <li><a class="dropdown-item" href="{{ route('register') }}">Đăng ký</a></li>
+            </ul>
+        @endif
 
-                            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                                <li><a class="dropdown-item" href="{{ route('login') }}">Đăng Nhập</a></li>
-                                <li><a class="dropdown-item" href="{{ route('register') }}">Đăng ký</a></li>
-                            </ul>
-                        @endif
                     </div>
                 </div>
             </div>

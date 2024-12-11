@@ -362,19 +362,19 @@ class ProductController extends Controller
     // Tìm kiếm sản phẩm 
     public function search(Request $request)
 {
-    $query = $request->input('query', ''); // Từ khóa tìm kiếm
+    $query = $request->input('query', ''); // Từ khóa tìm kiếm sản phẩm
     $sortOption = $request->input('sort', 'default'); // Tùy chọn sắp xếp
     $priceRange = $request->input('price'); // Phạm vi giá
     $categoryId = $request->input('category_id'); // Lọc theo danh mục
-    $giftBasketQuery = $request->input('gift_basket'); // Tìm kiếm giỏ quà (ProductType)
+    $giftBasketQuery = $request->input('gift_basket'); // Tìm kiếm giỏ quà
 
-    // Lấy danh sách danh mục để hiển thị
+    // Lấy danh sách danh mục
     $categories = Category::all();
 
-    // Bắt đầu query sản phẩm
+    // Truy vấn sản phẩm
     $products = Product::query();
 
-    // Tìm kiếm theo từ khóa
+    // Tìm kiếm sản phẩm theo từ khóa
     if (!empty($query)) {
         $products->where(function ($queryBuilder) use ($query) {
             $queryBuilder->where('name', 'like', "%{$query}%")
@@ -387,7 +387,7 @@ class ProductController extends Controller
         $products->where('category_id', $categoryId);
     }
 
-    // Lọc sản phẩm theo giá
+    // Lọc theo giá
     if (!empty($priceRange)) {
         switch ($priceRange) {
             case 'under_99000':
@@ -411,7 +411,7 @@ class ProductController extends Controller
         }
     }
 
-    // Sắp xếp sản phẩm theo tùy chọn
+    // Sắp xếp sản phẩm
     switch ($sortOption) {
         case 'asc':
             $products->orderBy('price', 'asc');
@@ -430,17 +430,71 @@ class ProductController extends Controller
     // Phân trang sản phẩm
     $products = $products->paginate(6);
 
-    // Lọc ProductType (Giỏ quà) giống như lọc Product
-    $productTypes = ProductType::query();
-
-    // Tìm kiếm giỏ quà theo từ khóa
+    // Chỉ thực thi truy vấn giỏ quà nếu có tham số gift_basket
+    $productTypes = collect(); // Tạo collection rỗng mặc định
     if (!empty($giftBasketQuery)) {
-        $productTypes->where(function ($queryBuilder) use ($giftBasketQuery) {
-            $queryBuilder->where('name', 'like', "%{$giftBasketQuery}%")
-                ->orWhere('description', 'like', "%{$giftBasketQuery}%");
-        });
+        $productTypes = ProductType::query()
+            ->where(function ($queryBuilder) use ($giftBasketQuery) {
+                $queryBuilder->where('name', 'like', "%{$giftBasketQuery}%")
+                    ->orWhere('description', 'like', "%{$giftBasketQuery}%");
+            })
+            ->when($categoryId, function ($queryBuilder) use ($categoryId) {
+                $queryBuilder->where('category_id', $categoryId);
+            })
+            ->when($priceRange, function ($queryBuilder) use ($priceRange) {
+                switch ($priceRange) {
+                    case 'under_99000':
+                        $queryBuilder->whereHas('products', function ($query) {
+                            $query->where('price', '<', 99000);
+                        });
+                        break;
+                    case '99000_201000':
+                        $queryBuilder->whereHas('products', function ($query) {
+                            $query->whereBetween('price', [99000, 201000]);
+                        });
+                        break;
+                    case '201000_301000':
+                        $queryBuilder->whereHas('products', function ($query) {
+                            $query->whereBetween('price', [201000, 301000]);
+                        });
+                        break;
+                    case '301000_501000':
+                        $queryBuilder->whereHas('products', function ($query) {
+                            $query->whereBetween('price', [301000, 501000]);
+                        });
+                        break;
+                    case '501000_1000000':
+                        $queryBuilder->whereHas('products', function ($query) {
+                            $query->whereBetween('price', [501000, 1000000]);
+                        });
+                        break;
+                    case 'above_1000000':
+                        $queryBuilder->whereHas('products', function ($query) {
+                            $query->where('price', '>', 1000000);
+                        });
+                        break;
+                }
+            })
+            ->when($sortOption, function ($queryBuilder) use ($sortOption) {
+                switch ($sortOption) {
+                    case 'asc':
+                        $queryBuilder->orderBy('name', 'asc');
+                        break;
+                    case 'desc':
+                        $queryBuilder->orderBy('name', 'desc');
+                        break;
+                    case 'newest':
+                        $queryBuilder->orderBy('created_at', 'desc');
+                        break;
+                    case 'oldest':
+                        $queryBuilder->orderBy('created_at', 'asc');
+                        break;
+                }
+            })
+            ->paginate(6);
     }
 
+<<<<<<< HEAD
     // Lọc theo danh mục nếu có
     if (!empty($categoryId)) {
         $productTypes->where('category_id', $categoryId);
@@ -502,7 +556,30 @@ class ProductController extends Controller
     $productTypes = $productTypes->paginate(6);
 
     return view('pages.product2', compact('products', 'categories', 'productTypes'))
+=======
+    return view('pages.product', compact('products', 'categories', 'productTypes'))
+>>>>>>> db64f47f549814b5ef7d8c2ef401a5d952ce5aa5
         ->with('query', $query);
+}
+
+
+
+public function deleteCategory($categoryId)
+{
+    // Tìm danh mục cần xóa
+    $category = Category::find($categoryId);
+
+    if ($category) {
+        // Xóa tất cả sản phẩm thuộc danh mục này
+        $category->products()->delete();
+
+        // Xóa danh mục
+        $category->delete();
+
+        return redirect()->route('categories.index')->with('success', 'Danh mục và sản phẩm đã được xóa!');
+    }
+
+    return redirect()->route('categories.index')->with('error', 'Danh mục không tồn tại!');
 }
 
 }
