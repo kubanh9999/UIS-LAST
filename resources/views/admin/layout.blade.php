@@ -101,22 +101,15 @@
                                             @csrf
                                         </form>
                                         <a class="dropdown-item" href="#" onclick="event.preventDefault(); handleLogout();">Đăng Xuất</a>
+                                        <a class="dropdown-item" href="{{ route('home.index') }}" >Đến trang website</a>
                                     </li>                                    
-                                        <li>      
-                                    </li>
-                                </ul>
+                                    </ul>
                                 @endif
                             </div>
-                    </div>
-                           
-                       
-                    
-                </li>
-            </ul>
-
-
-
-        </div>
+                        </div>            
+                    </li>
+                </ul>
+            </div>
        
         <div class="sidebar" id="sidebar">
             <div class="sidebar-inner slimscroll">
