@@ -90,49 +90,48 @@
                         </form>
                     </div>
                     <div class="inner-content">
-                        <div class="inner-content">
-                            @foreach ($products as $product)
-                                <div class="inner-box">
-                                    <div class="badge d-none">Mới</div>
-                                    <a href="{{ route('product.detail', $product->id) }}">
-                                        @php
-                                            $imagePath = public_path($product->image);
-                                        @endphp
+                        @foreach ($products as $product)
+                            <div class="inner-box">
+                                <div class="badge d-none">Mới</div>
+                                <a href="{{ route('product.detail', $product->id) }}">
+                                    @php
+                                        $imagePath = public_path($product->image);
+                                    @endphp
 
-                                        @if (file_exists($imagePath))
-                                            <img src="{{ asset($product->image) }}" alt="Ảnh sản phẩm">
-                                        @else
-                                            <img src="{{ asset('layouts/img/' . $product->image) }}" alt="Ảnh sản phẩm">
-                                        @endif
-                                    </a>
-                                    <h5>
-                                        <a href="{{ route('product.detail', $product->id) }}">{{ $product->name }}</a>
-                                    </h5>
-                                    <div class="inner-foot">
-                                        <div class="inner-price-sale">
-                                            <p class="price">{{ number_format($product->price, 0) }}đ</p>
-                                            <p class="sales" style="{{ $product->sales > 0 ? '' : 'display: none;' }}">Đã
-                                                bán: {{ number_format($product->sales, 1) }} kg</p>
-                                        </div>
-                                        <form action="{{ route('cart.add', ['id' => $product->id]) }}" method="post"
-                                            style="display: inline;">
-                                            @csrf
-                                            <input type="hidden" name="product[id]" value="{{ $product->id }}">
-                                            <input type="hidden" name="product[name]" value="{{ $product->name }}">
-                                            <input type="hidden" name="product[image]" value="{{ $product->image }}">
-                                            <input type="hidden" name="product[price]" value="{{ $product->price }}">
-                                            <input type="hidden" name="quantity" value="1">
-                                            <a href="#" onclick="this.closest('form').submit();" class="btn-cart">Thêm
-                                                giỏ
-                                                hàng
-                                            </a>
-                                        </form>
+                                    @if (file_exists($imagePath))
+                                        <img src="{{ asset($product->image) }}" alt="Ảnh sản phẩm">
+                                    @else
+                                        <img src="{{ asset('layouts/img/' . $product->image) }}" alt="Ảnh sản phẩm">
+                                    @endif
+                                </a>
+                                <h5>
+                                    <a href="{{ route('product.detail', $product->id) }}">{{ $product->name }}</a>
+                                </h5>
+                                <div class="inner-foot">
+                                    <div class="inner-price-sale">
+                                        <p class="price">{{ number_format($product->price, 0) }}đ</p>
+                                        <p class="sales" style="{{ $product->sales > 0 ? '' : 'display: none;' }}">Đã
+                                            bán: {{ number_format($product->sales, 1) }} kg</p>
                                     </div>
+                                    <form action="{{ route('cart.add', ['id' => $product->id]) }}" method="post"
+                                        style="display: inline;">
+                                        @csrf
+                                        <input type="hidden" name="product[id]" value="{{ $product->id }}">
+                                        <input type="hidden" name="product[name]" value="{{ $product->name }}">
+                                        <input type="hidden" name="product[image]" value="{{ $product->image }}">
+                                        <input type="hidden" name="product[price]" value="{{ $product->price }}">
+                                        <input type="hidden" name="quantity" value="1">
+                                        <a href="#" onclick="this.closest('form').submit();" class="btn-cart">Thêm
+                                            giỏ
+                                            hàng
+                                        </a>
+                                    </form>
                                 </div>
-                            @endforeach
-                        </div>
+                            </div>
+                        @endforeach
+                    </div>
 
-                        <div class="inner-content">
+                        <div class="inner-content mt-2">
                             @foreach ($productTypes as $productType)
                                 <div class="inner-box">
                                     <div class="badge d-none">Mới</div>
@@ -153,11 +152,24 @@
                                     </h5>
                                     <div class="inner-foot">
                                         <p class="price">{{ number_format($productType->price_gift, 0) }}đ</p>
+                                        <form action="{{ route('cart.add', ['id' => $productType->id]) }}" method="post"
+                                            style="display: inline;">
+                                            @csrf
+                                            <input type="hidden" id="quantity-hidden" name="quantity" value="1">
+                                            <input type="hidden" name="basket[id]" value="{{ $productType->id }}">
+                                            <input type="hidden" name="basket[name]" value="{{ $productType->name }}">
+                                            <input type="hidden" name="basket[image]" value="{{ $productType->image }}">
+                                            <input type="hidden" name="basket[price_gift]" value="{{ $productType->price_gift }}">
+                                            <a href="#" onclick="this.closest('form').submit();" class="btn-cart">Thêm
+                                                giỏ
+                                                hàng
+                                            </a>
+                                        </form>
                                     </div>
                                 </div>
                             @endforeach
                         </div>
-                    </div>
+                    
 
                     <ul class="pagination justify-content-center mt-3">
                         <!-- Previous Page Link -->
