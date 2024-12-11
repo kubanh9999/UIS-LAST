@@ -320,16 +320,27 @@
                             <small>{{ $latestPost->created_at }}</small>
                         </div>
                         <div class="inner-text">
-                            <p> @php
-                                $clearBreakLineArrStr = Str::replace('&nbsp;', '', $latestPost->content);
-                                $clearImgArrStr = preg_replace("<img([\w\W]+?)/>", "", $clearBreakLineArrStr);
-                            @endphp
-                            @foreach (explode("\n", $clearImgArrStr) as $key => $item)
-                                {!! $item !!}
-                                @if ($key === 3)
-                                    @break
-                                @endif
-                            @endforeach</p>
+                            <p>
+                                <div style="
+                                display: -webkit-box;
+                                -webkit-line-clamp: 3;
+                                -webkit-box-orient: vertical;
+                                overflow: hidden;
+                                text-overflow: ellipsis;">
+                                @php
+                                    // Loại bỏ các ký tự &nbsp; và thẻ <img>
+                                    $clearBreakLineArrStr = \Illuminate\Support\Str::replace('&nbsp;', '', $latestPost->content);
+                                    $clearImgArrStr = preg_replace("/<img([\w\W]+?)\/?>/", "", $clearBreakLineArrStr);
+                                @endphp
+                            
+                                @foreach (explode("\n", $clearImgArrStr) as $key => $item)
+                                    {!! $item !!}
+                                    @if ($key === 3)
+                                        @break
+                                    @endif
+                                @endforeach
+                            </div>
+                            </p>
                         </div>
                     </div>
                     <div class="inner-right">
@@ -352,16 +363,26 @@
                                         {{-- <h6>{{ $post->author }}</h6> --}}
                                         <small>{{ $post->created_at }}</small>
                                     </div>
-                                    <p>  @php
-                                        $clearBreakLineArrStr = Str::replace('&nbsp;', '', $latestPost->content);
-                                        $clearImgArrStr = preg_replace("<img([\w\W]+?)/>", "", $clearBreakLineArrStr);
-                                    @endphp
-                                    @foreach (explode("\n", $clearImgArrStr) as $key => $item)
-                                        {!! $item !!}
-                                        @if ($key === 3)
-                                            @break
-                                        @endif
-                                    @endforeach</p>
+                                    <p> <a href="{{ route('post.show', ['id' => $post->id]) }}" style="
+                                        color: black; 
+                                        text-decoration: none; 
+                                        font-size: 15px;
+                                        display: -webkit-box; 
+                                        -webkit-line-clamp: 2; 
+                                        -webkit-box-orient: vertical; 
+                                        overflow: hidden; 
+                                        text-overflow: ellipsis;">
+                                        @php
+                                            // Loại bỏ các ký tự &nbsp; và thẻ <img>
+                                            $clearBreakLineArrStr = \Illuminate\Support\Str::replace('&nbsp;', "", $post->content);
+                                            $clearImgArrStr = preg_replace("/<img([\w\W]+?)\/?>/", "", $clearBreakLineArrStr);
+                                    
+                                            // Loại bỏ thẻ HTML không cần thiết
+                                            $cleanContent = strip_tags($clearImgArrStr);
+                                        @endphp
+                                    
+                                        {!! $cleanContent !!}
+                                    </a></p>
                                 </div>
                             </div>
                         @endforeach
