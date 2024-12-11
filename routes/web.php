@@ -26,6 +26,7 @@ use App\Http\Controllers\SubscriberController;
 use App\Http\Controllers\LocationController;
 use App\Models\Product; 
 
+Route::get('/delete-category/{categoryId}', [ProductController::class, 'deleteCategory'])->name('category.delete');
 
 Route::get('/api/product-count', function() {
     return response()->json(['count' => Product::count()]);
