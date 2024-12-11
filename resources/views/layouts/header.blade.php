@@ -4,11 +4,11 @@
             <div class="inner-topbar">
                 <div class="inner-topleft">
                     <div class="inner-top-contact">
-                        <img class="inner-icon" src="assets/icons/phone.svg" alt="">
+                        <img class="inner-icon" src="{{asset('client/assets/icons/phone.svg')}}" alt="">
                         <span class="inner-text">0961710742</span>
                     </div>
                     <div class="inner-top-contact">
-                        <img class="inner-icon" src="assets/icons/mail.svg" alt="">
+                        <img class="inner-icon" src="{{asset('client/assets/icons/mail.svg')}}" alt="">
                         <span class="inner-text">uis.fruits@gmail.com</span>
                     </div>
                 </div>
@@ -17,7 +17,7 @@
                         @if (Auth::check())
                             <button class="btn dropdown-toggle" type="button" id="dropdownMenuButton1"
                                 data-bs-toggle="dropdown" aria-expanded="false">
-                                <img src="assets/icons/user.svg" alt=""> {{ Auth::user()->name }}
+                                <img src="{{asset('client/assets/icons/user.svg')}}" alt=""> {{ Auth::user()->name }}
                             </button>
                             <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
 
@@ -36,7 +36,7 @@
                         @else
                             <button class="btn dropdown-toggle" type="button" id="dropdownMenuButton1"
                                 data-bs-toggle="dropdown" aria-expanded="false">
-                                <img src="assets/icons/user.svg" alt=""> Tài khoản
+                                <img src="{{asset('client/assets/icons/user.svg')}}" alt=""> Tài khoản
                             </button>
 
                             <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
@@ -76,13 +76,13 @@
             </div>
             <div class="inner-logo">
                 <a href="{{ route('home.index') }}">
-                    <img src="client/assets/img/logo.png" alt="logo">
+                    <img src="{{asset('client/assets/img/logo.png')}}" alt="logo">
                 </a>
             </div>
             <div class="inner-search">
                 <form action="{{ route('products.search') }}" method="GET">
                     <input name="query" type="text" placeholder="Tìm kiếm ở đây ..." value="{{ request()->input('query') }}">
-                    <button><img src="assets/icons/search.svg" alt=""></button>
+                    <button><img src="{{asset('client/assets/icons/search.svg')}}" alt=""></button>
                 </form>
             </div>
             <div class="inner-menu">
@@ -96,7 +96,7 @@
             </div>
             <div class="inner-cart">
                 <a href="{{ route('cart.index') }}" class="inner-main">
-                    <img src="client/assets/icons/cart.svg" alt="cart">
+                    <img src="{{asset('client/assets/icons/cart.svg')}}" alt="cart">
                     <span class="translate-middle badge rounded-pill bg-danger"
                         id="cart-count">{{ count(Session::get('cart', [])) }}</span>
                 </a>
