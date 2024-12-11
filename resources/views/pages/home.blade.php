@@ -111,6 +111,24 @@
             <div class="swapper">
                 <div class="inner-title">
                     <h3>Sản phẩm bán chạy</h3>
+
+                    {{-- Load danh mục mobile --}}
+                    <button class="dropdown-toggle load-category-mobile" type="button" id="dropdownLoadCategory"
+                        data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="fa-solid fa-bars"></i>
+                    </button>
+                    <ul class="dropdown-menu" aria-labelledby="dropdownLoadCategory">
+                        @if ($topProductsGrouped->isNotEmpty())
+                            @foreach ($topProductsGrouped as $categoryName => $products)
+                                <li><a class="dropdown-item" href="javascript:void(0);" class="category-link category-link-best"
+                                        data-category="{{ $categoryName }}" data-section="sale">{{ $categoryName }}</a>
+                                </li>
+                            @endforeach
+                        @else
+                            <li><a class="dropdown-item" href="#">Không có danh mục</a></li>
+                        @endif
+                    </ul>
+
                     <ul class="load-category">
                         @if ($topProductsGrouped->isNotEmpty())
                             @foreach ($topProductsGrouped as $categoryName => $products)
@@ -123,7 +141,7 @@
                         @endif
                     </ul>
                 </div>
-                <div class="inner-content product-grid product-grid-best">
+                <div class="inner-content product-grid-best">
                     @foreach ($topProducts as $item)
                         <div class="inner-box">
                             <a href="{{ route('product.detail', $item->id) }}">
@@ -182,6 +200,24 @@
             <div class="swapper">
                 <div class="inner-title">
                     <h3>Sản phẩm mới</h3>
+
+                    {{-- Load danh mục mobile --}}
+                    <button class="dropdown-toggle load-category-mobile" type="button" id="dropdownLoadCategoryBest"
+                        data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="fa-solid fa-bars"></i>
+                    </button>
+                    <ul class="dropdown-menu category-title category-new" aria-labelledby="dropdownLoadCategoryBest">
+                        @if ($newProductsGrouped->isNotEmpty())
+                            @foreach ($newProductsGrouped as $categoryName => $products)
+                                <li><a class="dropdown-item" href="javascript:void(0);" class="category-link category-link-new"
+                                        data-category="{{ $categoryName }}" data-section="new">{{ $categoryName }}</a>
+                                </li>
+                            @endforeach
+                        @else
+                            <li><a class="dropdown-item" href="#">Không có danh mục</a></li>
+                        @endif
+                    </ul>
+
                     <ul class="load-category category-title category-new">
                         @if ($newProductsGrouped->isNotEmpty())
                         @foreach ($newProductsGrouped as $categoryName => $products)
@@ -194,8 +230,7 @@
                         @endif
                     </ul>
                 </div>
-                <div class="product-grid product-grid-new" class="product-grid">
-                <div class="inner-content">
+                <div class="inner-content product-grid-new">
                     @foreach ($newProducts as $item)
                         <div class="inner-box">
                             <div class="badge">Mới</div>
@@ -383,24 +418,19 @@
                         ? product.image  // Nếu có, giữ nguyên đường dẫn
                         : 'layouts/img/' + product.image;  // Nếu không, thay thế bằng 'layouts/img/'
                         html += `
-                          
-                <div class="inner-content">
                           <div class="inner-box">
                             <div class="badge">Mới</div>
                             <a href="/product/${product.id}">
-                              <img src="${imagePath}" alt="${product.name}">
+                              <img src="${imagePath}" alt="${product.name}" width="100%" height="200px">
                             </a>
                             <h5>
-                                <a href="/product/${product.id}"</a>
+                                <a href="/product/${product.id}" >${product.name}</a>
                             </h5>
                             <div class="inner-foot">
-                               ${new Intl.NumberFormat('vi-VN').format(product.price)} VND
-                                
+                               <p class="price">${new Intl.NumberFormat('vi-VN').format(product.price)}đ </p>
+                                <a href="#" class="btn-cart">Thêm giỏ hàng</a>
                             </div>
                         </div>
-                        
-                         
-                        </div> 
                         `;
                     });
                     
@@ -439,15 +469,19 @@
                         ? product.image  // Nếu có, giữ nguyên đường dẫn
                         : 'layouts/img/' + product.image;  // Nếu không, thay thế bằng 'layouts/img/'
                         html += `
-                            <div class="product-card">
+                            <div class="inner-box">
                                 <a href="/product/${product.id}">
-                                    <img src="=${imagePath}" alt="${product.name}">
+                                    <img src="${imagePath}" alt="${product.name}" width="100%" height="200px">
                                 </a>
-                                <h5 class="product-name">
+                                <h5>
                                     <a href="/product/${product.id}">${product.name}</a>
                                 </h5>
-                                <div class="price">
-                                    ${new Intl.NumberFormat('vi-VN').format(product.price)} VND
+                                <div class="inner-foot">
+                                    <div class="inner-price-sale">
+                                        <p class="price">${new Intl.NumberFormat('vi-VN').format(product.price)}đ</p>
+                                        <p class="sales">Đã bán: ${new Intl.NumberFormat('vi-VN').format(product.sales)}kg</p>
+                                    </div>
+                                    <a href="#" class="btn-cart">Thêm giỏ hàng</a>
                                 </div>
                             </div>
                         `;

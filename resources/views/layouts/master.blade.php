@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="{{ asset('client/assets/css/bootstrap.min.css') }}" >
     <link rel="stylesheet" href="{{ asset('client/assets/css/base.css') }}">
     <link rel="stylesheet" href="{{ asset('client/assets/css/style.css') }}">
-    <link rel="shortcut icon" href="client/assets/img/uis.png" type="image/x-icon">
+    <link rel="shortcut icon" href="{{asset('client/assets/img/uis.png')}}" type="image/x-icon">
   
     <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" rel="stylesheet">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
