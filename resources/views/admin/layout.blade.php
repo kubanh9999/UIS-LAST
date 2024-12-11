@@ -96,17 +96,13 @@
                                 </button>
                                 <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
     
-                                    <li><form id="logout-form" action="{{ route('logout') }}" method="POST"
-                                        style="display: none;">
-                                        @csrf
-                                    </form>
-                                    <a class="dropdown-item" href="#"
-                                        onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Đăng
-                                        Xuất
-                                    </a></li>
                                     <li>
-                                     
-                                       
+                                        <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                                            @csrf
+                                        </form>
+                                        <a class="dropdown-item" href="#" onclick="event.preventDefault(); handleLogout();">Đăng Xuất</a>
+                                    </li>                                    
+                                        <li>      
                                     </li>
                                 </ul>
                                 @endif
@@ -236,6 +232,39 @@
             }
         })
     }
+    // Sau khi người dùng nhấn đăng xuất
+// Hàm thay thế lịch sử trình duyệt sau khi đăng xuất
+const handleLogout = () => {
+    // Ngừng lưu lịch sử trình duyệt
+    window.history.pushState(null, null, window.location.href); // Thêm trang hiện tại vào lịch sử
+    window.history.forward(); // Điều hướng trình duyệt tới trang trước đó
+
+    // Thêm sự kiện trước khi tải lại trang (ngăn quay lại)
+    window.addEventListener("popstate", function() {
+        window.history.forward();
+    });
+
+    // Gửi form đăng xuất
+    document.getElementById('logout-form').submit();
+};
+
+// Hàm xử lý sự kiện beforeunload để cảnh báo người dùng nếu họ cố gắng rời khỏi trang
+const beforeUnloadHandler = (event) => {
+    event.preventDefault();
+    event.returnValue = "Bạn có chắc chắn muốn rời khỏi trang?"; // Thông báo cảnh báo
+};
+
+// Thêm sự kiện beforeunload khi có thay đổi dữ liệu hoặc khi người dùng nhấn logout
+const nameInput = document.querySelector("#name");
+nameInput.addEventListener("input", (event) => {
+    if (event.target.value !== "") {
+        window.addEventListener("beforeunload", beforeUnloadHandler);
+    } else {
+        window.removeEventListener("beforeunload", beforeUnloadHandler);
+    }
+});
+
+
 </script>
 </body>
 

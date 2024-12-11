@@ -168,13 +168,21 @@ class AuthController extends Controller
 
     // Đăng xuất
     public function logout(Request $request)
-    {
-        Auth::logout();
-        session()->forget(['cart']);
-        $request->session()->invalidate();  // Hủy session
-$request->session()->regenerateToken(); 
-        return redirect()->route('home.index'); // Điều hướng về trang login
-    }
+{
+    Auth::logout();  // Đăng xuất người dùng
+    session()->forget(['cart']);  // Xóa giỏ hàng (nếu có)
+    $request->session()->invalidate();  // Hủy session
+    $request->session()->regenerateToken();  // Tạo lại token CSRF để bảo mật
+
+    // Chuyển hướng về trang login và gửi script để thay thế lịch sử trình duyệt
+    return redirect()->route('login')  // Chuyển hướng về trang đăng nhập
+                     ->with('message', 'Bạn đã đăng xuất thành công.')  // Tùy chọn thông báo cho người dùng
+                     ->header('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate')  // Ngăn lưu cache
+                     ->header('Pragma', 'no-cache')  // Xóa cache trình duyệt
+                     ->header('Expires', '0');  // Đảm bảo không có dữ liệu cũ được lưu
+}
+
+
 
     // Chuyển hướng đến Google để đăng nhập
     public function redirectToGoogle()

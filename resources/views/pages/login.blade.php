@@ -1,6 +1,5 @@
 @extends('layouts.master')
 @section('title', 'Đăng nhập')
-
 @section('content')
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
@@ -87,6 +86,18 @@
 }
 </style>
 
+@if(session('replaceHistory'))
+    <script type="text/javascript">
+        // Thay thế lịch sử trang để ngăn quay lại trang trước
+        window.history.replaceState(null, null, window.location.href);
+        window.history.pushState(null, null, window.location.href);
+
+        // Lắng nghe sự kiện back của trình duyệt và ngăn lại
+        window.onpopstate = function () {
+            window.history.forward();
+        };
+    </script>
+@endif
 
 @if(session('error'))
     <script>
