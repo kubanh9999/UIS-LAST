@@ -12,76 +12,60 @@
                         <i class="fa-solid fa-plus"></i>THÊM DANH MỤC
                     </a>
                 </div>
-                
             </div>
             <div class="wordset">
                 <ul>
-                    
                     <li>
                         <a href="{{route('admin.indexCategory.post')}}" class="btn btn-success" style="text-decoration: none; color: white; float: right">xem trang danh mục bài viết</a>
                     </li>
                 </ul>
             </div>
         </div>
-        <script>
-            @if(session('success'))
-                Swal.fire({
-                    title: 'Thành công!',
-                    text: "{{ session('success') }}",
-                    icon: 'success',
-                    confirmButtonText: 'Đóng'
-                });
-            @endif
-        </script>
-            <div class="card">
-                <div class="card-body">
-                    <div class="table-responsive">
-                        <table class="table datanew">
-                            <thead>
-                                <tr>
-                                    <th>
-                                        <label class="checkboxs">
-                                            <input type="checkbox" id="select-all">
-                                            <span class="checkmarks"></span>
-                                        </label>
-                                    </th>
-                                    <th>Tên danh mục</th>
-                                    <th>Ngày tạo</th>
-                                    <th>Hành động</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach($category as $item)
-                                <tr id="category-{{ $item->id }}">
-                                    <td>
-                                        <label class="checkboxs">
-                                            <input type="checkbox">
-                                            <span class="checkmarks"></span>
-                                        </label>
-                                    </td>
-                                    <td>
-                                        <!-- Editable category name -->
-                                        <span class="category-name" data-id="{{ $item->id }}" contenteditable="true">
-                                            {{ $item->name }}
-                                        </span>
-                                    </td>
-                                    <td>{{ $item->created_at }}</td>
-                                    <td>
-                                        <!-- Edit Button (Optional if using inline editing) -->
-                                        <a class="me-3" href="{{ route('admin.categories.edit', $item->id) }}">
-                                            <i class="fa-solid fa-pen-to-square"></i>
-                                        </a>
-                                        <!-- Delete Button -->
-                                        <button type="button" class="btn btn-sm delete-category-btn" data-id="{{ $item->id }}" data-toggle="modal" data-target="#deleteCategoryModal">
-                                            <i class="fas fa-trash-alt"></i>
-                                        </button>
-                                    </td>
-                                </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
-                    </div>
-                    
+
+        <div class="card">
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table datanew">
+                        <thead>
+                            <tr>
+                                <th>
+                                    <label class="checkboxs">
+                                        <input type="checkbox" id="select-all">
+                                        <span class="checkmarks"></span>
+                                    </label>
+                                </th>
+                                <th>Tên danh mục</th>
+                                <th>Ngày tạo</th>
+                                <th>Hành động</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach($category as $item)
+                            <tr id="category-{{ $item->id }}">
+                                <td>
+                                    <label class="checkboxs">
+                                        <input type="checkbox">
+                                        <span class="checkmarks"></span>
+                                    </label>
+                                </td>
+                                <td>
+                                    <span class="category-name" data-id="{{ $item->id }}" contenteditable="true">
+                                        {{ $item->name }}
+                                    </span>
+                                </td>
+                                <td>{{ $item->created_at }}</td>
+                                <td>
+                                    <a class="me-3" href="{{ route('admin.categories.edit', $item->id) }}">
+                                        <i class="fa-solid fa-pen-to-square"></i>
+                                    </a>
+                                    <button type="button" class="btn btn-sm delete-category-btn" data-id="{{ $item->id }}" data-toggle="modal" data-target="#deleteCategoryModal">
+                                        <i class="fas fa-trash-alt"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
@@ -126,31 +110,28 @@
 
 @push('scripts')
 <script>
-    // Script để cập nhật action của form xóa với id danh mục
-    document.querySelectorAll('.delete-category-btn').forEach(button => {
-        button.addEventListener('click', function() {
-            var categoryId = this.getAttribute('data-id');
-            var actionUrl = '/admin/categories/' + categoryId;
-            document.getElementById('deleteForm').setAttribute('action', actionUrl);
-        });
-    });
-
-    // Script để cập nhật tên danh mục trực tiếp
     $(document).ready(function() {
-        $('.category-name').on('blur', function() {
+        // Khi người dùng nhấn nút xóa, cập nhật action của form xóa
+        $('.delete-category-btn').on('click', function() {
+            var categoryId = $(this).data('id');
+            var actionUrl = '/admin/categories/' + categoryId;
+            $('#deleteForm').attr('action', actionUrl);
+        });
+
+        // Cập nhật tên danh mục khi người dùng chỉnh sửa
+        $('.category-name').on('focusout', function() {
             var categoryName = $(this).text(); // Lấy tên danh mục sau khi chỉnh sửa
             var categoryId = $(this).data('id'); // Lấy ID danh mục
 
             // Gửi yêu cầu cập nhật danh mục qua AJAX
             $.ajax({
-                url: '/admin/categories/update/full/' + categoryId, // Đường dẫn route
+                url: '/admin/categories/update/full/' + categoryId,
                 method: 'PUT',
                 data: {
                     name: categoryName,
                     _token: '{{ csrf_token() }}'
                 },
                 success: function(response) {
-                    // Hiển thị thông báo thành công
                     Swal.fire({
                         title: 'Cập nhật thành công!',
                         text: 'Danh mục đã được cập nhật.',
@@ -159,7 +140,6 @@
                     });
                 },
                 error: function(error) {
-                    // Hiển thị thông báo lỗi
                     Swal.fire({
                         title: 'Cập nhật thất bại!',
                         text: 'Đã xảy ra lỗi, vui lòng thử lại.',
