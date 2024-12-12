@@ -138,7 +138,7 @@ class CheckoutController extends Controller
             'phone' => $request->phone,
             // Cung cấp giá trị mặc định nếu không có dữ liệu
             'payment_method' => "thanh toán tiền mặt",
-            'status' => 'Đang xử lý',
+            'status' => '0',
             'token' => $token,
             'order_date' => now(),
             'user_id' => Auth::id(),
@@ -462,7 +462,7 @@ class CheckoutController extends Controller
             'phone' => $request->phone,
             // Cung cấp giá trị mặc định nếu không có dữ liệu
             'payment_method' => "thanh toán VNPAY",
-            'status' => 'Đang xử lý',
+            'status' => '0',
             'token' => $vnp_TxnRef,
             'order_date' => now(),
             'user_id' => Auth::id(),
@@ -663,7 +663,7 @@ class CheckoutController extends Controller
                     'phone' => $request->phone,
                     // Cung cấp giá trị mặc định nếu không có dữ liệu
                     'payment_method' => "thanh toán MOMO",
-                    'status' => 'Đang xử lý',
+                    'status' => '0',
                     'token' => $vnp_TxnRef,
                     'order_date' => now(),
                     'user_id' => Auth::id(),
