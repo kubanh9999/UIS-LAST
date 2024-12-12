@@ -512,10 +512,10 @@ public function deleteCategory($categoryId)
         // Xóa danh mục
         $category->delete();
 
-        return redirect()->route('categories.index')->with('success', 'Danh mục và sản phẩm đã được xóa!');
+        return redirect()->route('admin.categories.index')->with('success', 'Danh mục và sản phẩm đã được xóa!');
     }
 
-    return redirect()->route('categories.index')->with('error', 'Danh mục không tồn tại!');
+    return redirect()->route('admin.categories.index')->with('error', 'Danh mục không tồn tại!');
 }
 
 }
