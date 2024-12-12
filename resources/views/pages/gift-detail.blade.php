@@ -277,6 +277,22 @@
                 button.classList.toggle('liked', !isLiked); // Thay đổi class liked
             });
         });
+        document.addEventListener('DOMContentLoaded', function () {
+            const toggleReplyButtons = document.querySelectorAll('.btn-toggle-replies');
+
+            toggleReplyButtons.forEach(button => {
+                button.addEventListener('click', function () {
+                    const replyList = button.nextElementSibling; // Lấy phần danh sách câu trả lời
+                    if (replyList.style.display === 'none' || replyList.style.display === '') {
+                        replyList.style.display = 'block'; // Hiển thị câu trả lời
+                        button.textContent = 'Ẩn câu trả lời'; // Thay đổi nút thành "Ẩn"
+                    } else {
+                        replyList.style.display = 'none'; // Ẩn câu trả lời
+                        button.textContent = `Xem ${replyList.children.length} câu trả lời`; // Thay đổi lại nút thành "Xem"
+                    }
+                });
+            });
+        });
 
         // Phần xử lý gửi trả lời
         document.querySelectorAll('.btn-submit-reply').forEach(button => {

@@ -19,7 +19,11 @@
                         <div class="inner-head">
                             <h4>Danh mục sản phẩm</h4>
                         </div>
+                        
                         <ul class="inner-list">
+                            <li class="category-item">
+                                <a href="{{ route('products.byCategory', array_merge(request()->except('category'), ['category' => 'all'])) }}">Tất cả sản phẩm</a>
+                            </li>
                             @foreach ($categories as $category)
                                 <li>
                                     <a
