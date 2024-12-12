@@ -18,7 +18,7 @@ class CartController extends Controller
         $total = $this->calculateTotal();
       /*   dd($cart); */
         $products = DB::table('product_types')->get();
-        return view('pages.cart', compact('cart', 'total','products'));
+        return view('pages.cart2', compact('cart', 'total','products'));
     }
 
     // Thêm sản phẩm vào giỏ hàng
