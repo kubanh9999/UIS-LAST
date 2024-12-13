@@ -2,6 +2,18 @@
 @section('title', 'Trang chủ')
 @section('content')
 
+{{-- @if (session('success'))
+    <div class="alert alert-success alert-dismissible fade show" role="alert" style="text-align: center">
+        <strong><i class="fas fa-check-circle"></i> Thành công!</strong> {{ session('success') }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+@endif
+@if (session('error'))
+    <div class="alert alert-danger alert-dismissible fade show" role="alert" style="text-align: center">
+        <strong><i class="fas fa-exclamation-circle"></i> Lỗi!</strong> {{ session('error') }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+@endif --}}
     @if (session('success'))
         <script>
             toastr.success('{{ session('success') }}');
@@ -336,7 +348,7 @@
                             
                                 @foreach (explode("\n", $clearImgArrStr) as $key => $item)
                                     {!! $item !!}
-                                    @if ($key === 3)
+                                    @if ($key === 4)
                                         @break
                                     @endif
                                 @endforeach

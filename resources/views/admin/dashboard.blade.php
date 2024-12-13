@@ -56,7 +56,18 @@
         color: aliceblue;
     }
 </style>
-
+@if (session('success'))
+    <div class="alert alert-success alert-dismissible fade show" role="alert" style="text-align: center">
+        <strong><i class="fas fa-check-circle"></i> Thành công!</strong> {{ session('success') }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+@endif
+@if (session('error'))
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        <strong><i class="fas fa-exclamation-circle"></i> Lỗi!</strong> {{ session('error') }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+@endif
 @section('content')
     <div class="page-wrapper">
         <div class="content">
