@@ -125,9 +125,8 @@
                                         <input type="hidden" name="product[image]" value="{{ $product->image }}">
                                         <input type="hidden" name="product[price]" value="{{ $product->price }}">
                                         <input type="hidden" name="quantity" value="1">
-                                        <a href="#" onclick="this.closest('form').submit();" class="btn-cart">Thêm
-                                            giỏ
-                                            hàng
+                                        <a href="#" onclick="this.closest('form').submit();" class="btn-cart">
+                                            <i class="fa-solid fa-cart-shopping"></i> 
                                         </a>
                                     </form>
                                 </div>
