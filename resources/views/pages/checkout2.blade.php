@@ -1,7 +1,26 @@
 @extends('layouts.master')
 @section('title', 'Thanh toán')
 @section('content')
-
+<style>
+    #message {
+        text-align: center;
+    border-radius: 5px;
+    padding: 15px;
+    font-size: 14px;
+    font-weight: bold;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+.alert-success {
+    background-color: #d4edda;
+    color: #155724;
+    border-color: #c3e6cb;
+}
+.alert-danger {
+    background-color: #f8d7da;
+    color: #721c24;
+    border-color: #f5c6cb;
+}
+</style>
 
     <div class="container">
         <nav aria-label="breadcrumb">
@@ -12,7 +31,7 @@
             </ol>
         </nav>
     </div>
-
+    <div id="message" class="message mt-3"></div>
     <section class="section-checkout">
         <div class="container">
             <div class="swapper">
@@ -20,7 +39,7 @@
                     @csrf
                     <div class="inner-form-group">
                         <div class="input-group">
-                            <input type="text" name="discount_code" id="discount_code" placeholder="Nhập mã giảm giá"
+                            <input type="text"name="discount_code" id="discount_code"  placeholder="Nhập mã giảm giá"
                                 required>
                             <button type="submit">Áp dụng</button>
                         </div>
@@ -34,7 +53,7 @@
                             <div class="group-form">
                                 <label for="name">Họ và tên</label>
                                 <input type="text" name="name" id="name" class="custom-form-control"
-                                    placeholder="Họ và tên" value="{{ old('name', $user->name) }}" required>
+                                    placeholder="Họ và tên" value="{{ old('name', $user->name ?? '') }}" required>
                                 <small id="name-error" class="text-danger" style="display:none;">
                                     Vui lòng nhập họ và tên
                                 </small>
@@ -42,7 +61,7 @@
                             <div class="group-form">
                                 <label for="email">Email</label>
                                 <input type="email" name="email" id="email" class="custom-form-control"
-                                    placeholder="Email" value="{{ old('email', $user->email) }}" required>
+                                    placeholder="Email" value="{{ old('email', $user->email ?? '') }}" required>
                                 <small id="email-error" class="text-danger" style="display:none;">
                                     Vui lòng nhập email
                                 </small>
@@ -50,7 +69,7 @@
                             <div class="group-form">
                                 <label for="phone">Số điện thoại</label>
                                 <input type="text" name="phone" id="phone" class="custom-form-control"
-                                    placeholder="Số điện thoại" value="{{ old('phone', $user->phone) }}" required>
+                                    placeholder="Số điện thoại" value="{{ old('phone', $user->phone ?? '') }}" required>
                                 <small id="phone-error" class="text-danger" style="display:none;">
                                     Vui lòng nhập số điện thoại
                                 </small>
@@ -58,7 +77,7 @@
                             <div class="group-form">
                                 <label for="name">Địa chỉ</label>
                                 <input type="text" name="address" id="street" class="custom-form-control"
-                                    placeholder="Địa chỉ" value="{{ old('street', $user->street) }}" required>
+                                    placeholder="Địa chỉ" value="{{ old('street', $user->street ?? '') }}" required>
                                 <small id="street-error" class="text-danger" style="display:none;">
                                     Vui lòng nhập địa chỉ
                                 </small>
@@ -66,21 +85,25 @@
                             <div class="group-form">
                                 <label for="name">Tỉnh/Thành phố</label>
                                 <select class="custom-form-control" name="province_id" id="province" required>
-                                    <option value="{{ $user->province_id }}">
+                                    <option value="{{ $user->province_id ?? '' }}">
                                         {{ $user->province->name ?? 'Vui lòng chọn Tỉnh/Thành phố' }}
                                     </option>
-                                    @foreach ($provinces as $province)
-                                        <option value="{{ $province->province_id }}"
-                                            {{ $province->province_id == $user->province_id ? 'selected' : '' }}>
-                                            {{ $province->name }}
-                                        </option>
-                                    @endforeach
+                                    @if (!empty($provinces))
+                                        @foreach ($provinces as $province)
+                                            <option value="{{ $province->province_id ?? '' }}" 
+                                                {{ $province->province_id == ($user->province_id ?? '') ? 'selected' : '' }}>
+                                                {{ $province->name }}
+                                            </option>
+                                        @endforeach
+                                    @else
+                                        <option value="">Không có dữ liệu</option>
+                                    @endif
                                 </select>
                             </div>
                             <div class="group-form">
                                 <label for="name">Quận/Huyện</label>
                                 <select class="custom-form-control district" name="district_id" id="district" required>
-                                    <option value="{{ $user->district_id }}">
+                                    <option value="{{ $user->district_id ?? ''}}">
                                         {{ $user->district->name ?? 'Vui lòng chọn Quận/Huyện' }}
                                     </option>
                                 </select>
@@ -88,7 +111,7 @@
                             <div class="group-form">
                                 <label for="name">Phường/Xã</label>
                                 <select class="custom-form-control" name="ward_id" id="ward" required>
-                                    <option value="{{ $user->wards_id }}">
+                                    <option value="{{ $user->wards_id ?? ''}}">
                                         {{ $user->ward->name ?? 'Vui lòng chọn Phường/Xã' }}
                                     </option>
                                 </select>
@@ -263,6 +286,8 @@
                     method: 'POST',
                     data: $(this).serialize(),
                     success: function(response) {
+                        console.log('response',response);
+                        
                         let totalAfterDiscount = parseFloat(response.total_price)
                             .toLocaleString('vi-VN', {
                                 style: 'currency',
