@@ -9,7 +9,7 @@
                     </div>
                     <div class="inner-top-contact">
                         <img class="inner-icon" src="{{asset('client/assets/icons/mail.svg')}}" alt="">
-                        <span class="inner-text">uis.fruits@gmail.com</span>
+                        <span class="inner-text">uisfruits@gmail.com</span>
                     </div>
                 </div>
                 <div class="inner-topright">
