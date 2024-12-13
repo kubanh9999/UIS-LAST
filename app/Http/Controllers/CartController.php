@@ -170,7 +170,6 @@ class CartController extends Controller
         // Tính tổng tiền và số lượng sản phẩm
         $totalPrice = $this->calculateTotal();
         $cartItemCount = array_sum(array_column($cart, 'quantity'));
-
         return response()->json([
             'success' => true,
             'message' => 'Sản phẩm đã xóa thành công',

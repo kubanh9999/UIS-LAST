@@ -40,10 +40,10 @@ main {
 .btn-cart { 
     margin-bottom: 0;
     padding: 5px;
-    font-size: 12px;
+    font-size: 17px;
     background-color: var(--color-first);
     color: var(--color-three);
-    border-radius: 10px;
+    border-radius: 22px;
     cursor: pointer;
 }
 .btn-cart:hover {
