@@ -275,10 +275,12 @@ span.status.HoanThanh {
         @endif
         <!-- Hiển thị thông báo thành công -->
         @if (session('success'))
-            <div class="alert alert-success">
-                {{ session('success') }}
-            </div>
-        @endif
+        <div class="alert alert-success alert-dismissible fade show" role="alert" style="position: relative; padding: 15px 20px; margin-bottom: 15px; border: 1px solid #c3e6cb; border-radius: 5px; background-color: #d4edda; color: #155724; text-align: center;">
+            <strong><i class="fas fa-check-circle"></i> Thành công! </strong> 
+            {{ session('success') }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close" style="position: absolute; top: 10px; right: 15px; background: none; border: none; font-size: 18px; color: #155724; cursor: pointer;">&times;</button>
+        </div>
+    @endif
 
         <!-- Hiển thị thông báo lỗi -->
         @if (session('error'))
