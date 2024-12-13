@@ -324,8 +324,8 @@
                 form.action = isLiked ? `/comments/${commentId}/unlike` : `/comments/${commentId}/like`;
 
                 form.innerHTML = `
-            <input type="hidden" name="_token" value="${document.querySelector('meta[name="csrf-token"]').getAttribute('content')}">
-            `;
+                <input type="hidden" name="_token" value="${document.querySelector('meta[name="csrf-token"]').getAttribute('content')}">
+                `;
                 document.body.appendChild(form);
                 form.submit();
 
