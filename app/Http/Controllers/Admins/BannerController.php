@@ -139,6 +139,7 @@ class BannerController extends Controller
   
       // Cập nhật thông tin banner/-strong/-heart:>:o:-((:-h $banner->position = $request->position;
       $banner->type = $request->type;
+      $banner->position = $request->position; 
       $banner->alt_text = $request->alt_text;
       $banner->link = $link;
       $banner->category_id = $request->category_id;
