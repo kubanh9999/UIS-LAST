@@ -66,7 +66,7 @@ class AuthController extends Controller
     // Hiển thị form đăng ký
     public function showRegisterForm()
     {
-        return view('pages.register');
+        return view('pages.register2');
     }
 
     // Xử lý đăng ký
@@ -134,7 +134,7 @@ class AuthController extends Controller
     // Hiển thị form đăng nhập
     public function showLoginForm()
     {
-        return view('pages.login');
+        return view('pages.login2');
     }
 
     // Xử lý đăng nhập
