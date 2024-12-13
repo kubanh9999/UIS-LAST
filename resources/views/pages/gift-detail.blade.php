@@ -2,6 +2,30 @@
 @section('title', 'Chi tiết sản phẩm')
 
 @section('content')
+<style>
+    .custom-gift-btn a {
+    display: inline-block;
+    width: 230px;
+    padding: 10px 20px;
+    font-size: 16px;
+    font-weight: bold;
+    color: #fff;
+    background-color: #74c36f;
+    border: 2px solid #74c36f;
+    ;
+    border-radius: 8px;
+    text-align: center;
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+.custom-gift-btn a:active {
+    background-color: #1e7e34; /* Màu tối hơn khi nhấn */
+    border-color: #1e7e34;
+    transform: scale(0.98); /* Thu nhỏ nhẹ khi nhấn */
+}
+
+</style>
 
 
     {{-- Hiển thị thông báo thành công --}}
@@ -66,9 +90,9 @@
                             </div>
 
                             <div class="custom-gift-btn">
-                                <a href="{{ route('basket.selectFruits', $basket->id) }}">Tùy chọn giỏ quà</a>
+                                <a href="{{ route('basket.selectFruits', $basket->id) }}">Giỏ quà tùy chỉnh</a>
                             </div>
-
+<br>
                             <div class="purchase-options">
                                 <button type="submit" name="action" class="btn-buy-now">
                                     <span>Mua Ngay</span>

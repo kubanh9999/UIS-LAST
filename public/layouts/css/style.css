@@ -850,6 +850,32 @@ main {
     text-decoration: none;
     cursor: pointer;
 }
+.custom-gift-btn a {
+    display: inline-block;
+    padding: 10px 20px;
+    font-size: 16px;
+    font-weight: bold;
+    color: #fff;
+    background-color: #28a745; /* Màu xanh lá nổi bật */
+    border: 2px solid #28a745;
+    border-radius: 8px;
+    text-align: center;
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+.custom-gift-btn a:hover {
+    background-color: #218838; /* Màu xanh đậm hơn khi hover */
+    border-color: #218838;
+    transform: scale(1.05); /* Tăng nhẹ kích thước khi hover */
+}
+
+.custom-gift-btn a:active {
+    background-color: #1e7e34; /* Màu tối hơn khi nhấn */
+    border-color: #1e7e34;
+    transform: scale(0.98); /* Thu nhỏ nhẹ khi nhấn */
+}
+
 .custom-gift-btn a:hover {
     color: #fff;
     background: rgb(49, 159, 37);
