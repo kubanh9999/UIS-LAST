@@ -40,7 +40,7 @@ class CheckoutController extends Controller
         $selectedGiftId = session()->get('selected_product');
         $selectedGift = $selectedGiftId ? ProductType::find($selectedGiftId) : null;
 
-        return view('pages.checkout', compact('products'));
+        return view('pages.checkout2', compact('products'));
     }
 
     // Xử lý checkout với sản phẩm quà tặng được chọn
@@ -91,7 +91,7 @@ class CheckoutController extends Controller
         // Tính phí vận chuyển (nếu có)
         $shippingCost = 0; // Ví dụ: phí vận chuyển là 1000, thay thế bằng logic của bạn nếu cần
 
-        return view('pages.checkout', compact('wards', 'districts', 'provinces', 'products', 'selectedGift', 'totalPrice', 'shippingCost', 'cart', 'productData', 'user'));
+        return view('pages.checkout2', compact('wards', 'districts', 'provinces', 'products', 'selectedGift', 'totalPrice', 'shippingCost', 'cart', 'productData', 'user'));
 
     }
 
@@ -138,7 +138,7 @@ class CheckoutController extends Controller
             'phone' => $request->phone,
             // Cung cấp giá trị mặc định nếu không có dữ liệu
             'payment_method' => "thanh toán tiền mặt",
-            'status' => 'Đang xử lý',
+            'status' => '0',
             'token' => $token,
             'order_date' => now(),
             'user_id' => Auth::id(),
@@ -462,7 +462,7 @@ class CheckoutController extends Controller
             'phone' => $request->phone,
             // Cung cấp giá trị mặc định nếu không có dữ liệu
             'payment_method' => "thanh toán VNPAY",
-            'status' => 'Đang xử lý',
+            'status' => '0',
             'token' => $vnp_TxnRef,
             'order_date' => now(),
             'user_id' => Auth::id(),
@@ -663,7 +663,7 @@ class CheckoutController extends Controller
                     'phone' => $request->phone,
                     // Cung cấp giá trị mặc định nếu không có dữ liệu
                     'payment_method' => "thanh toán MOMO",
-                    'status' => 'Đang xử lý',
+                    'status' => '0',
                     'token' => $vnp_TxnRef,
                     'order_date' => now(),
                     'user_id' => Auth::id(),

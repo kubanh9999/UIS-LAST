@@ -498,8 +498,6 @@ class ProductController extends Controller
         ->with('query', $query);
 }
 
-
-
 public function deleteCategory($categoryId)
 {
     // Tìm danh mục cần xóa
