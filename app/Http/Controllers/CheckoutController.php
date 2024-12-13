@@ -341,7 +341,7 @@ $shippingCost = $shippingCost ?? 0;
         return response()->json([
             'total_price' => number_format($totalPriceAfterDiscount, 2, '.', ''),
             'discount' => $discountPercentage,
-            'message' => 'Giảm giá đã được áp dụng thành công.',
+            'message' => 'Mã giảm giá đã được áp dụng thành công.',
         ]);
     }
     
