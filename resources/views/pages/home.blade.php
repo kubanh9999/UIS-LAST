@@ -95,8 +95,9 @@
                                     <input type="hidden" name="product[image]" value="{{ $basket->image }}">
                                     <input type="hidden" name="product[price_gift]" value="{{ $basket->price_gift }}">
                                     <input type="hidden" name="quantity" value="1">
-                                    <a href="#" onclick="this.closest('form').submit();" class="btn-cart">Thêm giỏ
-                                        hàng</a>
+                                    <a href="#" onclick="this.closest('form').submit();" class="btn-cart">
+                                        <i class="fa-solid fa-cart-shopping"></i>
+                                    </a>
                                 </form>
                             </div>
                         </div>
@@ -167,8 +168,8 @@
                                     <input type="hidden" name="product[image]" value="{{ $item->image }}">
                                     <input type="hidden" name="product[price]" value="{{ $item->price }}">
                                     <input type="hidden" name="quantity" value="1">
-                                    <a href="#" onclick="this.closest('form').submit();" class="btn-cart">Thêm giỏ
-                                        hàng
+                                    <a href="#" onclick="this.closest('form').submit();" class="btn-cart">
+                                        <i class="fa-solid fa-cart-shopping"></i>
                                     </a>
                                 </form>
                             </div>
@@ -257,7 +258,7 @@
                                     <input type="hidden" name="product[price]" value="{{ $item->price }}">
                                     <input type="hidden" name="quantity" value="1">
                                     <a href="#" onclick="this.closest('form').submit();" class="btn-cart">
-                                        Thêm giỏ hàng
+                                        <i class="fa-solid fa-cart-shopping"></i>
                                     </a>
                                 </form>
                             </div>
