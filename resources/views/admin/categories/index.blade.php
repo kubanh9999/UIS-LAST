@@ -58,9 +58,10 @@
                                     <a class="me-3" href="{{ route('admin.categories.edit', $item->id) }}">
                                         <i class="fa-solid fa-pen-to-square"></i>
                                     </a>
-                                    <button type="button" class="btn btn-sm delete-category-btn" data-id="{{ $item->id }}" data-toggle="modal" data-target="#deleteCategoryModal">
+                                    <a href="{{ route('category.delete', $item->id) }}"
+                                        onclick="return confirm('Bạn có chắc chắn muốn xóa danh mục này? Hành động này không thể hoàn tác!')">
                                         <i class="fas fa-trash-alt"></i>
-                                    </button>
+                                    </a>
                                 </td>
                             </tr>
                             @endforeach
