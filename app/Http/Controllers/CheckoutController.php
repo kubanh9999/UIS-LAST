@@ -142,7 +142,7 @@ $shippingCost = $shippingCost ?? 0;
             'email' => $request->email,
             'phone' => $request->phone,
             // Cung cấp giá trị mặc định nếu không có dữ liệu
-            'payment_method' => "thanh toán tiền mặt",
+            'payment_method' => "Thanh toán khi nhận hàng",
             'status' => 'Đang xử lý',
             'token' => $token,
             'order_date' => now(),
