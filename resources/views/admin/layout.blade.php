@@ -103,8 +103,9 @@
                                         <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
                                             @csrf
                                         </form>
-                                        <a class="dropdown-item" href="#" onclick="event.preventDefault(); handleLogout();">Đăng Xuất</a>
                                         <a class="dropdown-item" href="{{ route('home.index') }}" >Đến trang website</a>
+                                        <a class="dropdown-item" href="#" onclick="event.preventDefault(); handleLogout();">Đăng Xuất</a>
+                                   
                                     </li>                                    
                                     </ul>
                                 @endif
