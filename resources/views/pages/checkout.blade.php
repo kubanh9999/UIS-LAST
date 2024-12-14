@@ -270,11 +270,15 @@
                                 class="img-fluid"
                                 style="width: 80px; height: 80px;">
 
-                                {{-- Hiển thị số lượng sản phẩm --}}
-                                <span class="ml-3 font-weight-bold">{{ $quantity }}</span>
+                           
 
                                 {{-- Hiển thị tổng giá cho sản phẩm --}}
                                 <span class="ml-auto total font-weight-bold">{{ number_format($itemTotal) }} VND</span>
+                                
+                                |
+
+                                {{-- Hiển thị số lượng sản phẩm --}}
+                                <span class="ml-3 font-weight-bold">{{ $quantity }}</span>
                             </div>
 
 

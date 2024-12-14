@@ -68,7 +68,10 @@
             </div>
             <div class="header-left active">
                 <div class="imagess m-0">
-                    <img src="{{ asset('layouts/img/logota.png') }}" alt="" class="img-fluid" style="width: 90%;"> <!-- Ảnh sẽ chiếm 90% chiều rộng của container -->
+                    <a href="/admin">
+                        <img src="{{ asset('layouts/img/logota.png') }}" alt="" class="img-fluid" style="width: 90%;"> <!-- Ảnh sẽ chiếm 90% chiều rộng của container -->
+                    </a>
+                 
                 </div>
                 <a id="toggle_btn" href="javascript:void(0);">
                 </a>
@@ -100,8 +103,9 @@
                                         <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
                                             @csrf
                                         </form>
-                                        <a class="dropdown-item" href="#" onclick="event.preventDefault(); handleLogout();">Đăng Xuất</a>
                                         <a class="dropdown-item" href="{{ route('home.index') }}" >Đến trang website</a>
+                                        <a class="dropdown-item" href="#" onclick="event.preventDefault(); handleLogout();">Đăng Xuất</a>
+                                   
                                     </li>                                    
                                     </ul>
                                 @endif

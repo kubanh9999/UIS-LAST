@@ -1,3 +1,21 @@
+<style>
+    html, body {
+    height: 100%;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+.content {
+    flex: 1;
+}
+
+footer {
+    margin-top: auto;
+}
+
+</style>
+
 <footer class="footer">
     <div class="container">
         <div class="swapper">

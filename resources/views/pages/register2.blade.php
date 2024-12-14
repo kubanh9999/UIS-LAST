@@ -2,7 +2,15 @@
 @section('title', 'Đăng ký')
 
 @section('content')
-
+@if (session('swal'))
+    <script>
+        Swal.fire({
+            icon: '{{ session('swal')['icon'] }}',
+            title: '{{ session('swal')['title'] }}',
+            text: '{{ session('swal')['text'] }}'
+        });
+    </script>
+@endif
     <section class="section-account">
         <div class="container">
             <div class="swapper">

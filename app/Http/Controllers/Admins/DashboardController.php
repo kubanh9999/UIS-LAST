@@ -41,16 +41,15 @@ class DashboardController extends Controller
         }
 
         // Lấy doanh thu từ cơ sở dữ liệu
-        $salesData = DB::table('order_details')
-            ->select(
-                DB::raw('MONTH(orders.created_at) as month'), // Lấy tháng từ created_at
-                DB::raw('SUM(order_details.total_price) as total_revenue')
-            )
-            ->join('orders', 'order_details.order_id', '=', 'orders.id')
-            ->whereYear('orders.created_at', $currentYear) // Lọc theo năm
-            ->groupBy('month') // Nhóm theo tháng
-            ->get();
-
+        $salesData = DB::table('orders')
+        ->select(
+            DB::raw('MONTH(order_date) as month'), // Lấy tháng từ cột order_date
+            DB::raw('SUM(total_amount) as total_revenue') // Tổng doanh thu từ cột total_amount
+        )
+        ->whereYear('order_date', $currentYear) // Lọc các đơn hàng trong năm hiện tại
+        ->groupBy('month') // Nhóm theo tháng
+        ->get();
+/* dd($salesData); */
         // Cập nhật doanh thu cho các tháng có dữ liệu
         foreach ($salesData as $sale) {
             $monthlySales[$sale->month]['total'] += $sale->total_revenue;
@@ -77,21 +76,21 @@ class DashboardController extends Controller
 
         // Truy vấn doanh thu hàng ngày
         $dailySales = DB::table('order_details')
-            ->join('orders', 'order_details.order_id', '=', 'orders.id')
-            ->leftJoin('products', 'order_details.product_id', '=', 'products.id') // Join bảng products
-            ->leftJoin('product_types', 'order_details.gift_id', '=', 'product_types.id') // Join bảng product_types
-            ->select(
-                DB::raw('DAY(orders.created_at) as day'),
-                DB::raw('COALESCE(products.id, product_types.id) as product_id'), // Lấy id sản phẩm hoặc giỏ quà
-                DB::raw('COALESCE(products.name, product_types.name) as product_name'), // Lấy tên sản phẩm hoặc giỏ quà
-                DB::raw('SUM(order_details.total_price) as total_revenue')
-            )
-            ->whereYear('orders.created_at', $currentYear)
-            ->whereMonth('orders.created_at', $currentMonth)
-            ->groupBy(DB::raw('DAY(orders.created_at), COALESCE(products.id, product_types.id), COALESCE(products.name, product_types.name)')) // Cập nhật GROUP BY
-            ->get()
-            ->groupBy('day'); // Nhóm dữ liệu theo ngày
-
+    ->join('orders', 'order_details.order_id', '=', 'orders.id')
+    ->leftJoin('products', 'order_details.product_id', '=', 'products.id') // Join bảng products
+    ->leftJoin('product_types', 'order_details.gift_id', '=', 'product_types.id') // Join bảng product_types
+    ->select(
+        DB::raw('DAY(orders.created_at) as day'), // Lấy ngày trong tháng
+        DB::raw('COALESCE(products.id, product_types.id) as product_id'), // Lấy ID sản phẩm hoặc giỏ quà
+        DB::raw('COALESCE(products.name, product_types.name) as product_name'), // Lấy tên sản phẩm hoặc giỏ quà
+        DB::raw('SUM(order_details.total_price) as total_revenue') // Tính tổng doanh thu cho mỗi sản phẩm trong ngày
+    )
+    ->whereYear('orders.created_at', $currentYear)
+    ->whereMonth('orders.created_at', $currentMonth)
+    ->groupBy(DB::raw('DAY(orders.created_at), COALESCE(products.id, product_types.id), COALESCE(products.name, product_types.name)')) // Nhóm theo ngày và sản phẩm
+    ->get()
+    ->groupBy('day'); // Nhóm dữ liệu theo ngày
+/* dd($dailySales); */
         $dailyRevenue = [];
         foreach ($dailySales as $day => $sales) {
             foreach ($sales as $sale) {
