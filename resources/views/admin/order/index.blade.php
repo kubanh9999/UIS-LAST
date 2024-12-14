@@ -123,10 +123,10 @@
                                 <td>{{ $item->payment_method }}</td>
                                 <td>
                                 <select name="status" class="status-select" data-order-id="{{ $item->id }}" onchange="updateOrderStatus(this)">
-                                    <option value="-1" {{ $item->status == -1 ? 'selected' : '' }}>Đã hủy</option>
-                                    <option value="0" {{ $item->status == 0 ? 'selected' : '' }}>Đang xử lý</option>
-                                    <option value="1" {{ $item->status == 1 ? 'selected' : '' }}>Đang vận chuyển</option>
-                                    <option value="2" {{ $item->status == 2 ? 'selected' : '' }}>Đã nhận hàng</option>
+                                    <option value="Đã hủy" {{ $item->status == 'Đã hủy' ? 'selected' : '' }}>Đã hủy</option>
+                                    <option value="Đang xử lý" {{ $item->status == 'Đang xử lý' ? 'selected' : '' }}>Đang xử lý</option>
+                                    <option value="Đang vận chuyển" {{ $item->status == 'Đang vận chuyển' ? 'selected' : '' }}>Đang vận chuyển</option>
+                                    <option value="Đã nhận hàng" {{ $item->status == 'Đã nhận hàng' ? 'selected' : '' }}>Đã nhận hàng</option>
                                 </select>
                                 </td>
                                 <td>
