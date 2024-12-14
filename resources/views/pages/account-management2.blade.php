@@ -166,25 +166,21 @@
                                     <strong>#{{ $item->id }} |
                                         {{ \Carbon\Carbon::parse($item->order_date)->timezone('Asia/Ho_Chi_Minh')->format('H:i:s | d/m/Y') }}</strong>
                                 </div>
-                                <div class=" card-body">
+                                <div class="card-body">
                                     <p><strong>Tên người mua:</strong> {{ $item->user->name }}</p>
                                     <p><strong>Số điện thoại:</strong> {{ $item->phone }}</p>
-                                    <p><strong>Trạng thái:</strong> <span
-                                            class="badge {{ $item->status == 'Đang xử lý' ? 'bg-warning' : 'bg-success' }}">{{ $item->status }}</span>
-                                    </p>
+                                    <p><strong>Trạng thái:</strong> <span class="badge {{ $item->status == 'Đang xử lý' ? 'bg-warning' : 'bg-success' }}">{{ $item->status }}</span></p>
                                     <p><strong>Phương thức thanh toán:</strong> {{ $item->payment_method }}</p>
+                                    
                                     <div class="justify-content-between">
-                                        <a href="{{ route('account.management.order.detail', $item->id) }}"
-                                            class="btn-sm btn-order-sm"><i class="fa-solid fa-eye"></i> Xem chi
-                                            tiết</a>
-                                        @if ($item->status == 'Đang xử lý')
-                                            <a href="{{ route('account.order.cancel', $item->id) }}"
-                                                class="btn btn-danger btn-sm cancel-order" data-method="POST"
-                                                data-confirm="Bạn có chắc chắn muốn hủy đơn hàng này?"><i
-                                                    class="fa-solid fa-trash"></i> Hủy đơn hàng</a>
-                                        @else
-                                            <button class="btn-trash btn-sm" disabled><i class="fa-solid fa-trash"></i> Đã
-                                                hủy</button>
+                                        <a href="{{ route('account.management.order.detail', $item->id) }}" class="btn btn-success btn-sm"><i class="fa-solid fa-eye"></i> Xem chi tiết</a>
+                                        
+                                        @if ($item->payment_method == 'Thanh toán khi nhận hàng')
+                                            @if ($item->status == 'Đang xử lý')
+                                                <a href="{{ route('account.order.cancel', $item->id) }}" class="btn btn-danger btn-sm cancel-order" data-method="POST" data-confirm="Bạn có chắc chắn muốn hủy đơn hàng này?"><i class="fa-solid fa-trash"></i> Hủy đơn hàng</a>
+                                            @else
+                                                <button class="btn btn-secondary btn-sm" disabled><i class="fa-solid fa-trash"></i> Đã hủy</button>
+                                            @endif
                                         @endif
                                     </div>
                                 </div>
