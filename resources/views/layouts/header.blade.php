@@ -86,7 +86,7 @@
             </div>
             <div class="inner-logo">
                 <a href="{{ route('home.index') }}">
-                    <img src="{{asset('client/assets/img/logo.png')}}" alt="logo">
+                    <img src="{{asset('client/assets/img/logo3.png')}}" alt="logo">
                 </a>
             </div>
             <div class="inner-search">

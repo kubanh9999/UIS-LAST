@@ -69,7 +69,7 @@
             <div class="header-left active">
                 <div class="imagess m-0">
                     <a href="/admin">
-                        <img src="{{ asset('layouts/img/logota.png') }}" alt="" class="img-fluid" style="width: 90%;"> <!-- Ảnh sẽ chiếm 90% chiều rộng của container -->
+                        <img src="{{asset('client/assets/img/logo3.png')}}" alt="" class="img-fluid" style="width: 90%;"> <!-- Ảnh sẽ chiếm 90% chiều rộng của container -->
                     </a>
                  
                 </div>
