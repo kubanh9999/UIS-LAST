@@ -410,59 +410,78 @@
 <script>
     // Xử lý danh mục sản phẩm mới
     $(document).on('click', '.category-link-new', function() {
-       console.log('aa');
-       
-        var categoryName = $(this).data('category');
-        console.log('categoryName',categoryName);
-        
-        var currentUrl = window.location.href.split('?')[0];
+    console.log('aa');
 
-        $.ajax({
-            url: '{{ route('products.category.name', ':categoryName') }}'
-                .replace(':categoryName', categoryName),
-            type: 'GET',
-            success: function(response) {
-                console.log(response);
-                var html = '';
+    var categoryName = $(this).data('category');
+    console.log('categoryName', categoryName);
 
-                if (response.length > 0) {
-                    $.each(response, function(index, product) {
-                        var imagePath = product.image.includes('uploads/products') 
+    var currentUrl = window.location.href.split('?')[0];
+
+    $.ajax({
+        url: '{{ route('products.category.name', ':categoryName') }}'
+            .replace(':categoryName', categoryName),
+        type: 'GET',
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        },
+        success: function(response) {
+            console.log(response);
+            var html = '';
+
+            if (response.length > 0) {
+                $.each(response, function(index, product) {
+                    var imagePath = product.image.includes('uploads/products')
                         ? product.image  // Nếu có, giữ nguyên đường dẫn
                         : 'layouts/img/' + product.image;  // Nếu không, thay thế bằng 'layouts/img/'
-                        html += `
-                          <div class="inner-box">
+
+                    html += `
+                        <div class="inner-box">
                             <div class="badge">Mới</div>
                             <a href="/product/${product.id}">
-                              <img src="${imagePath}" alt="${product.name}" width="100%" height="200px">
+                                <img src="${imagePath}" alt="${product.name}" width="100%" height="200px">
                             </a>
                             <h5>
                                 <a href="/product/${product.id}" >${product.name}</a>
                             </h5>
                             <div class="inner-foot">
-                               <p class="price">${new Intl.NumberFormat('vi-VN').format(product.price)}đ </p>
-                                <a href="#" class="btn-cart">Thêm giỏ hàng</a>
+                                <p class="price">${new Intl.NumberFormat('vi-VN').format(product.price)}đ</p>
+                                <form action="/cart/add/${product.id}" method="post" style="display: inline;">
+                                    <input type="hidden" name="_token" value="${$('meta[name=\"csrf-token\"]').attr('content')}">
+                                    <input type="hidden" name="product[id]" value="${product.id}">
+                                    <input type="hidden" name="product[name]" value="${product.name}">
+                                    <input type="hidden" name="product[image]" value="${product.image}">
+                                    <input type="hidden" name="product[price]" value="${product.price}">
+                                    <input type="hidden" name="quantity" value="1">
+                                    <a href="#" class="btn-cart">
+                                        <i class="fa-solid fa-cart-shopping"></i>
+                                    </a>
+                                </form>
                             </div>
-                        </div>
-                        `;
-                    });
-                    
-                } else {
-                    html = '<p>Không có sản phẩm nào trong danh mục này.</p>';
-                }
-
-                $('.product-grid-new').html(html);
-                window.history.pushState(
-                    { category: categoryName },
-                    '',
-                    currentUrl + '?category=' + categoryName
-                );
-            },
-            error: function() {
-                alert('Có lỗi xảy ra khi tải sản phẩm.');
+                        </div>`;
+                });
+            } else {
+                html = '<p>Không có sản phẩm nào trong danh mục này.</p>';
             }
-        });
+
+            $('.product-grid-new').html(html);
+            window.history.pushState(
+                { category: categoryName },
+                '',
+                currentUrl + '?category=' + categoryName
+            );
+        },
+        error: function() {
+            alert('Có lỗi xảy ra khi tải sản phẩm.');
+        }
     });
+});
+
+// Xử lý sự kiện click của nút btn-cart
+$(document).on('click', '.btn-cart', function(e) {
+    e.preventDefault(); // Ngăn chặn hành động mặc định
+    $(this).closest('form').submit(); // Gửi form
+});
+
 
     // Xử lý danh mục sản phẩm bán chạy
     $(document).on('click', '.category-link-best', function() {
@@ -470,6 +489,9 @@
         var currentUrl = window.location.href.split('?')[0];
 
         $.ajax({
+            headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        },
             url: '{{ route('products.category.name', ':categoryName') }}'
                 .replace(':categoryName', categoryName),
             type: 'GET',
@@ -494,7 +516,15 @@
                                         <p class="price">${new Intl.NumberFormat('vi-VN').format(product.price)}đ</p>
                                         <p class="sales">Đã bán: ${new Intl.NumberFormat('vi-VN').format(product.sales)}kg</p>
                                     </div>
-                                    <a href="#" class="btn-cart">Thêm giỏ hàng</a>
+                                    <form action="/cart/add/${product.id}" method="post" style="display: inline;">
+                    <input type="hidden" name="_token" value="${$('meta[name="csrf-token"]').attr('content')}">
+                    <input type="hidden" name="product[id]" value="${product.id}">
+                    <input type="hidden" name="product[name]" value="${product.name}">
+                    <input type="hidden" name="product[image]" value="${product.image}">
+                    <input type="hidden" name="product[price]" value="${product.price}">
+                    <input type="hidden" name="quantity" value="1">
+                    <a href="#" class="btn-cart"><i class="fa-solid fa-cart-shopping"></i></a>
+                </form>
                                 </div>
                             </div>
                         `;
@@ -515,6 +545,10 @@
             }
         });
     });
+    $(document).on('click', '.btn-cart', function(e) {
+    e.preventDefault(); // Ngăn chặn hành động mặc định
+    $(this).closest('form').submit(); // Gửi form
+});
 </script>
 
 

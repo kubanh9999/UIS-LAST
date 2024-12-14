@@ -122,7 +122,7 @@ class AuthController extends Controller
         'name' => $request->name,
         'email' => $request->email,
         'password' => Hash::make($request->password),
-        'role' => 0,
+        'role' => "user",
     ]);
 
     // Xóa session sau khi đăng ký thành công
@@ -154,7 +154,7 @@ class AuthController extends Controller
                 auth()->logout();
                 return redirect()->back()->with('error', 'Tài khoản của bạn đã bị khóa. Vui lòng liên hệ với admin.');
             }
-            if ($user->role == 1) {
+            if ($user->role == 'adminadmin') {
                 return redirect('/admin')->with('success', 'Đăng nhập thành công!'); // Điều hướng đến trang admin nếu role = 1
             }
             return redirect()->route('home.index')->with('success', 'Đăng nhập thành công!'); // Điều hướng đến trang home
