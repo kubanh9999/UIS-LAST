@@ -131,7 +131,7 @@
                                         <td class="action-cell">
                                             <div class="action-icons">
                                                 <button type="button" class="btn status-btn" data-id="{{ $item->id }}" data-status="{{ $item->status }}" onclick="toggleStatusq(this)">
-                                                    <i class="fa-solid {{ $item->status == 'hoạt động' ? 'fa-unlock' : 'fa-lock' }}"></i>
+                                                    <i class="fa-solid {{ $item->status == 0 ? 'fa-unlock' : 'fa-lock' }}"></i>
                                                 </button>
                                             </div>
                                             

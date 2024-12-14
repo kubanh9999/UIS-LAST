@@ -15,8 +15,10 @@ class BannerController extends Controller
     public function index()
     {
         $categories = Category::all();
-        $banners = Banner::orderBy('position', 'asc')->get();
-        return view('admin.banner.index', compact('banners','categories'));
+        $mainBanners = Banner::where('type', 'main')->orderBy('position', 'asc')->get();
+        $secondaryBanners = Banner::where('type', 'secondary')->orderBy('position', 'asc')->get();
+        $thirdBanners = Banner::where('type', 'third')->orderBy('position', 'asc')->get();
+        return view('admin.banner.index', compact('mainBanners','secondaryBanners','thirdBanners','categories'));
     }
 
     // Hiển thị form thêm banner
