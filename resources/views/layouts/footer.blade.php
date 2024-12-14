@@ -21,7 +21,7 @@ footer {
         <div class="swapper">
             <div class="inner-box">
                 <a href="">
-                    <img src="{{asset('client/assets/img/logo.png')}}" alt="logo">
+                    <img src="{{asset('client/assets/img/logo3.png')}}" alt="logo">
                 </a>
                 <p class="inner-text">Cửa hàng <b>uis</b> là một website cung cấp thực phẩm an toàn, nông sản sạch
                     cho người
