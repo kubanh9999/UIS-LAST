@@ -155,9 +155,9 @@ class AuthController extends Controller
                 return redirect()->back()->with('error', 'Tài khoản của bạn đã bị khóa. Vui lòng liên hệ với admin.');
             }
             if ($user->role == 1) {
-                return redirect('/admin'); // Điều hướng đến trang admin nếu role = 1
+                return redirect('/admin')->with('success', 'Đăng nhập thành công!'); // Điều hướng đến trang admin nếu role = 1
             }
-            return redirect()->route('home.index'); // Điều hướng đến trang dashboard nếu không phải admin
+            return redirect()->route('home.index')->with('success', 'Đăng nhập thành công!'); // Điều hướng đến trang home
            
     
         }

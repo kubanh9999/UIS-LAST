@@ -50,33 +50,34 @@
                                             }
                                         @endphp
                                         <img src="{{ asset($imagePath) }}" 
-                                        class="card-img-top" alt="{{ $post->title }}" style="height: 200px; object-fit: cover;"></a>
+                                        class="card-img-top" alt="{{ $post->title }}" style="height: 200px; object-fit: cover; font-size: 5px; "></a>
                                     
                                     <div class="card-body d-flex flex-column" style="height: 300px;">
-                                        <h5 class="card-title">
+                                        <h5 class="card-title" style="font-size: 16px">
                                             <a href="{{ route('post.show', $post->id) }}" class="text-dark" style="text-decoration: none; ">{{ $post->title }}</a>
                                         </h5>
                                         
-                                        <p class="card-text" style="flex-grow: 1; font-size: ">
-                                            @php
-                               
-                                
-                                            $clearBreakLineArrStr = Str::replace('&nbsp;',"", $post->content);
-                                            
-                                            $clearImgArrStr = preg_replace("<img([\w\W]+?)/>", "", $clearBreakLineArrStr);
-                    
-                                            @endphp
-                                            @foreach (explode("\n",
-                                                   $clearImgArrStr
-                                                ) as $key => $item)
-                                                {!! $item !!}
-                                                @if ($key === 2)
-                                                    @break
-                                                @endif
-                                            @endforeach
-                                            
-                                        </p>
-                                      
+                                        <p class="card-text" 
+                                        style="flex-grow: 1; font-size: 12px; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; text-overflow: ellipsis; font-family: Arial, sans-serif;">
+                                         @php
+                                             $content = $post->content ?? '';
+                                             $clearBreakLineArrStr = \Illuminate\Support\Str::replace('&nbsp;', '', $content);
+                                             $clearImgArrStr = preg_replace("/<img([\w\W]+?)\/?>/", '', $clearBreakLineArrStr);
+                                     
+                                             // Xử lý nội dung thành các đoạn văn dựa trên dấu <br> hoặc xuống dòng
+                                             $lines = preg_split('/<br\s*\/?>|\n/', trim($clearImgArrStr));
+                                         @endphp
+                                     
+                                         {{-- Hiển thị tối đa 3 dòng nội dung --}}
+                                         @foreach ($lines as $key => $line)
+                                             @if (!empty(trim($line)))
+                                                 {!! $line !!}
+                                                 @if ($key === 4) {{-- Hiển thị tối đa 3 dòng (index 0, 1, 2) --}}
+                                                     @break
+                                                 @endif
+                                             @endif
+                                         @endforeach
+                                     </p>
                                     </div>
                                 </div>
                             </div>
