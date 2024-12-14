@@ -377,9 +377,7 @@
                                         <small>{{ $post->created_at }}</small>
                                     </div>
                                     <p> <a href="{{ route('post.show', ['id' => $post->id]) }}" style="
-                                        color: black; 
-                                        text-decoration: none; 
-                                        font-size: 15px;
+
                                         display: -webkit-box; 
                                         -webkit-line-clamp: 2; 
                                         -webkit-box-orient: vertical; 

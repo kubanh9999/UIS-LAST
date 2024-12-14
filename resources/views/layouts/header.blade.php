@@ -21,7 +21,8 @@
             <img src="assets/icons/user.svg" alt=""> {{ Auth::user()->name }}
         </button>
         <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-            <li><a class="dropdown-item" href="/account/management">Quản lý tài khoản</a></li>
+            <li><a class="dropdown-item" href="{{ route('account.management')}}">Quản lý tài khoản</a></li>
+
             <li><a class="dropdown-item" href="{{ url('admin') }}">Đến trang Admin</a></li>
             <li>
                 <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
@@ -32,10 +33,11 @@
         </ul>
     @else
         <button class="btn dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
-            <img src="assets/icons/user.svg" alt=""> {{ Auth::user()->name }}
+            <img src="{{asset('client/assets/icons/user.svg')}}" alt=""> {{ Auth::user()->name }}
         </button>
         <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-            <li><a class="dropdown-item" href="/account/management">Quản lý tài khoản</a></li>
+            <li><a class="dropdown-item" href="{{ route('account.management')}}">Quản lý tài khoản</a></li>
+
             <li>
                 <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
                     @csrf
