@@ -52,6 +52,7 @@ Route::post('/verify-code', [AuthController::class, 'verifyCode'])->name('verifi
 
 Route::put('/admin/updateCategory/{id}', [AdminPostController::class, 'updateCategory'])->name('admin.post.updateCategory');
 Route::get('/post/{id}/editCategory', [AdminPostController::class, 'editCategory'])->name('admin.post.editCategory');
+Route::get('/post/delete/{id}', [AdminPostController::class, 'deletePost'])->name('admin.post.delete');
 Route::get('admin/index/post', [AdminPostController::class, 'index_categories'])->name('admin.indexCategory.post');
 Route::get('admin/create/post', [AdminPostController::class, 'createCategory'])->name('admin.createCategory.post');
 Route::post('admin/index/store', [AdminPostController::class, 'storeCategory'])->name('admin.storeCategory.post');

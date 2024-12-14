@@ -77,9 +77,10 @@
                                             <i class="fa-solid fa-pen-to-square"></i>
                                         </a>
                                         <!-- Delete Button -->
-                                        <button type="button" class="btn btn-sm delete-category-btn" data-id="{{ $item->id }}" data-toggle="modal" data-target="#deleteCategoryModal">
-                                            <i class="fas fa-trash-alt"></i>
-                                        </button>
+                                        <a href="{{ route('admin.post.delete', $item->id) }}"
+                                            onclick="return confirm('Bạn có chắc chắn muốn xóa danh mục này? Hành động này không thể hoàn tác!')">
+                                        <i class="fas fa-trash-alt"></i>
+                                    </a>
                                     </td>
                                 </tr>
                                 @endforeach
