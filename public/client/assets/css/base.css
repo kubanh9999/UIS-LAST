@@ -37,3 +37,18 @@ main {
     background:  var(--color-background);
 }
 
+<<<<<<< HEAD
+=======
+.btn-cart { 
+    margin-bottom: 0;
+    padding: 5px;
+    font-size: 17px;
+    background-color: var(--color-first);
+    color: var(--color-three);
+    border-radius: 22px;
+    cursor: pointer;
+}
+.btn-cart:hover {
+    color: var(--color-three);
+}
+>>>>>>> 0cd8828f70a3a041a39b31a5e32f241e901a804e

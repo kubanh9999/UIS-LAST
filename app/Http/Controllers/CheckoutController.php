@@ -71,7 +71,8 @@ class CheckoutController extends Controller
         $products = Product::whereIn('id', $product_ids)->get(); // Lấy thông tin các sản phẩm theo id
 
         // Tính toán tổng giá trị đơn hàng
-        $totalPrice = 0;
+        $totalPrice = $totalPrice ?? 0;
+$shippingCost = $shippingCost ?? 0;
 
         foreach ($products as $product) {
             // Kiểm tra xem sản phẩm có trong giỏ hàng và có trường quantity không
@@ -91,7 +92,7 @@ class CheckoutController extends Controller
         // Tính phí vận chuyển (nếu có)
         $shippingCost = 0; // Ví dụ: phí vận chuyển là 1000, thay thế bằng logic của bạn nếu cần
 
-        return view('pages.checkout2', compact('wards', 'districts', 'provinces', 'products', 'selectedGift', 'totalPrice', 'shippingCost', 'cart', 'productData', 'user'));
+        return view('pages.checkout2', compact('wards', 'districts', 'provinces', 'products', 'selectedGift', 'totalPrice', 'shippingCost', 'cart', 'productData', 'user','totalPrice' ));
 
     }
 
@@ -101,6 +102,10 @@ class CheckoutController extends Controller
     public function completeCheckout(Request $request)
     {
         /* dd($request->all()); */
+        $user = Auth::user();
+        $provinces = Province::all();
+        $districts = District::where('province_id', $user->province_id)->get();
+        $wards = Ward::where('district_id', $user->district_id)->get();
         $cart = session()->get('cart');
         if (!$cart) {
             return redirect()->back()->with('error', 'Giỏ hàng trống!');
@@ -249,7 +254,7 @@ class CheckoutController extends Controller
         Mail::to($order->email)->send(new OrderMail($order));
         session()->forget(['cart', 'discounted_total']);
 
-        return view('pages.checkoutSuccess');
+        return view('pages.checkoutSuccess' );
     }
 
 
@@ -336,7 +341,7 @@ class CheckoutController extends Controller
         return response()->json([
             'total_price' => number_format($totalPriceAfterDiscount, 2, '.', ''),
             'discount' => $discountPercentage,
-            'message' => 'Giảm giá đã được áp dụng thành công.',
+            'message' => 'Mã giảm giá đã được áp dụng thành công.',
         ]);
     }
     
@@ -567,6 +572,7 @@ class CheckoutController extends Controller
     /* thanh toán momo */
     public function momo(Request $request)
     {
+        $user = Auth();
        /*   dd($request->all()); */
         $cart = session()->get('cart');
         if (!$cart) {
@@ -591,7 +597,7 @@ class CheckoutController extends Controller
         }
         $shippingCost = 0;
         $totalAmount += $shippingCost;
-       /*  dd( $totalAmount); */
+        /* dd( $totalAmount); */
         // Kiểm tra tổng số tiền không âm
         if ($totalAmount < 0) {
             return redirect()->back()->with('error', 'Tổng số tiền không hợp lệ!');

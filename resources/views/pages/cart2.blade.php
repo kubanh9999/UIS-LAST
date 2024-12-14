@@ -254,6 +254,7 @@
                         deleteCartItem(id);
                     } else {
                         updateCartItem(id, quantity);
+                        location.reload();
                     }
                 });
             });

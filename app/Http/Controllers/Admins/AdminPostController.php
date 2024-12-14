@@ -231,8 +231,18 @@ public function updateCategory(Request $request, $id)
     return redirect()->route('admin.indexCategory.post')->with('success', 'Danh mục đã được cập nhật thành công!');
 }
 
+public function deletePost($id)
+{
+    $category = PostCategory::find($id);
 
+    // Xóa tất cả các sản phẩm thuộc danh mục này
+    $category->posts()->delete();
 
+    // Xóa danh mục
+    $category->delete();
+
+    return redirect()->route('admin.indexCategory.post')->with('success', 'Danh mục và tất cả sản phẩm liên quan đã được xóa.');
+}
 
 
 }

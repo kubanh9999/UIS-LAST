@@ -9,7 +9,7 @@
                     </div>
                     <div class="inner-top-contact">
                         <img class="inner-icon" src="{{asset('client/assets/icons/mail.svg')}}" alt="">
-                        <span class="inner-text">uis.fruits@gmail.com</span>
+                        <span class="inner-text">uisfruits@gmail.com</span>
                     </div>
                 </div>
                 <div class="inner-topright">
@@ -21,7 +21,11 @@
             <img src="assets/icons/user.svg" alt=""> {{ Auth::user()->name }}
         </button>
         <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+<<<<<<< HEAD
             <li><a class="dropdown-item" href="{{ route('account.management')}}">Quản lý tài khoản</a></li>
+=======
+            <li><a class="dropdown-item" href="/account/management">Quản lý tài khoản</a></li>
+>>>>>>> 0cd8828f70a3a041a39b31a5e32f241e901a804e
             <li><a class="dropdown-item" href="{{ url('admin') }}">Đến trang Admin</a></li>
             <li>
                 <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
@@ -36,6 +40,7 @@
         </button>
         <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
             <li><a class="dropdown-item" href="{{ route('account.management')}}">Quản lý tài khoản</a></li>
+
             <li>
                 <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
                     @csrf
