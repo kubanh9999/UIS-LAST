@@ -36,16 +36,3 @@ main {
     padding: 15px 0px;
     background:  var(--color-background);
 }
-
-.btn-cart { 
-    margin-bottom: 0;
-    padding: 5px;
-    font-size: 17px;
-    background-color: var(--color-first);
-    color: var(--color-three);
-    border-radius: 22px;
-    cursor: pointer;
-}
-.btn-cart:hover {
-    color: var(--color-three);
-}

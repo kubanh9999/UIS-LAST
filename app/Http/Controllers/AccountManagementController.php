@@ -27,13 +27,13 @@ class AccountManagementController extends Controller
             ->where('user_id', $user->id)
             ->with(['orderDetails', 'orderDetails.product', 'orderDetails.gift', 'orderDetails.productInGift.product']) // Nạp dữ liệu liên quan
             ->get();
-        return view('pages.account-management', compact('orders','provinces', 'user','districts','wards'));
+        return view('pages.account-management2', compact('orders','provinces', 'user','districts','wards'));
     }
 
     public function changePassword()
     {
 
-        return view('pages.account-management');
+        return view('pages.account-management2');
     }
     public function updatePassword(Request $request)
     {
@@ -69,7 +69,7 @@ class AccountManagementController extends Controller
             }
         ])->find($id);
 
-        return view('pages.account-check-orderDetail', compact('orders','provinces', 'user','districts','wards'));
+        return view('pages.account-order-detail', compact('orders','provinces', 'user','districts','wards'));
     }
 
     public function cancelOrder($orderId)
@@ -100,7 +100,7 @@ class AccountManagementController extends Controller
         $districts = District::where('province_id', $user->province_id)->get();
         $wards = Ward::where('district_id', $user->district_id)->get();
         $user->load('province', 'district', 'ward'); // Lấy thông tin người dùng hiện tại
-        return view('account.management', compact('user','wards','districts ','provinces'));
+        return view('account.management2', compact('user','wards','districts ','provinces'));
     }
 
 
