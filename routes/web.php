@@ -25,7 +25,10 @@ use App\Http\Controllers\OrderController;
 use App\Http\Controllers\SubscriberController;
 use App\Http\Controllers\LocationController;
 use App\Models\Product; 
+Route::get('reset', [AuthController::class, 'resetPasswordForm'])->name('reset');
 
+Route::post('/reset/passwork', [AuthController::class, 'resetPassword'])->name('reset.password');
+Route::post('/sendPasswok', [AuthController::class, 'sendPasswok'])->name('sendPasswok');
 Route::get('/delete-category/{categoryId}', [ProductController::class, 'deleteCategory'])->name('category.delete');
 
 Route::get('/api/product-count', function() {
