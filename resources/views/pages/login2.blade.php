@@ -150,7 +150,8 @@
                         </div>
                         <div class="submit-form">
                             <button type="submit">Đăng Nhập</button>
-                            <p class="not-register">Bạn chưa có tài khoản <a href="{{ route('register') }}">Đăng ký</a> tại đây?</p>
+                            <p class="not-register">Bạn chưa có tài khoản <a href="{{ route('register') }}">Đăng ký</a> tại đây? </p>
+                            <p>Bạn quên quên mật khẩu <a href="{{route('reset')}}">lấy lại mật khẩu</a></p>
                         </div>
                     </div>
                     <div class="inner-more">
