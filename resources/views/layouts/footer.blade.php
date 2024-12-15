@@ -27,7 +27,7 @@ footer {
                     cho người
                     dân</p>
                     <ul class="inner-list">
-                        <li><i class="fas fa-map-marker-alt"></i> Gò vấp, Hồ Chí Minh</li>
+                        <li><i class="fas fa-map-marker-alt"></i> Công viên phần mềm Quang Trung TPHCM</li>
                         <li><i class="fas fa-phone"></i> 1900 6750</li>
                     </ul>
             </div>
