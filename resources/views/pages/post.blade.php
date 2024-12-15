@@ -67,20 +67,26 @@
                                         </h5>
                                         <p class="card-text flex-grow-1 text-muted" 
                                            style="font-size: 14px; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden;">
-                                            @php
-                                                $content = $post->content ?? '';
-                                                $clearBreakLineArrStr = \Illuminate\Support\Str::replace('&nbsp;', '', $content);
-                                                $clearImgArrStr = preg_replace("/<img([\w\W]+?)\/?\?>/", '', $clearBreakLineArrStr);
-                                                $lines = preg_split('/<br\s*\/??>|\n/', trim($clearImgArrStr));
-                                            @endphp
-                                            @foreach ($lines as $key => $line)
-                                                @if (!empty(trim($line)))
-                                                    {!! $line !!}
-                                                    @if ($key === 2)
-                                                        @break
-                                                    @endif
-                                                @endif
-                                            @endforeach
+                                           @php
+    $content = $post->content ?? '';
+    // Loại bỏ khoảng trắng không cần thiết
+    $clearBreakLineArrStr = \Illuminate\Support\Str::replace('&nbsp;', '', $content);
+    // Loại bỏ thẻ <img>
+    $clearImgArrStr = preg_replace("/<img([\w\W]+?)\/?\?>/", '', $clearBreakLineArrStr);
+    // Loại bỏ toàn bộ các thẻ HTML để xử lý dễ hơn
+    $plainTextContent = strip_tags($clearImgArrStr, '<br>');
+    // Tách nội dung theo thẻ <br> hoặc dấu xuống dòng
+    $lines = preg_split('/<br\s*\/?>|\n/', trim($plainTextContent));
+@endphp
+
+@foreach ($lines as $key => $line)
+    @if (!empty(trim($line)))
+        {!! $line !!}
+        @if ($key === 1)
+            @break
+        @endif
+    @endif
+@endforeach
                                         </p>
 {{--                                         <a href="{{ route('post.show', $post->id) }}" class="btn btn-primary btn-sm mt-auto align-self-start">Xem thêm</a>
  --}}                                    </div>
