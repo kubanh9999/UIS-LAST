@@ -55,64 +55,8 @@
         <!-- Nhúng video vào đây -->
         <div class="video-container">
             <img src="https://png.pngtree.com/background/20210711/original/pngtree-fresh-literary-fruit-lemon-tea-fruit-tea-taobao-banner-picture-image_1126915.jpg" alt="Hình ảnh mô tả" class="video-img">
-            <iframe src="https://www.youtube.com/embed/TmqH0kp1NN4?si=GYsfyrBF2kxtlDuu" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+            <iframe width="640" height="360" src="https://www.youtube.com/embed/KPP4Cfupzhs" title="Hey Bear Sensory - Smoothie Mix!- Fun Dance Video with music and animation !" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
         </div>
-    </div>
-</section>
-
-<section id="services" class="bg-light py-5">
-    <div class="container">
-        <h2 class="text-center mb-4">Dịch Vụ Của Chúng Tôi</h2>
-        <div class="row">
-            <div class="col-md-4">
-                <div class="card mb-4 shadow-sm">
-                    <img src="https://berryfruit.vn/upload/images/banner/banner-web-1.jpg" class="card-img-top service-img" alt="Dịch Vụ 1">
-                    <div class="card-body text-center">
-                        <h5 class="card-title">Dịch Vụ 1</h5>
-                        <p class="card-text">Mô tả dịch vụ 1.</p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="card mb-4 shadow-sm">
-                    <img src="https://bizweb.dktcdn.net/100/421/036/files/banner-khoa-hoc-pha-che-tra-trai-cay-chuyen-sau-tobeefood.jpg?v=1625132040009" class="card-img-top service-img" alt="Dịch Vụ 2">
-                    <div class="card-body text-center">
-                        <h5 class="card-title">Dịch Vụ 2</h5>
-                        <p class="card-text">Mô tả dịch vụ 2.</p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="card mb-4 shadow-sm">
-                    <img src="https://cdn.tgdd.vn/Files/2022/09/07/1465850/tu-26-8-21-9-2022-trai-cay-cac-loai-khuyen-mai-chi-tu-18000d-202209071257591236.jpg" class="card-img-top service-img" alt="Dịch Vụ 3">
-                    <div class="card-body text-center">
-                        <h5 class="card-title">Dịch Vụ 3</h5>
-                        <p class="card-text">Mô tả dịch vụ 3.</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-
-<section id="contact" class="py-5">
-    <div class="container">
-        <h2 class="text-center">Liên Hệ Với Chúng Tôi</h2>
-        <form>
-            <div class="form-group">
-                <label for="name">Họ và tên:</label>
-                <input type="text" class="form-control" id="name" placeholder="Nhập họ và tên">
-            </div>
-            <div class="form-group">
-                <label for="email">Email:</label>
-                <input type="email" class="form-control" id="email" placeholder="Nhập email">
-            </div>
-            <div class="form-group">
-                <label for="message">Tin nhắn:</label>
-                <textarea class="form-control" id="message" rows="3" placeholder="Nhập tin nhắn"></textarea>
-            </div>
-            <button type="submit" class="btn btn-primary">Gửi</button>
-        </form>
     </div>
 </section>
 @endsection
