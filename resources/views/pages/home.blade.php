@@ -348,7 +348,7 @@
                             
                                 @foreach (explode("\n", $clearImgArrStr) as $key => $item)
                                     {!! $item !!}
-                                    @if ($key === 4)
+                                    @if ($key === 1)
                                         @break
                                     @endif
                                 @endforeach
