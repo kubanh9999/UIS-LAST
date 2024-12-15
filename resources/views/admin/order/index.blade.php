@@ -174,10 +174,13 @@
     });
 
     function updateOrderStatus(selectElement) {
-        const orderId = selectElement.getAttribute('data-order-id'); // Lấy ID đơn hàng
-        const newStatus = selectElement.value; // Lấy trạng thái mới
+    const orderId = selectElement.getAttribute('data-order-id'); // Lấy ID đơn hàng
+    const newStatus = selectElement.value; // Trạng thái mới
+    const currentStatus = selectElement.getAttribute('data-current-status'); // Trạng thái hiện tại
 
-        // Gửi request AJAX
+    // Hiển thị hộp thoại xác nhận đơn giản
+    if (confirm(`Bạn có chắc chắn muốn chuyển trạng thái đơn hàng sang '${newStatus}' không?`)) {
+        // Gửi request AJAX nếu người dùng nhấn OK
         fetch(`/admin/orders/update-status`, {
             method: 'POST',
             headers: {
@@ -185,34 +188,33 @@
                 'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
             },
             body: JSON.stringify({
-                id: orderId, // Gửi ID đơn hàng
-                status: newStatus // Gửi trạng thái mới
+                id: orderId, // ID đơn hàng
+                status: newStatus, // Trạng thái mới
             }),
         })
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                Swal.fire({
-            icon: 'success',
-            title: 'Thành công!',
-            text: 'Trạng thái đơn hàng đã được cập nhật.',
-            showConfirmButton: false,
-            timer: 1500
-        });
-            } else {
-                Swal.fire({
-            icon: 'error',
-            title: 'Lỗi!',
-            text: 'Có lỗi xảy ra khi cập nhật trạng thái.',
-            showConfirmButton: true
-        });
-            }
-        })
-        .catch(error => {
-            console.error('Error:', error);
-            alert('Không thể kết nối tới server.');
-        });
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // Cập nhật trạng thái hiện tại
+                    selectElement.setAttribute('data-current-status', newStatus);
+                } else {
+                    // Khôi phục trạng thái cũ nếu có lỗi
+                    alert(data.message || 'Có lỗi xảy ra!');
+                    selectElement.value = currentStatus;
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Lỗi kết nối tới server!');
+                selectElement.value = currentStatus;
+            });
+    } else {
+        // Khôi phục trạng thái ban đầu nếu người dùng nhấn Cancel
+        selectElement.value = currentStatus;
+        location.reload();
+    }
 }
+
 
 </script>
 @endsection
