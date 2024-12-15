@@ -217,22 +217,32 @@
                                     method: 'DELETE',
                                     headers: {
                                         'X-CSRF-TOKEN': document.querySelector(
-                                            'meta[name="csrf-token"]').getAttribute(
-                                            'content')
+                                            'meta[name="csrf-token"]').getAttribute('content')
                                     }
                                 })
                                 .then(response => response.json())
                                 .then(data => {
                                     if (data.success) {
-                                        this.closest('tr').remove();
-                                        document.getElementById('totalPrice')
-                                            .textContent = data.totalPrice + 'VND';
-                                        document.getElementById('cart-count')
-                                            .textContent = data.cartItemCount || 0;
-                                        location.reload();
+                                        // Tùy chọn: Hiển thị thông báo trước khi reload
+                                        Swal.fire({
+                                            title: 'Đã xóa!',
+                                            text: 'Sản phẩm đã được xóa khỏi giỏ hàng.',
+                                            icon: 'success',
+                                            timer: 1500,
+                                            showConfirmButton: false
+                                        }).then(() => {
+                                            location.reload(); // Reload trang ngay sau khi hoàn tất
+                                        });
                                     }
                                 })
-                                .catch(error => console.error('Lỗi:', error));
+                                .catch(error => {
+                                    console.error('Lỗi:', error);
+                                    Swal.fire({
+                                        title: 'Lỗi!',
+                                        text: 'Không thể xóa sản phẩm. Vui lòng thử lại.',
+                                        icon: 'error',
+                                    });
+                                });
                         }
                     });
                 });
