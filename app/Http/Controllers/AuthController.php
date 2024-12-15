@@ -8,6 +8,9 @@ use Illuminate\Support\Facades\Hash;
 use Laravel\Socialite\Facades\Socialite;
 use Illuminate\Support\Facades\Mail;
 use App\Models\UserTimeLog;
+use Illuminate\Support\Str;
+
+use Illuminate\Support\Facades\Validator;
 class AuthController extends Controller
 {
     public function sendVerificationCode(Request $request)
@@ -154,7 +157,7 @@ class AuthController extends Controller
                 auth()->logout();
                 return redirect()->back()->with('error', 'Tài khoản của bạn đã bị khóa. Vui lòng liên hệ với admin.');
             }
-            if ($user->role == 'adminadmin') {
+            if ($user->role == 1) {
                 return redirect('/admin')->with('success', 'Đăng nhập thành công!'); // Điều hướng đến trang admin nếu role = 1
             }
             return redirect()->route('home.index')->with('success', 'Đăng nhập thành công!'); // Điều hướng đến trang home
@@ -216,5 +219,68 @@ class AuthController extends Controller
 
     return redirect()->route('home.index'); // Điều hướng đến trang chính
 }
+
+
+public function resetPasswordForm()
+{
+    return view('pages.resset');
+}
+
+public function resetPassword(Request $request)
+{
+    if (!session()->has('verification_email') || !session()->has('verification_code')) {
+        session()->flash('swal', [
+            'icon' => 'error',
+            'title' => 'Lỗi xác minh',
+            'text' => 'Vui lòng xác minh email trước khi đăng ký.',
+        ]);
+        return redirect()->route('resset');
+    }
+    
+    // Kiểm tra xem email và mã OTP có khớp với session không
+    if (session('verification_email') !== $request->email || session('verification_code') != $request->verification_code) {
+        session()->flash('swal', [
+            'icon' => 'error',
+            'title' => 'Lỗi xác minh',
+            'text' => 'Mã OTP không chính xác.',
+        ]);
+        return back();
+    }
+    
+    // Kiểm tra xem mã OTP có hết hạn không
+    if (now()->greaterThan(session('verification_expires_at'))) {
+        session()->flash('swal', [
+            'icon' => 'error',
+            'title' => 'Lỗi xác minh',
+            'text' => 'Mã OTP đã hết hạn.',
+        ]);
+        return back();
+    }
+    
+    // Nếu tất cả kiểm tra hợp lệ
+    session()->flash('swal', [
+        'icon' => 'success',
+        'title' => 'Xác minh thành công',
+        'text' => 'Mã OTP chính xác. Bạn có thể tiếp tục đăng ký.',
+    ]);
+    $request->validate([
+        'password' => 'required|string|min:8|confirmed',
+    ]);
+
+    // Cập nhật mật khẩu cho người dùng
+    $user = User::where('email', session('verification_email'))->first();
+    if ($user) {
+        $user->password = Hash::make($request->password);
+        $user->save();
+
+        // Xóa session sau khi đặt lại mật khẩu thành công
+        session()->forget(['verification_email', 'verification_code', 'verification_expires_at']);
+
+        return redirect()->route('login')->with('success', 'Mật khẩu của bạn đã được thay đổi thành công!');
+    }
+
+    return back()->withErrors(['email' => 'Không tìm thấy người dùng với email này.']);
+}
+// Hàm tạo mật khẩu ngẫu nhiên với chữ cái, số, ký tự đặc biệt (bao gồm "á")
 
 }
