@@ -43,6 +43,22 @@
         .continue .cart-not-item {
             font-size: small;
         }
+
+        .section-cart {
+            height: 350px;
+        }
+        .section-cart .cart-none {
+            width: 50%;
+            margin: 0 auto;
+            border: none;
+            background: url('client/assets/img/cart-empty.png');
+            background-repeat: no-repeat;
+            background-size: 100% 100%;
+            display: flex;
+            height: 350px;
+            justify-content: center;
+            align-items: flex-end;
+        }
     </style>
 
     <div class="container">
@@ -57,7 +73,7 @@
     <section class="section-cart">
         <div class="container">
             @if (empty($cart))
-                <div class="swapper">
+                <div class="swapper cart-none">
                     <p>Giỏ hàng trống vui lòng về 
                         <a href="{{ route('home.index') }}" style="font-weight: bold"> Trang chủ </a> mua hàng !
                     </p>

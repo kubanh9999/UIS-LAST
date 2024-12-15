@@ -1,4 +1,4 @@
-<style>
+{{-- <style>
     html, body {
     height: 100%;
     margin: 0;
@@ -14,7 +14,7 @@ footer {
     margin-top: auto;
 }
 
-</style>
+</style> --}}
 
 <footer class="footer">
     <div class="container">

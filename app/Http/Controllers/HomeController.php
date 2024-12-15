@@ -127,7 +127,7 @@ class HomeController extends Controller
         $basket = ProductType::findOrFail($id);
         $fruits = Product::all();
 
-        return view('pages.custom-gift-basket', compact('basket', 'fruits'));
+        return view('pages.custom-gift-basket2', compact('basket', 'fruits'));
     }
     public function giftDetail($id)
     {
