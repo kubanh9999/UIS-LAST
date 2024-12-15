@@ -1,5 +1,37 @@
 @extends('admin.layout')
 @section('content')
+<style>
+    /* Tạo kiểu cho select */
+.status-select {
+    width: 200px;
+    padding: 8px 12px;
+    font-size: 14px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    background-color: #f9f9f9;
+    transition: border-color 0.3s ease, background-color 0.3s ease;
+}
+
+/* Khi người dùng hover vào select */
+.status-select:hover {
+    border-color: #4CAF50; /* Màu viền khi hover */
+    background-color: #e8f5e9; /* Màu nền khi hover */
+}
+
+/* Khi select được chọn */
+.status-select:focus {
+    border-color: #4CAF50; /* Màu viền khi chọn */
+    background-color: #ffffff;
+    outline: none; /* Loại bỏ viền mặc định khi focus */
+}
+
+/* Style cho các option bên trong select */
+.status-select option {
+    padding: 8px 12px;
+    font-size: 14px;
+}
+
+</style>
     <div class="page-wrapper">
         <div class="content">
             <div class="page-header">

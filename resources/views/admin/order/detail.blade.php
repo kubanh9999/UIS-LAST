@@ -197,7 +197,7 @@
                 @foreach ($order->orderDetails as $item)
                     @if ($item->gift_id && !in_array($item->gift_id, $displayedGiftIds))
                         <div class="card">
-                            <strong></strong> {{ $item->gift->name }} | Số lượng: x{{ $item->quantity }}
+                            <strong></strong> {{ $item->gift->name }} | Số lượng: x {{ $item->quantity }}
                             <br>
                                 @php
                                     $imagePath = $item->gift->image;
@@ -232,7 +232,7 @@
                                                     @endphp
                                                     <img src="{{ asset($imagePath) }}" 
                                                         alt="{{ $giftItem->product->name }}" style="width: 40px;">
-                                                    <span>{{ $giftItem->product->name }} x{{ $giftItem->quantity }}</span>
+                                                    <span>{{ $giftItem->product->name }} x {{ $giftItem->quantity }}kg</span>
                                                 </li>
                                             @endif
                                         @endforeach
