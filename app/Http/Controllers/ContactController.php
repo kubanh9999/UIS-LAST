@@ -26,12 +26,21 @@ class ContactController extends Controller
        /*  dd($request->all()); */
          // Xác thực dữ liệu từ form
          $request->validate([
-             'category' => 'required',
-             'name' => 'required',
-             'email' => 'required|email',
-             'phone' => 'required|regex:/^[0-9]{10,11}$/',
-             'message' => 'required|min:10',
-         ]);
+            'category' => 'required',
+            'name' => 'required',
+            'email' => 'required|email',
+            'phone' => 'required|regex:/^[0-9]{10,11}$/',
+            'message' => 'required|min:10',
+        ], [
+            'category.required' => 'Vui lòng chọn danh mục.',
+            'name.required' => 'Vui lòng nhập họ và tên của bạn.',
+            'email.required' => 'Vui lòng nhập địa chỉ email.',
+            'email.email' => 'Email không đúng định dạng. Vui lòng nhập lại.',
+            'phone.required' => 'Vui lòng nhập số điện thoại.',
+            'phone.regex' => 'Số điện thoại chỉ được chứa 10 đến 11 chữ số.',
+            'message.required' => 'Vui lòng nhập nội dung tin nhắn.',
+            'message.min' => 'Nội dung tin nhắn phải có ít nhất 10 ký tự.',
+        ]);
      
          // Dữ liệu từ form
          $data = [

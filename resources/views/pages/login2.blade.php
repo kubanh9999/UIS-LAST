@@ -85,6 +85,12 @@
     font-size: small;
 }
 </style> --}}
+<style>
+     .quenmk {
+    margin-left: 350px;
+    font-size: 12px;
+    }
+</style>
 
     @if (session('replaceHistory'))
         <script type="text/javascript">
@@ -148,14 +154,16 @@
                             <input type="password" name="password" id="password" required>
                             <span id="password-error" class="error-message d-none"></span>
                         </div>
+                        <div class="quenmk">
+                            <p><a href="{{route('reset')}}">Quên mật khẩu?</a></p>
+                        </div>
                         <div class="submit-form">
                             <button type="submit">Đăng Nhập</button>
                             <p class="not-register">Bạn chưa có tài khoản <a href="{{ route('register') }}">Đăng ký</a> tại đây? </p>
-                            <p>Bạn quên quên mật khẩu <a href="{{route('reset')}}">lấy lại mật khẩu</a></p>
                         </div>
                     </div>
                     <div class="inner-more">
-                        <a {{ route('login.google') }}>
+                        <a href="{{ route('login.google') }}">
                             <img src="{{asset('client/assets/img/google_logo.png')}}" alt="google_logo.png" width="35px">
                             <span>Đăng nhập bằng Google</span>
                         </a>

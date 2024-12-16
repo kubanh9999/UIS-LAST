@@ -45,7 +45,7 @@
         }
 
         .section-cart {
-            height: 350px;
+            height: auto;
         }
         .section-cart .cart-none {
             width: 50%;
