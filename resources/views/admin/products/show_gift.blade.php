@@ -148,7 +148,7 @@
 {{--                                                php artisan storage:link--}}
                                         </td>
                                         <td>{{ $item->category_id }}</td>
-                                        <td contenteditable="true" class="editable-field" data-id="{{ $item->id }}" data-field="price">{{ number_format($item->price, 0) }} VND</td>
+                                        <td contenteditable="true" class="editable-field" data-id="{{ $item->id }}" data-field="price">{{ number_format($item->price_gift, 0) }} VND</td>
                                         <td contenteditable="true" class="editable-field" data-id="{{ $item->id }}" data-field="stock">{{ $item->stock }}</td>
                                         <td>
                                             <div class="d-flex justify-content-center align-items-center">

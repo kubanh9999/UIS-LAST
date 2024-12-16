@@ -60,15 +60,16 @@ class AdminProductController extends Controller
         // Lưu ảnh sản phẩm chính
         $productImage = null;
         if ($request->hasFile('product_image')) {
-            // Lấy tên file gốc
-            $fileName = $request->file('product_image')->getClientOriginalName();
+            // Tạo tên file duy nhất bằng cách sử dụng timestamp và mã hash
+            $uniqueFileName = uniqid() . '_' . time() . '.' . $request->file('product_image')->getClientOriginalExtension();
 
             // Di chuyển file đến thư mục chỉ định
-            $request->file('product_image')->move(public_path($uploadFolder), $fileName);
+            $request->file('product_image')->move(public_path($uploadFolder), $uniqueFileName);
 
             // Đường dẫn tương đối để lưu vào DB
-            $productImage = $uploadFolder . '/' . $fileName;
+            $productImage = $uploadFolder . '/' . $uniqueFileName;
         }
+
 
         // Nếu là giỏ quà, lưu vào bảng product_types
         if ($request->product_type === 'gift_basket') {
@@ -134,7 +135,6 @@ class AdminProductController extends Controller
         //     }
         // }
 
-
         return redirect()->route('admin.products.index')->with('success', 'Trái cây đã được thêm thành công!');
     }
 
@@ -165,7 +165,6 @@ class AdminProductController extends Controller
 
     public function updateGift(Request $request, string $id)
     {
-
         $gift = ProductType::findOrFail($id);
 
         $request->validate([
@@ -175,26 +174,48 @@ class AdminProductController extends Controller
             'stock' => 'required|integer|min:0',
             'description' => 'required|string',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'upload_folder' => 'nullable|string', // Thư mục lưu trữ ảnh tùy chọn
         ]);
 
-        // Cập nhật sản phẩm
+        // Cập nhật thông tin cơ bản
         $gift->name = $request->name;
         $gift->category_id = $request->category_id;
         $gift->price_gift = $request->price_gift;
         $gift->stock = $request->stock;
         $gift->description = $request->description;
 
-        // Kiểm tra và lưu ảnh sản phẩm chính
-        if ($request->hasFile('image')) {
-            $productImage = $request->file('image')->store('upload', 'public');
-            $gift->image = $productImage;
+        // Lấy thư mục upload, mặc định là 'uploads/gift_baskets'
+        $uploadFolder = $request->input('upload_folder', 'uploads/products');
+
+        // Đảm bảo thư mục tồn tại, nếu không thì tạo mới
+        if (!file_exists(public_path($uploadFolder))) {
+            mkdir(public_path($uploadFolder), 0777, true);
         }
 
-        $gift->save();
+        // Kiểm tra và lưu ảnh sản phẩm chính
+        if ($request->hasFile('image')) {
+            // Xóa ảnh cũ nếu có
+            if ($gift->image && file_exists(public_path($gift->image))) {
+                unlink(public_path($gift->image));
+            }
 
+            // Tạo tên file ảnh duy nhất
+            $uniqueFileName = uniqid() . '_' . time() . '.' . $request->file('image')->getClientOriginalExtension();
+
+            // Di chuyển file mới đến thư mục chỉ định
+            $request->file('image')->move(public_path($uploadFolder), $uniqueFileName);
+
+            // Cập nhật đường dẫn ảnh mới
+            $gift->image = $uploadFolder . '/' . $uniqueFileName;
+        }
+
+        // Lưu thông tin giỏ quà
+        $gift->save();
 
         return redirect()->route('admin.products.gift')->with('success', 'Giỏ quà đã được cập nhật thành công!');
     }
+
+
 
     public function updateField(Request $request)
     {
@@ -213,75 +234,85 @@ class AdminProductController extends Controller
     }
 
     public function update(Request $request, string $id)
-    {
-        $product = Product::findOrFail($id);
+{
+    $product = Product::findOrFail($id);
 
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'category_id' => 'required|integer',
-            'price' => 'required|numeric|min:0',
-            'discount' => 'nullable|numeric|min:0',
-            'stock' => 'required|integer|min:0',
-            'description' => 'required|string',
-            'product_image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-            // 'child_images' => 'nullable|array|min:1',
-            // 'child_images.*' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-            'upload_folder' => 'nullable|string', // Tùy chọn thư mục lưu trữ
-        ]);
+    $request->validate([
+        'name' => 'required|string|max:255',
+        'category_id' => 'required|integer',
+        'price' => 'required|numeric|min:0',
+        'discount' => 'nullable|numeric|min:0',
+        'stock' => 'required|integer|min:0',
+        'description' => 'required|string',
+        'product_image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+        // 'child_images' => 'nullable|array|min:1',
+        // 'child_images.*' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+        'upload_folder' => 'nullable|string', // Tùy chọn thư mục lưu trữ
+    ]);
 
-        // Cập nhật thông tin sản phẩm
-        $product->name = $request->name;
-        $product->category_id = $request->category_id;
-        $product->price = $request->price;
-        $product->discount = $request->discount;
-        $product->stock = $request->stock;
-        $product->description = $request->description;
+    // Cập nhật thông tin sản phẩm
+    $product->name = $request->name;
+    $product->category_id = $request->category_id;
+    $product->price = $request->price;
+    $product->discount = $request->discount;
+    $product->stock = $request->stock;
+    $product->description = $request->description;
 
-        // Lấy thư mục upload, mặc định là 'uploads/products'
-        $uploadFolder = $request->input('upload_folder', 'uploads/products');
+    // Lấy thư mục upload, mặc định là 'uploads/products'
+    $uploadFolder = $request->input('upload_folder', 'uploads/products');
 
-        // Kiểm tra và cập nhật ảnh sản phẩm chính
-        if ($request->hasFile('product_image')) {
-            // Xóa ảnh cũ nếu có
-            if ($product->image && file_exists(public_path($product->image))) {
-                unlink(public_path($product->image));
-            }
+    // Đảm bảo thư mục tồn tại
+    if (!file_exists(public_path($uploadFolder))) {
+        mkdir(public_path($uploadFolder), 0777, true);
+    }
 
-            // Lưu ảnh mới
-            $fileName = $request->file('product_image')->getClientOriginalName();
-            $request->file('product_image')->move(public_path($uploadFolder), $fileName);
-            $product->image = $uploadFolder . '/' . $fileName;
+    // Kiểm tra và cập nhật ảnh sản phẩm chính
+    if ($request->hasFile('product_image')) {
+        // Xóa ảnh cũ nếu có
+        if ($product->image && file_exists(public_path($product->image))) {
+            unlink(public_path($product->image));
         }
 
-        $product->save();
+        // Tạo tên file ảnh duy nhất
+        $uniqueFileName = uniqid() . '_' . time() . '.' . $request->file('product_image')->getClientOriginalExtension();
 
-        // Xử lý ảnh con
-        // if ($request->hasFile('child_images')) {
-        //     // Xóa ảnh con cũ
-        //     $oldChildImages = ProductImage::where('product_id', $product->id)->get();
-        //     foreach ($oldChildImages as $oldImage) {
-        //         if (file_exists(public_path($oldImage->image))) {
-        //             unlink(public_path($oldImage->image));
-        //         }
-        //     }
-        //     ProductImage::where('product_id', $product->id)->delete();
+        // Di chuyển file mới đến thư mục chỉ định
+        $request->file('product_image')->move(public_path($uploadFolder), $uniqueFileName);
 
-        //     // Lưu ảnh con mới
-        //     foreach ($request->file('child_images') as $image) {
-        //         $childFileName = $image->getClientOriginalName();
-        //         $image->move(public_path($uploadFolder . '/child'), $childFileName);
-        //         $childImagePath = $uploadFolder . '/child/' . $childFileName;
-
-        //         ProductImage::create([
-        //             'product_id' => $product->id,
-        //             'image' => $childImagePath,
-        //         ]);
-        //     }
-        // }
-
-
-        return redirect()->route('admin.products.index')->with('success', 'Sản phẩm đã được cập nhật thành công!');
+        // Cập nhật đường dẫn ảnh mới
+        $product->image = $uploadFolder . '/' . $uniqueFileName;
     }
+
+    // Lưu thông tin sản phẩm
+    $product->save();
+
+    // Xử lý ảnh con (nếu có)
+    // if ($request->hasFile('child_images')) {
+    //     // Xóa ảnh con cũ
+    //     $oldChildImages = ProductImage::where('product_id', $product->id)->get();
+    //     foreach ($oldChildImages as $oldImage) {
+    //         if (file_exists(public_path($oldImage->image))) {
+    //             unlink(public_path($oldImage->image));
+    //         }
+    //     }
+    //     ProductImage::where('product_id', $product->id)->delete();
+
+    //     // Lưu ảnh con mới
+    //     foreach ($request->file('child_images') as $image) {
+    //         $childFileName = $image->getClientOriginalName();
+    //         $image->move(public_path($uploadFolder . '/child'), $childFileName);
+    //         $childImagePath = $uploadFolder . '/child/' . $childFileName;
+
+    //         ProductImage::create([
+    //             'product_id' => $product->id,
+    //             'image' => $childImagePath,
+    //         ]);
+    //     }
+    // }
+
+    return redirect()->route('admin.products.index')->with('success', 'Sản phẩm đã được cập nhật thành công!');
+}
+
 
     /**
      * Display the specified resource.
@@ -320,18 +351,18 @@ class AdminProductController extends Controller
                 unlink(public_path($imagePath)); // Xóa ảnh chính
             }
 
-            // Xử lý ảnh con của sản phẩm (giả sử bạn có bảng `product_images` lưu ảnh con)
-            $childImages = $product->images; // Quan hệ tới bảng ảnh con
-            if ($childImages) {
-                foreach ($childImages as $childImage) {
-                    $childImagePath = $childImage->path; // Đường dẫn của ảnh con
-                    if ($childImagePath && file_exists(public_path($childImagePath))) {
-                        unlink(public_path($childImagePath)); // Xóa ảnh con
-                    }
-                    // Xóa bản ghi ảnh con trong cơ sở dữ liệu
-                    $childImage->delete();
-                }
-            }
+            // // Xử lý ảnh con của sản phẩm (giả sử bạn có bảng `product_images` lưu ảnh con)
+            // $childImages = $product->images; // Quan hệ tới bảng ảnh con
+            // if ($childImages) {
+            //     foreach ($childImages as $childImage) {
+            //         $childImagePath = $childImage->path; // Đường dẫn của ảnh con
+            //         if ($childImagePath && file_exists(public_path($childImagePath))) {
+            //             unlink(public_path($childImagePath)); // Xóa ảnh con
+            //         }
+            //         // Xóa bản ghi ảnh con trong cơ sở dữ liệu
+            //         $childImage->delete();
+            //     }
+            // }
 
             // Xóa sản phẩm khỏi cơ sở dữ liệu
             $product->delete();
@@ -363,11 +394,10 @@ class AdminProductController extends Controller
         }
     }
 
-
     public function updateStatus(Request $request)
     {
         // Các trạng thái hợp lệ
-        $validStatuses = ['Đang xử lý', 'Đang vận chuyển','Đã giao', 'Hoàn thành','Đã hủy'];
+        $validStatuses = ['Đang xử lý', 'Đang vận chuyển', 'Đã giao', 'Hoàn thành', 'Đã hủy'];
         // Lấy đơn hàng từ ID
         $order = Order::find($request->id);
         if ($order) {
@@ -376,16 +406,16 @@ class AdminProductController extends Controller
                 // Cập nhật trạng thái
                 $order->status = $request->status;
                 $order->save();
-    
+
                 return response()->json(['success' => true]);
             } else {
                 return response()->json(['success' => false, 'message' => 'Trạng thái không hợp lệ']);
             }
         }
-    
+
         return response()->json(['success' => false]);
     }
-    
+
     function gift()
     {
         $ProductType = ProductType::orderBy('id', 'desc')->get();
