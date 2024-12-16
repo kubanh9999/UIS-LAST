@@ -163,9 +163,8 @@
                                             <input type="hidden" name="basket[name]" value="{{ $productType->name }}">
                                             <input type="hidden" name="basket[image]" value="{{ $productType->image }}">
                                             <input type="hidden" name="basket[price_gift]" value="{{ $productType->price_gift }}">
-                                            <a href="#" onclick="this.closest('form').submit();" class="btn-cart">Thêm
-                                                giỏ
-                                                hàng
+                                            <a href="#" onclick="this.closest('form').submit();" class="btn-cart">
+                                                <i class="fa-solid fa-cart-shopping"></i>
                                             </a>
                                         </form>
                                     </div>
