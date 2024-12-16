@@ -156,6 +156,9 @@ Route::post('/change-password', [AccountManagementController::class, 'updatePass
 Route::get('/account/management/order/detail/{id}', [AccountManagementController::class, 'orderDetail'])->name('account.management.order.detail');
 // Route hủy đơn hàng
 Route::post('/account/order/{orderId}/cancel', [AccountManagementController::class, 'cancelOrder'])->name('account.order.cancel');
+// Route xác nhận đơn hàng
+Route::post('/account/order/confirm/{orderId}', [AccountManagementController::class, 'completeOrder'])->name('order.confirm');
+
 
 //Admin
 Route::get('/admin/product/edit/{id}', [AdminProductController::class, 'editGift'])->name('admin.gift.edit');

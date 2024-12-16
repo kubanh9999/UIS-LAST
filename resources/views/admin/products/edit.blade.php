@@ -56,7 +56,7 @@
                     </div>
                 </div>
 
-                <div class="col-lg-12">
+                {{-- <div class="col-lg-12">
                     <div class="form-group">
                         <label>Ảnh con</label>
                         <input type="file" name="child_images[]" class="form-control" multiple>
@@ -66,7 +66,7 @@
                             </div>
                         @endif
                     </div>
-                </div>
+                </div> --}}
 
                 <div class="col-lg-12">
                     <div class="form-group">
