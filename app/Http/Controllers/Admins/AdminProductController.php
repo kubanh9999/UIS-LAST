@@ -134,6 +134,7 @@ class AdminProductController extends Controller
         //     }
         // }
 
+
         return redirect()->route('admin.products.index')->with('success', 'Trái cây đã được thêm thành công!');
     }
 
@@ -278,6 +279,7 @@ class AdminProductController extends Controller
         //     }
         // }
 
+
         return redirect()->route('admin.products.index')->with('success', 'Sản phẩm đã được cập nhật thành công!');
     }
 
@@ -360,6 +362,7 @@ class AdminProductController extends Controller
             return redirect()->back()->withErrors(['error' => 'Lỗi khi xóa giỏ quà: ' . $e->getMessage()]);
         }
     }
+
 
     public function updateStatus(Request $request)
     {

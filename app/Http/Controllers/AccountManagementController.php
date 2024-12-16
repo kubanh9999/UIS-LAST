@@ -123,7 +123,6 @@ class AccountManagementController extends Controller
     {
        /*  dd(vars: $request->ward_id); */
         $user = Auth::user(); // Lấy thông tin người dùng hiện tại
-
         // Cập nhật thông tin người dùng
         $user->update([
             'name' => $request->name,

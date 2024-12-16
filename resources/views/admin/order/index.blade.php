@@ -155,11 +155,10 @@
                                 <td>{{ $item->payment_method }}</td>
                                 <td>
                                 <select name="status" class="status-select" data-order-id="{{ $item->id }}" onchange="updateOrderStatus(this)">
-                                    <option value="Đang xử lý" {{ $item->status == 'Đang xử lý' ? 'selected' : '' }}>Đang xử lý</option>
-                                    <option value="Đang vận chuyển" {{ $item->status == 'Đang vận chuyển' ? 'selected' : '' }}>Đang vận chuyển</option>
-                                    <option value="Đã giao" {{ $item->status == 'Đã giao' ? 'selected' : '' }}>Đã giao</option>
-                                    <option value="Hoàn thành" {{ $item->status == 'Hoàn thành' ? 'selected' : '' }}>Hoàn thành đơn hàng</option>
-                                    <option value="Đã hủy" {{ $item->status == 'Đã hủy' ? 'selected' : '' }}>Đã hủy</option>
+                                    <option value="-1" {{ $item->status == -1 ? 'selected' : '' }}>Đã hủy</option>
+                                    <option value="0" {{ $item->status == 0 ? 'selected' : '' }}>Đang xử lý</option>
+                                    <option value="1" {{ $item->status == 1 ? 'selected' : '' }}>Đang vận chuyển</option>
+                                    <option value="2" {{ $item->status == 2 ? 'selected' : '' }}>Đã nhận hàng</option>
                                 </select>
                                 </td>
                                 <td>
@@ -225,71 +224,19 @@
                 status: newStatus, // Trạng thái mới
             }),
         })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    // Cập nhật trạng thái hiện tại
-                    selectElement.setAttribute('data-current-status', newStatus);
-                } else {
-                    // Khôi phục trạng thái cũ nếu có lỗi
-                    alert(data.message || 'Có lỗi xảy ra!');
-                    selectElement.value = currentStatus;
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                alert('Lỗi kết nối tới server!');
-                selectElement.value = currentStatus;
-            });
-    } else {
-        // Khôi phục trạng thái ban đầu nếu người dùng nhấn Cancel
-        selectElement.value = currentStatus;
-        location.reload();
-    }
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                alert('Trạng thái đơn hàng đã được cập nhật.');
+            } else {
+                alert('Có lỗi xảy ra khi cập nhật trạng thái.');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('Không thể kết nối tới server.');
+        });
 }
-
-$(document).ready(function() {
-    function updateOptions(selectElement) {
-        var selectedStatus = $(selectElement).val();
-
-        // Reset lại trạng thái hiển thị
-        $(selectElement).find('option').show();
-
-        // Ẩn các option dựa trên trạng thái hiện tại
-        if (selectedStatus == 'Đang xử lý') {
-            $(selectElement).find('option[value="Đã giao"]').hide();
-            $(selectElement).find('option[value="Hoàn thành"]').hide();
-        } else if (selectedStatus == 'Đang vận chuyển') {
-            $(selectElement).find('option[value="Đã hủy"]').hide();
-            $(selectElement).find('option[value="Đang xử lý"]').hide();
-            $(selectElement).find('option[value="Hoàn thành"]').hide();
-        } else if (selectedStatus == 'Đã giao') {
-            $(selectElement).find('option[value="Đã hủy"]').hide();
-            $(selectElement).find('option[value="Đang vận chuyển"]').hide();
-            $(selectElement).find('option[value="Đang xử lý"]').hide();
-            $(selectElement).find('option[value="Hoàn thành"]').hide();
-        } else if (selectedStatus == 'Hoàn thành') {
-            $(selectElement).find('option[value="Đã hủy"]').hide();
-            $(selectElement).find('option[value="Đang vận chuyển"]').hide();
-            $(selectElement).find('option[value="Đang xử lý"]').hide();
-            $(selectElement).find('option[value="Đã giao"]').hide();
-        } else if (selectedStatus == 'Đã hủy') {
-            $(selectElement).find('option').not('[value="Đã hủy"]').hide();
-        }
-    }
-
-    // Kiểm tra trạng thái ban đầu khi trang được tải
-    $('.status-select').each(function() {
-        updateOptions(this);
-    });
-
-    // Lắng nghe sự thay đổi trạng thái
-    $('.status-select').on('change', function() {
-        updateOptions(this);
-    });
-});
-
-
 
 </script>
 @endsection
