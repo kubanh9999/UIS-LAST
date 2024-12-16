@@ -331,15 +331,10 @@
                         <div class="inner-media">
                       {{--  --}}
                             <small>{{ $latestPost->created_at }}</small>
+                            <h6>Người đăng: {{ $latestPost->author }}</h6>
                         </div>
                         <div class="inner-text">
                             <p>
-                                <div style="
-                                display: -webkit-box;
-                                -webkit-line-clamp: 3;
-                                -webkit-box-orient: vertical;
-                                overflow: hidden;
-                                text-overflow: ellipsis;">
                                 @php
                                     // Loại bỏ các ký tự &nbsp; và thẻ <img>
                                     $clearBreakLineArrStr = \Illuminate\Support\Str::replace('&nbsp;', '', $latestPost->content);
@@ -352,7 +347,7 @@
                                         @break
                                     @endif
                                 @endforeach
-                            </div>
+                            
                             </p>
                         </div>
                     </div>
@@ -375,14 +370,9 @@
                                     <div class="inner-media">
                                         {{-- <h6>{{ $post->author }}</h6> --}}
                                         <small>{{ $post->created_at }}</small>
+                                        <h6>Người đăng: {{ $post->author }}</h6>
                                     </div>
-                                    <p> <a href="{{ route('post.show', ['id' => $post->id]) }}" style="
-
-                                        display: -webkit-box; 
-                                        -webkit-line-clamp: 2; 
-                                        -webkit-box-orient: vertical; 
-                                        overflow: hidden; 
-                                        text-overflow: ellipsis;">
+                                    <p class="text"> 
                                         @php
                                             // Loại bỏ các ký tự &nbsp; và thẻ <img>
                                             $clearBreakLineArrStr = \Illuminate\Support\Str::replace('&nbsp;', "", $post->content);
@@ -393,7 +383,8 @@
                                         @endphp
                                     
                                         {!! $cleanContent !!}
-                                    </a></p>
+                                    </p>
+                                    
                                 </div>
                             </div>
                         @endforeach
