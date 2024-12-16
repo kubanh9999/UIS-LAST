@@ -197,9 +197,12 @@ class DashboardController extends Controller
                     break;
                 case 'Đang vận chuyển':
                     $item->status = 'Đang vận chuyển';
+                    break;    
+                case 'Hoàn thành':
+                    $item->status = 'Hoàn thành';
                     break;
-                case 'Đã nhận hàng':
-                    $item->status = 'Đã nhận hàng';
+                case 'Đã giao':
+                    $item->status = 'Đã giao';
                     break;
                 default:
                     $item->status = 'Không xác định';
