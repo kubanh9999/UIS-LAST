@@ -47,8 +47,8 @@ class AdminProductController extends Controller
             'discount' => 'nullable|numeric|min:0',
             'stock' => 'required|integer|min:0',
             'description' => 'required|string',
-            'product_image' => 'required|image|max:2048',
-            'child_images' => 'required|array|min:1',
+            'product_image' => 'nullable|image|max:2048',
+            // 'child_images' => 'required|array|min:1',
             'child_images.*' => 'image|max:2048',
             'product_type' => 'required|string',
             'upload_folder' => 'nullable|string', // Thêm tùy chọn để xác định thư mục
@@ -115,24 +115,24 @@ class AdminProductController extends Controller
         }
 
         // Lưu ảnh con cho sản phẩm trái cây
-        if ($request->hasFile('child_images')) {
-            foreach ($request->file('child_images') as $image) {
-                // Lấy tên file ảnh con
-                $childFileName = $image->getClientOriginalName();
+        // if ($request->hasFile('child_images')) {
+        //     foreach ($request->file('child_images') as $image) {
+        //         // Lấy tên file ảnh con
+        //         $childFileName = $image->getClientOriginalName();
 
-                // Di chuyển ảnh con đến thư mục con
-                $image->move(public_path($uploadFolder . '/child'), $childFileName);
+        //         // Di chuyển ảnh con đến thư mục con
+        //         $image->move(public_path($uploadFolder . '/child'), $childFileName);
 
-                // Đường dẫn tương đối để lưu vào DB
-                $childImagePath = $uploadFolder . '/child/' . $childFileName;
+        //         // Đường dẫn tương đối để lưu vào DB
+        //         $childImagePath = $uploadFolder . '/child/' . $childFileName;
 
-                // Lưu ảnh con vào cơ sở dữ liệu
-                ProductImage::create([
-                    'product_id' => $product->id,
-                    'image' => $childImagePath,
-                ]);
-            }
-        }
+        //         // Lưu ảnh con vào cơ sở dữ liệu
+        //         ProductImage::create([
+        //             'product_id' => $product->id,
+        //             'image' => $childImagePath,
+        //         ]);
+        //     }
+        // }
 
         return redirect()->route('admin.products.index')->with('success', 'Trái cây đã được thêm thành công!');
     }
@@ -223,8 +223,8 @@ class AdminProductController extends Controller
             'stock' => 'required|integer|min:0',
             'description' => 'required|string',
             'product_image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-            'child_images' => 'nullable|array|min:1',
-            'child_images.*' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            // 'child_images' => 'nullable|array|min:1',
+            // 'child_images.*' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             'upload_folder' => 'nullable|string', // Tùy chọn thư mục lưu trữ
         ]);
 
@@ -255,28 +255,28 @@ class AdminProductController extends Controller
         $product->save();
 
         // Xử lý ảnh con
-        if ($request->hasFile('child_images')) {
-            // Xóa ảnh con cũ
-            $oldChildImages = ProductImage::where('product_id', $product->id)->get();
-            foreach ($oldChildImages as $oldImage) {
-                if (file_exists(public_path($oldImage->image))) {
-                    unlink(public_path($oldImage->image));
-                }
-            }
-            ProductImage::where('product_id', $product->id)->delete();
+        // if ($request->hasFile('child_images')) {
+        //     // Xóa ảnh con cũ
+        //     $oldChildImages = ProductImage::where('product_id', $product->id)->get();
+        //     foreach ($oldChildImages as $oldImage) {
+        //         if (file_exists(public_path($oldImage->image))) {
+        //             unlink(public_path($oldImage->image));
+        //         }
+        //     }
+        //     ProductImage::where('product_id', $product->id)->delete();
 
-            // Lưu ảnh con mới
-            foreach ($request->file('child_images') as $image) {
-                $childFileName = $image->getClientOriginalName();
-                $image->move(public_path($uploadFolder . '/child'), $childFileName);
-                $childImagePath = $uploadFolder . '/child/' . $childFileName;
+        //     // Lưu ảnh con mới
+        //     foreach ($request->file('child_images') as $image) {
+        //         $childFileName = $image->getClientOriginalName();
+        //         $image->move(public_path($uploadFolder . '/child'), $childFileName);
+        //         $childImagePath = $uploadFolder . '/child/' . $childFileName;
 
-                ProductImage::create([
-                    'product_id' => $product->id,
-                    'image' => $childImagePath,
-                ]);
-            }
-        }
+        //         ProductImage::create([
+        //             'product_id' => $product->id,
+        //             'image' => $childImagePath,
+        //         ]);
+        //     }
+        // }
 
         return redirect()->route('admin.products.index')->with('success', 'Sản phẩm đã được cập nhật thành công!');
     }
@@ -361,12 +361,10 @@ class AdminProductController extends Controller
         }
     }
 
-
-
     public function updateStatus(Request $request)
     {
         // Các trạng thái hợp lệ
-        $validStatuses = ['Đã hủy', 'Đang xử lý', 'Đang vận chuyển', 'Đã nhận hàng'];
+        $validStatuses = ['Đang xử lý', 'Đang vận chuyển','Đã giao', 'Hoàn thành','Đã hủy'];
         // Lấy đơn hàng từ ID
         $order = Order::find($request->id);
         if ($order) {

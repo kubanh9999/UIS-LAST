@@ -36,9 +36,9 @@
         <div class="content">
             <div class="page-header">
                 <div class="page-title">
-                    <h4>DANH MỤC SẢN PHẨM </h4>
-                    <h6>View/Search product Category</h6>
-                    <h6>Note Status: <strong>-1</strong> : Đã hủy / <strong>0</strong> : Đang xử lý / <strong>1</strong> : Đang vận chuyển / <strong>2</strong> : Đã nhận hàng</h6>
+                    <h4>QUẢN LÝ ĐƠN HÀNG </h4>
+                    {{-- <h6>View/Search product Category</h6>
+                    <h6>Note Status: <strong>-1</strong> : Đã hủy / <strong>0</strong> : Đang xử lý / <strong>1</strong> : Đang vận chuyển / <strong>2</strong> : Đã nhận hàng</h6> --}}
                 </div>
              
             </div>
@@ -155,10 +155,11 @@
                                 <td>{{ $item->payment_method }}</td>
                                 <td>
                                 <select name="status" class="status-select" data-order-id="{{ $item->id }}" onchange="updateOrderStatus(this)">
-                                    <option value="Đã hủy" {{ $item->status == 'Đã hủy' ? 'selected' : '' }}>Đã hủy</option>
                                     <option value="Đang xử lý" {{ $item->status == 'Đang xử lý' ? 'selected' : '' }}>Đang xử lý</option>
                                     <option value="Đang vận chuyển" {{ $item->status == 'Đang vận chuyển' ? 'selected' : '' }}>Đang vận chuyển</option>
-                                    <option value="Đã nhận hàng" {{ $item->status == 'Đã nhận hàng' ? 'selected' : '' }}>Đã nhận hàng</option>
+                                    <option value="Đã giao" {{ $item->status == 'Đã giao' ? 'selected' : '' }}>Đã giao</option>
+                                    <option value="Hoàn thành" {{ $item->status == 'Hoàn thành' ? 'selected' : '' }}>Hoàn thành đơn hàng</option>
+                                    <option value="Đã hủy" {{ $item->status == 'Đã hủy' ? 'selected' : '' }}>Đã hủy</option>
                                 </select>
                                 </td>
                                 <td>
@@ -176,7 +177,7 @@
     </div>
 
 
-
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
     document.querySelectorAll('.editable-status').forEach(element => {
         element.addEventListener('click', function() {
@@ -246,6 +247,48 @@
         location.reload();
     }
 }
+
+$(document).ready(function() {
+    function updateOptions(selectElement) {
+        var selectedStatus = $(selectElement).val();
+
+        // Reset lại trạng thái hiển thị
+        $(selectElement).find('option').show();
+
+        // Ẩn các option dựa trên trạng thái hiện tại
+        if (selectedStatus == 'Đang xử lý') {
+            $(selectElement).find('option[value="Đã giao"]').hide();
+            $(selectElement).find('option[value="Hoàn thành"]').hide();
+        } else if (selectedStatus == 'Đang vận chuyển') {
+            $(selectElement).find('option[value="Đã hủy"]').hide();
+            $(selectElement).find('option[value="Đang xử lý"]').hide();
+            $(selectElement).find('option[value="Hoàn thành"]').hide();
+        } else if (selectedStatus == 'Đã giao') {
+            $(selectElement).find('option[value="Đã hủy"]').hide();
+            $(selectElement).find('option[value="Đang vận chuyển"]').hide();
+            $(selectElement).find('option[value="Đang xử lý"]').hide();
+            $(selectElement).find('option[value="Hoàn thành"]').hide();
+        } else if (selectedStatus == 'Hoàn thành') {
+            $(selectElement).find('option[value="Đã hủy"]').hide();
+            $(selectElement).find('option[value="Đang vận chuyển"]').hide();
+            $(selectElement).find('option[value="Đang xử lý"]').hide();
+            $(selectElement).find('option[value="Đã giao"]').hide();
+        } else if (selectedStatus == 'Đã hủy') {
+            $(selectElement).find('option').not('[value="Đã hủy"]').hide();
+        }
+    }
+
+    // Kiểm tra trạng thái ban đầu khi trang được tải
+    $('.status-select').each(function() {
+        updateOptions(this);
+    });
+
+    // Lắng nghe sự thay đổi trạng thái
+    $('.status-select').on('change', function() {
+        updateOptions(this);
+    });
+});
+
 
 
 </script>

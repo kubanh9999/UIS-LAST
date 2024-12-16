@@ -1,7 +1,18 @@
 @extends('layouts.master')
 @section('title', 'Quản lý tài khoản')
 @section('content')
+<style>
+    .btn-light-green {
+    background-color: #a8e6a3; /* Xanh lá nhạt */
+    color: #000;
+    border: none;
+}
 
+.btn-light-green:hover {
+    background-color: #87d987; /* Xanh lá hơi đậm khi hover */
+}
+
+</style>
 
     <div class="container">
         <nav aria-label="breadcrumb">
@@ -173,38 +184,58 @@
                                     <p><strong>Phương thức thanh toán:</strong> {{ $item->payment_method }}</p>
                                     
                                     <div class="justify-content-between">
-                                        <a href="{{ route('account.management.order.detail', $item->id) }}" class="btn btn-success btn-sm"><i class="fa-solid fa-eye"></i> Xem chi tiết</a>
-                                        
+                                        @if ($item->status == 'Hoàn thành')
+                                            <a href="https://www.facebook.com/profile.php?id=100094217616470" target="_blank" class="btn btn-light-green btn-sm">
+                                                <i class="fa-solid fa-star"></i> Đánh giá
+                                            </a>  
+                                        @else
+                                            <a href="{{ route('account.management.order.detail', $item->id) }}" class="btn btn-success btn-sm">
+                                                <i class="fa-solid fa-eye"></i> Xem chi tiết
+                                            </a>
+                                        @endif
+
                                         {{-- @if ($item->payment_method == 'Thanh toán khi nhận hàng') --}}
                                         @if ($item->status == 'Đang xử lý')
-                                        <a href="{{ route('account.order.cancel', $item->id) }}" 
-                                           class="btn btn-danger btn-sm cancel-order" 
-                                           data-method="POST" 
-                                           data-confirm="Bạn có chắc chắn muốn hủy đơn hàng này?">
-                                            <i class="fa-solid fa-trash"></i> Hủy đơn hàng
-                                        </a>
-                                    @elseif ($item->status == 'Đã hủy' && ($item->payment_method == 'thanh toán VNPAY' || $item->payment_method == 'thanh toán MOMO'))
-                                        <div class="alert alert-info" role="alert">
-                                            <i class="fa-solid fa-info-circle"></i> 
-Đơn hàng đã hủy. Liên hệ chúng tôi để hoàn tiền 
-<strong>
-    <a href="https://zalo.me/0326748389" target="_blank" class="me-2">
-        <i class="fa-brands fa-zalo"></i> Zalo: 0326748389
-    </a> 
-    - 
-    <a href="https://www.facebook.com/profile.php?id=100094217616470" target="_blank" class="ms-2">
-        <i class="fa-brands fa-facebook"></i> Uis Fruits
-    </a>
-</strong>.
-
-
-                                        </div>
-                                    @else
-                                        <button class="btn btn-secondary btn-sm" disabled>
-                                            <i class="fa-solid fa-trash"></i> Đã hủy
-                                        </button>
-                                    @endif
-                                    
+                                            <a href="{{ route('account.order.cancel', $item->id) }}" 
+                                            class="btn btn-danger btn-sm cancel-order" 
+                                            data-method="POST" 
+                                            data-confirm="Bạn có chắc chắn muốn hủy đơn hàng này?">
+                                                <i class="fa-solid fa-trash"></i> Hủy đơn hàng
+                                            </a>
+                                        @elseif ($item->status == 'Đang vận chuyển')
+                                            <a href="#" class="btn btn-warning btn-sm ">
+                                                <i class="fa-solid fa-truck"></i> Đang vận chuyển
+                                            </a>
+                                        @elseif ($item->status == 'Đã giao')
+                                            <a href="{{ route('order.confirm', $item->id) }}" 
+                                                class="btn btn-success btn-sm cancel-order" 
+                                                data-method="POST" 
+                                                data-confirm="Bạn có chắc chắn muốn xác nhận đơn hàng này?">
+                                                <i class="fa-solid fa-check"></i> Đã nhận được hàng
+                                            </a>
+                                        @elseif ($item->status == 'Hoàn thành')
+                                            <a href="{{ route('account.management.order.detail', $item->id) }}" class="btn btn-success btn-sm">
+                                                <i class="fa-solid fa-eye"></i> Hoàn thành
+                                            </a>          
+                                        @elseif ($item->status == 'Đã hủy' && ($item->payment_method == 'thanh toán VNPAY' || $item->payment_method == 'thanh toán MOMO'))
+                                            <div class="alert alert-info" role="alert">
+                                                <i class="fa-solid fa-info-circle"></i> 
+                                                Đơn hàng đã hủy. Liên hệ chúng tôi để hoàn tiền 
+                                                <strong>
+                                                    <a href="https://zalo.me/0326748389" target="_blank" class="me-2">
+                                                        <i class="fa-brands fa-zalo"></i> Zalo: 0326748389
+                                                    </a> 
+                                                    - 
+                                                    <a href="https://www.facebook.com/profile.php?id=100094217616470" target="_blank" class="ms-2">
+                                                        <i class="fa-brands fa-facebook"></i> Uis Fruits
+                                                    </a>
+                                                </strong>.
+                                            </div>
+                                        @else
+                                            <button class="btn btn-secondary btn-sm" disabled>
+                                                <i class="fa-solid fa-trash"></i> Đã hủy
+                                            </button>
+                                        @endif
                                         {{-- @endif --}}
                                     </div>
                                 </div>
