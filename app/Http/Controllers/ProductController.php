@@ -497,22 +497,22 @@ class ProductController extends Controller
         ->with('query', $query);
 }
 
-// public function deleteCategory($categoryId)
-// {
-//     // Tìm danh mục cần xóa
-//     $category = Category::find($categoryId);
+public function deleteCategory($categoryId)
+{
+    // Tìm danh mục cần xóa
+    $category = Category::find($categoryId);
 
-//     if ($category) {
-//         // Xóa tất cả sản phẩm thuộc danh mục này
-//         $category->products()->delete();
+    if ($category) {
+        // Xóa tất cả sản phẩm thuộc danh mục này
+        $category->products()->delete();
 
-//         // Xóa danh mục
-//         $category->delete();
+        // Xóa danh mục
+        $category->delete();
 
-//         return redirect()->route('admin.categories.index')->with('success', 'Danh mục và sản phẩm đã được xóa!');
-//     }
+        return redirect()->route('admin.categories.index')->with('success', 'Danh mục và sản phẩm đã được xóa!');
+    }
 
-//     return redirect()->route('admin.categories.index')->with('error', 'Danh mục không tồn tại!');
-// }
+    return redirect()->route('admin.categories.index')->with('error', 'Danh mục không tồn tại!');
+}
 
 }
