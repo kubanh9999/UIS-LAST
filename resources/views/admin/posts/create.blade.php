@@ -52,6 +52,13 @@
                             </div>
                         </div>
 
+                        <div class="col-lg-6 col-sm-6 col-12">
+                            <div class="form-group">
+                                <label>Tác giả</label>
+                                <input type="text" name="author" required class="form-control" placeholder="Nhập tên tác giả">
+                            </div>
+                        </div>
+
                         <!-- Trạng thái -->
                        {{--  <div class="col-lg-6 col-sm-6 col-12">
                             <div class="form-group">

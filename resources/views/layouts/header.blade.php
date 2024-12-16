@@ -18,7 +18,7 @@
 
     @if (Auth::user()->role == 1)
         <button class="btn dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
-            <img src="assets/icons/user.svg" alt=""> {{ Auth::user()->name }}
+            <img src="{{asset('client/assets/icons/user.svg')}}" alt=""> {{ Auth::user()->name }}
         </button>
         <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
             <li><a class="dropdown-item" href="{{ route('account.management')}}">Quản lý tài khoản</a></li>
@@ -48,7 +48,7 @@
             @endif
         @else
             <button class="btn dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
-                <img src="assets/icons/user.svg" alt=""> Tài khoản
+                <img src="{{asset('client/assets/icons/user.svg')}}" alt=""> Tài khoản
             </button>
             <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
                 <li><a class="dropdown-item" href="{{ route('login') }}">Đăng Nhập</a></li>

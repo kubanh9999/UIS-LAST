@@ -71,6 +71,7 @@ class AdminPostController extends Controller
     $post->title = $request->input('title');
     $post->category_id = $request->input('category_id');
     $post->content = $request->input('content');
+    $post->author = $request->input('author');
     $post->image = $thumbnailPath;
     $post->user_id = Auth::id(); // Lấy ID người dùng hiện tại
     $post->save();
@@ -129,6 +130,7 @@ class AdminPostController extends Controller
         $post->title = $request->input('title');
         $post->category_id = $request->input('category_id');
         $post->content = $request->input('content');
+        $post->author = $request->input('author');
         $post->image = $thumbnailPath;
         $post->status = $request->input('status'); // Trực tiếp gán status từ request
         $post->user_id = Auth::id(); // Lấy ID người dùng hiện tại
