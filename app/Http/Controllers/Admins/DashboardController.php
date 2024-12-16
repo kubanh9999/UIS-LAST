@@ -189,20 +189,20 @@ class DashboardController extends Controller
         ->map(function($item) {
             // Thay thế mã trạng thái với tên trạng thái
             switch ($item->status) {
-                case -1:
+                case 'Đã hủy':
                     $item->status = 'Đã hủy';
                     break;
-                case 0:
+                case 'Đang xử lý':
                     $item->status = 'Đang xử lý';
                     break;
-                case 1:
+                case 'Đang vận chuyển':
                     $item->status = 'Đang vận chuyển';
                     break;
-                case 2:
+                case 'Đã nhận hàng':
                     $item->status = 'Đã nhận hàng';
                     break;
                 default:
-                    $item->status = 'Không xác định'; // Trường hợp không xác định trạng thái
+                    $item->status = 'Không xác định';
                     break;
             }
             return $item;
