@@ -166,46 +166,70 @@
             calculateTotal();
         });
     
-        document.addEventListener("DOMContentLoaded", function() {
-            const checkboxes = document.querySelectorAll('input[type="checkbox"]'); // Chọn tất cả các checkbox
-            const totalPriceElement = document.getElementById("totalPrice"); // Lấy phần tử hiển thị tổng giá
-            let totalPrice = 0; // Khởi tạo biến tổng giá
-    
-            // Hàm tính tổng giá
-            function calculateTotal() {
-            let totalPrice = 0; // Khởi tạo giá trị tổng là 0
-            checkboxes.forEach(function (checkbox) {
-                if (checkbox.checked) {
-                    const price = parseFloat(checkbox.dataset.price); // Lấy giá của sản phẩm từ thuộc tính data-price
-                    const quantity = checkbox.closest('.product-item').querySelector('select').value; // Lấy số lượng từ select
-                    const itemPrice = price * (parseInt(quantity) / 1000); // Tính giá dựa trên số lượng (kg)
-                    totalPrice += itemPrice; // Cộng vào tổng giá
-    
-                    // Cập nhật giá hiển thị của sản phẩm
-                    const dynamicPriceElement = checkbox.closest('.product-item').querySelector('.dynamic-price');
-                    if (dynamicPriceElement) {
-                        dynamicPriceElement.textContent = itemPrice.toLocaleString(); // Cập nhật giá động
-                    }
-                    
+        document.addEventListener("DOMContentLoaded", function () {
+    const checkboxes = document.querySelectorAll('input[type="checkbox"]'); // Lấy tất cả checkbox
+    const totalPriceElement = document.getElementById("totalPrice"); // Tổng giá tiền
+    let totalWeight = 0; // Tổng khối lượng
+
+    // Hàm tính tổng giá và kiểm tra khối lượng
+    function calculateTotal() {
+        let totalPrice = 0; // Tổng tiền
+        totalWeight = 0; // Reset tổng khối lượng
+
+        checkboxes.forEach(function (checkbox) {
+            if (checkbox.checked) {
+                const price = parseFloat(checkbox.dataset.price); // Giá sản phẩm
+                const quantity = parseInt(checkbox.closest('.product-item').querySelector('select').value); // Lượng đã chọn
+                totalWeight += quantity; // Cộng dồn khối lượng
+
+                // Tính giá dựa trên lượng (kg)
+                const itemPrice = price * (quantity / 1000);
+                totalPrice += itemPrice;
+
+                // Cập nhật giá động cho từng sản phẩm
+                const dynamicPriceElement = checkbox.closest('.product-item').querySelector('.dynamic-price');
+                if (dynamicPriceElement) {
+                    dynamicPriceElement.textContent = itemPrice.toLocaleString();
                 }
-            });
-            totalPriceElement.textContent = totalPrice.toLocaleString(); // Cập nhật tổng giá vào DOM
-        }
-    
-            // Lắng nghe sự kiện thay đổi checkbox hoặc select
-            checkboxes.forEach(function(checkbox) {
-                checkbox.addEventListener('change', calculateTotal);
-            });
-    
-            // Lắng nghe sự kiện thay đổi lượng trong select
-            const selects = document.querySelectorAll('select');
-            selects.forEach(function(select) {
-                select.addEventListener('change', calculateTotal);
-            });
-    
-            // Gọi hàm tính tổng khi tải trang
-            calculateTotal();
+            }
         });
+
+        // Kiểm tra giới hạn khối lượng (3kg)
+        if (totalWeight > 3000) {
+            alert("Bạn không thể chọn quá 3kg tổng cộng!");
+            return false; // Dừng tính toán
+        }
+
+        // Cập nhật tổng giá trị hiển thị
+        totalPriceElement.textContent = totalPrice.toLocaleString();
+        return true;
+    }
+
+    // Sự kiện cho checkbox
+    checkboxes.forEach(function (checkbox) {
+        checkbox.addEventListener('change', function () {
+            if (!calculateTotal()) {
+                checkbox.checked = false; // Bỏ chọn nếu vượt quá 3kg
+            }
+        });
+    });
+
+    // Sự kiện cho select số lượng
+    const selects = document.querySelectorAll('select');
+    selects.forEach(function (select) {
+        select.addEventListener('change', function () {
+            const checkbox = select.closest('.product-item').querySelector('input[type="checkbox"]');
+            if (checkbox.checked && !calculateTotal()) {
+                select.value = "100"; // Reset về giá trị mặc định nếu quá 3kg
+                calculateTotal();
+            }
+        });
+    });
+
+    // Gọi hàm tính toán khi tải trang
+    calculateTotal();
+});
+
     
     </script>
     
