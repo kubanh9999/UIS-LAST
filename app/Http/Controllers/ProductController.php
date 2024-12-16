@@ -324,8 +324,7 @@ class ProductController extends Controller
 
     public function detail($id)
     {
-        $product_detail = Product::with('category', 'images')->find($id);
-
+        $product_detail = Product::find($id);
         if (!$product_detail) {
             abort(404);
         }

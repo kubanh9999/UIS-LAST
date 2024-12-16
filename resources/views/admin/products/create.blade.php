@@ -96,7 +96,7 @@
                                 </div>
                             </div>
 
-                            <div class="col-lg-12">
+                            {{-- <div class="col-lg-12">
                                 <div class="form-group">
                                     <label>Ảnh con (chọn ít nhất 1 ảnh)</label>
                                     <input type="file" name="child_images[]" class="form-control {{ $errors->has('child_images') ? 'is-invalid' : '' }}" id="childImages" multiple required>
@@ -107,7 +107,7 @@
                                         </div>
                                     @endif
                                 </div>
-                            </div>
+                            </div> --}}
 
                             <div class="col-lg-12">
                                 <div class="form-group">

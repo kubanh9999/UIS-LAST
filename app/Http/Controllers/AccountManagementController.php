@@ -92,6 +92,21 @@ class AccountManagementController extends Controller
         return redirect()->route('account.management')
             ->with('error', 'Không thể hủy đơn hàng vì đơn hàng không còn trong trạng thái "Đang xử lý".');
     }
+    public function completeOrder($orderId)
+    {
+        $order = Order::find($orderId);
+
+        if ($order && $order->status == 'Đã giao') {
+            // Cập nhật trạng thái thành 'Hoàn thành'
+            $order->status = 'Hoàn thành';
+            $order->save();
+
+            // Quay lại trang đơn hàng của user với thông báo thành công
+            return redirect()->route('account.management')->with('success', 'Đơn hàng đã hoàn thành!');
+        }
+        return redirect()->route('account.management')->with('error', 'Đơn hàng không thể hoàn thành.');
+    }
+
 
     public function showUserInfo()
     {
@@ -108,10 +123,6 @@ class AccountManagementController extends Controller
     {
        /*  dd(vars: $request->ward_id); */
         $user = Auth::user(); // Lấy thông tin người dùng hiện tại
-
-        // Validate dữ liệu nhập
-       
-
         // Cập nhật thông tin người dùng
         $user->update([
             'name' => $request->name,
