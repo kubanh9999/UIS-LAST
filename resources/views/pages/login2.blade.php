@@ -155,7 +155,7 @@
                         </div>
                     </div>
                     <div class="inner-more">
-                        <a {{ route('login.google') }}>
+                        <a href="{{ route('login.google') }}">
                             <img src="{{asset('client/assets/img/google_logo.png')}}" alt="google_logo.png" width="35px">
                             <span>Đăng nhập bằng Google</span>
                         </a>
