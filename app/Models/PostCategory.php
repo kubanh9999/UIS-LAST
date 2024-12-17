@@ -10,7 +10,6 @@ class PostCategory extends Model
     use HasFactory;
     protected $fillable = [
         'name',
-        'description'
     ];
     public function posts()
     {
