@@ -52,7 +52,7 @@ class DiscountController extends Controller
         $user->valid_end = $request->input('valid_end');
         $user->save();
     
-        return redirect()->route('admin.discount.index')->with('success', 'User đã được cập nhật thành công!');
+        return redirect()->route('admin.discount.index')->with('success', 'mã giảm giá đã được cập nhật thành công!');
     }
 
     public function destroy($id)
