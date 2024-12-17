@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admins;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\User;
+use App\Models\Discount;
 use Illuminate\Support\Facades\Hash;
 class AdminUserController extends Controller
 {
@@ -25,7 +26,8 @@ class AdminUserController extends Controller
      */
     public function create()
     {
-        return view('admin.users.create');
+        $coupons = Discount::where('quantity', '>', 0)->get();
+        return view('admin.users.create', compact('coupons'));
     }
 
     /**
@@ -38,8 +40,9 @@ class AdminUserController extends Controller
             'email' => $request->input('email'), // Đảm bảo có trường này trong migration
             'password' => Hash::make($request->input('password')), // Mã hóa mật khẩu
             'phone' => $request->input('phone'),
-            'address' => $request->input('address'),
+            'street' => $request->input('street'),
             'role' => $request->input('role'),
+            'discount_id' =>  $request->input('discount_id'),
         ]);
         return redirect()->route('admin.users.index')->with('success', 'User đã được thêm thành công!');
     }
@@ -54,8 +57,9 @@ class AdminUserController extends Controller
      */
     public function edit($id)
     {
-        $user = User::findOrFail($id); // Lấy người dùng theo ID
-        return view('admin.users.edit', compact('user')); // Trả về view với thông tin người dùng
+        $user = User::findOrFail($id);
+        $coupons = Discount::where('quantity', '>', 0)->get(); // Lấy người dùng theo ID
+        return view('admin.users.edit', compact('user','coupons')); // Trả về view với thông tin người dùng
     }
 
     /**
@@ -72,7 +76,8 @@ class AdminUserController extends Controller
         }
     
         $user->phone = $request->input('phone');
-        $user->address = $request->input('address');
+        $user->discount_id = $request->input('discount_id');
+        $user->street = $request->input('address');
         $user->role = $request->input('role');
         $user->save();
     
