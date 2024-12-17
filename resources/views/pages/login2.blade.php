@@ -154,11 +154,12 @@
                             <input type="password" name="password" id="password" required>
                             <span id="password-error" class="error-message d-none"></span>
                         </div>
-                        <div class="quenmk">
+                        {{-- <div class="quenmk">
                             <p><a href="{{route('reset')}}">Quên mật khẩu?</a></p>
-                        </div>
+                        </div> --}}
                         <div class="submit-form">
                             <button type="submit">Đăng Nhập</button>
+                            <p class="mb-0"><a href="{{route('reset')}}">Quên mật khẩu?</a></p>
                             <p class="not-register">Bạn chưa có tài khoản <a href="{{ route('register') }}">Đăng ký</a> tại đây? </p>
                         </div>
                     </div>
