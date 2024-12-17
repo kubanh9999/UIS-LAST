@@ -123,7 +123,7 @@
                                 @if ($cmt->status == 1 || $cmt->user_id == Auth::id())
                                     <div class="comment-box card mb-3 p-3">
                                         <div class="d-flex justify-content-between">
-                                            <span class="comment-user font-weight-bold">{{ $cmt->user->name }}</span>
+                                            <span class="comment-user font-weight-bold">{{ $cmt->user->name ?? 'Người dùng cũ' }}</span>
                                             <span
                                                 class="comment-time text-muted">{{ $cmt->created_at->diffForHumans() }}</span>
                                         </div>
@@ -165,7 +165,7 @@
                                                             <div class="reply-box card mb-2 p-2">
                                                                 <div class="d-flex justify-content-between">
                                                                     <span
-                                                                        class="reply-user font-weight-bold">{{ $reply->user->name }}</span>
+                                                                        class="reply-user font-weight-bold">{{ $reply->user->name ?? 'Người dùng cũ' }}</span>
                                                                     <span
                                                                         class="reply-time text-muted">{{ $reply->created_at->diffForHumans() }}</span>
                                                                 </div>

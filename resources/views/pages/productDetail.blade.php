@@ -226,7 +226,7 @@ input#quantity:focus {
                                                         @if ($reply->status == 1 || $reply->user_id == Auth::id())
                                                             <div class="reply-box card mb-2 p-2">
                                                                 <div class="d-flex justify-content-between">
-                                                                    <span class="reply-user font-weight-bold">{{ $reply->user->name }}</span>
+                                                                    <span class="reply-user font-weight-bold">{{ $reply->user->name ?? null }}</span>
                                                                     <span class="reply-time text-muted">{{ $reply->created_at->diffForHumans() }}</span>
                                                                 </div>
                                                                 <p class="mb-0" @disabled($reply->status != 1)>{{ $reply->content }}</p>

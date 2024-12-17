@@ -50,7 +50,7 @@
                                         </label>
                                     </td>
                                     <td>{{ $item->id }}</td>
-                                    <td>{{ $item->user->name ?? null  }}</td>
+                                    <td>{{ $item->user->name ?? 'Người dùng cũ'  }}</td>
                                     <td>{{ $item->content }}</td>
                                     <td>{{ $item->replies_count }}</td>
                                     <td>

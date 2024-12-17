@@ -4,7 +4,7 @@
         <div class="content">
             <div class="page-header">
                 <div class="page-title">
-                    <h4>DANH SÁCH MÃ GIẢM GIÁ </h4>
+                    <h4>QUẢN LÝ MÃ GIẢM GIÁ </h4>
                  {{--    <h6>View/Search product Category</h6> --}}
                 </div>
                 <div class="page-btn">
@@ -106,6 +106,7 @@
                                     <th>id</th>
                                     <th>mã giảm giá</th>
                                     <th>Phần trăm giảm giá</th>
+                                    <th>Số lượng</th>
                                     <th>ngày bắt đầu</th>
                                     <th>ngày kết thúc</th>
                                     <th>Hành động</th>
@@ -123,6 +124,7 @@
                                     <td>{{$item->id}}</td>
                                     <td>{{$item->code}}</td>
                                     <td contenteditable="true" class="editable" data-column="discount_percent" data-id="{{ $item->id }}">{{$item->discount_percent}} %</td>
+                                    <td>{{$item->quantity}}</td>
                                     <td contenteditable="true" class="editable" data-column="valid_form" data-id="{{ $item->id }}">{{$item->valid_form}}</td>
                                     <td contenteditable="true" class="editable" data-column="valid_end" data-id="{{ $item->id }}">{{$item->valid_end}}</td>
                                     <td class="d-flex justify-content-center align-items-center">

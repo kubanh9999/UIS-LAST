@@ -4,7 +4,7 @@
         <div class="content">
             <div class="page-header">
                 <div class="page-title">
-                    <h4>BÀI VIẾT</h4>
+                    <h4>QUẢN LÝ BÀI VIẾT</h4>
 
                 </div>
                 <div class="page-btn">
