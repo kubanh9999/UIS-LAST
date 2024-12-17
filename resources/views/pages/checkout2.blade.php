@@ -38,6 +38,12 @@
                 <form id="discount-form" class="discount-form" action="{{ route('applyDiscount') }}" method="POST">
                     @csrf
                     <div class="inner-form-group">
+                        @if($discount && $discount->quantity > 0)
+                            <p style="color: green; font-size: 14px;">
+                                Bạn có mã giảm giá: <strong>{{ $discount->code }}</strong> 
+                                (Giảm {{ intval($discount->discount_percent) }}%)
+                            </p>
+                        @endif
                         <div class="input-group">
                             <input type="text"name="discount_code" id="discount_code"  placeholder="Nhập mã giảm giá"
                                 required>

@@ -103,11 +103,12 @@
                                             <span class="checkmarks"></span>
                                         </label>
                                     </th>
-                                    <th>id</th>
-                                    <th>mã giảm giá</th>
+                                    <th>#</th>
+                                    <th>Mã giảm giá</th>
                                     <th>Phần trăm giảm giá</th>
-                                    <th>ngày bắt đầu</th>
-                                    <th>ngày kết thúc</th>
+                                    <th>Số lượng</th>
+                                    <th>Ngày bắt đầu</th>
+                                    <th>Ngày kết thúc</th>
                                     <th>Hành động</th>
                                 </tr>
                             </thead>
@@ -123,6 +124,7 @@
                                     <td>{{$item->id}}</td>
                                     <td>{{$item->code}}</td>
                                     <td contenteditable="true" class="editable" data-column="discount_percent" data-id="{{ $item->id }}">{{$item->discount_percent}} %</td>
+                                    <td contenteditable="true" class="editable" data-column="quantity" data-id="{{ $item->id }}">{{$item->quantity}}</td>
                                     <td contenteditable="true" class="editable" data-column="valid_form" data-id="{{ $item->id }}">{{$item->valid_form}}</td>
                                     <td contenteditable="true" class="editable" data-column="valid_end" data-id="{{ $item->id }}">{{$item->valid_end}}</td>
                                     <td class="d-flex justify-content-center align-items-center">

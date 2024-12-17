@@ -18,6 +18,7 @@ use Symfony\Component\ErrorHandler\Debug;
 use App\Models\Province;
 use App\Models\District;
 use App\Models\Ward;
+use Illuminate\Support\Facades\DB;
 class CheckoutController extends Controller
 {
     // Hiển thị trang checkout
@@ -92,7 +93,12 @@ $shippingCost = $shippingCost ?? 0;
         // Tính phí vận chuyển (nếu có)
         $shippingCost = 0; // Ví dụ: phí vận chuyển là 1000, thay thế bằng logic của bạn nếu cần
 
-        return view('pages.checkout2', compact('wards', 'districts', 'provinces', 'products', 'selectedGift', 'totalPrice', 'shippingCost', 'cart', 'productData', 'user','totalPrice' ));
+        $discount = null;
+        if ($user->discount_id != 0) {
+            $discount = DB::table('discounts')->where('id', $user->discount_id)->first();
+        }
+
+        return view('pages.checkout2', compact('discount','wards', 'districts', 'provinces', 'products', 'selectedGift', 'totalPrice', 'shippingCost', 'cart', 'productData', 'user','totalPrice' ));
 
     }
 
@@ -336,7 +342,8 @@ $shippingCost = $shippingCost ?? 0;
         session()->put('discount_amount', round($discountAmount, 2));
         session()->put('discount_id', $discount->id);
         session()->put('discounted_total', round($totalPriceAfterDiscount, 2));
-    
+        
+        DB::table('discounts')->where('id', $discount->id)->decrement('quantity');
         // Trả về kết quả
         return response()->json([
             'total_price' => number_format($totalPriceAfterDiscount, 2, '.', ''),

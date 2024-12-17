@@ -33,6 +33,13 @@
                                         <input type="number" name="discount_percent" value="{{ old('discount_percent', $discount->discount_percent ?? 0) }}" required class="form-control">
                                     </div>
                                 </div>
+                                <!-- Quantity -->
+                                <div class="col-lg-6 col-sm-6 col-12">
+                                    <div class="form-group">
+                                        <label>Số lượng</label>
+                                        <input type="number" name="quantity" value="{{ old('quantity', $discount->quantity ?? 0) }}" required class="form-control">
+                                    </div>
+                                </div>
 
                                 <!-- Description -->
                                 <div class="col-lg-12 col-sm-12 col-12">
