@@ -92,7 +92,7 @@
             <p>Cảm ơn bạn đã lựa chọn <strong>UIS Fruits</strong> cho nhu cầu mua sắm trái cây của mình. Chúng tôi rất vui khi được phục vụ bạn!</p>
             <p>Thông tin đơn hàng của bạn đã được ghi nhận thành công. Để xác nhận đơn hàng, vui lòng nhấn vào nút bên dưới:</p>
             <p style="text-align:center">
-                <a href="{{ route('confirm.order', ['token' => $order->token]) }}" class="button" style="color: #fff; ">Xác Nhận Đơn Hàng</a>
+                <a href="{{ route('confirm.order', ['token' => $order->token]) }}" class="button" style="color: #fff; ">Xem đơn hàng </a>
             </p>
             <p>Nếu bạn có bất kỳ thắc mắc hoặc yêu cầu hỗ trợ nào, đừng ngần ngại liên hệ với chúng tôi qua email: <a href="mailto:uisfruits@gmail.com">uisfruits@gmail.com</a>.</p>
             <p>Một lần nữa, cảm ơn bạn đã tin tưởng UIS Fruits. Chúng tôi mong chờ được phục vụ bạn trong tương lai!</p>
