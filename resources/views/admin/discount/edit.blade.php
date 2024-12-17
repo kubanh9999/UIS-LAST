@@ -68,11 +68,10 @@
                                 <!-- Submit and Cancel Buttons -->
                               
                                 <div class="col-lg-12">
-                                
-                                    <!-- Sử dụng button thay vì a -->
-                                    <a href="{{ route('admin.discount.index') }}" class="btn btn-secondary">Hủy</a>
-                                    <button type="submit" class="btn btn-success me-2">Đồng ý</button>
-                                    <!-- Cập nhật link đến route -->
+                                    <div class="form-group d-flex justify-content-end">
+                                        <a href="{{ route('admin.discount.index') }}" class="btn btn-secondary me-2">Hủy</a>
+                                        <button type="submit" class="btn btn-success">Đồng ýý</button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
