@@ -1,5 +1,10 @@
 @extends('admin.layout')
 @section('content')
+<style>
+    select.form-control.giamgia {
+    width: 270px;
+}
+</style>
     <div class="page-wrapper">
         <div class="content">
             <div class="page-header">
@@ -15,7 +20,7 @@
                     @method('PUT') <!-- Thêm phương thức PUT cho cập nhật -->
                     <div class="card-body">
                         <div class="row">
-                            <div class="col-lg-3 col-sm-6 col-12">
+                            <!-- <div class="col-lg-3 col-sm-6 col-12">
                                 <div class="form-group">
                                     <label>Tên</label>
                                     <input type="text" name="name" value="{{ old('name', $user->name) }}" class="form-control" required>
@@ -57,11 +62,11 @@
                                         <option value="User" {{ $user->role == 'User' ? 'selected' : '' }}>User</option>
                                     </select>
                                 </div>
-                            </div>
+                            </div> -->
                             <div class="col-lg-3 col-sm-6 col-12">
                                 <div class="form-group">
                                     <label>Mã giảm giá (Coupon)</label>
-                                    <select name="discount_id" class="form-control">
+                                    <select name="discount_id" class="form-control giamgia">
                                         <option value="">Không có mã giảm giá</option>
                                         @foreach($coupons as $coupon)
                                             <option value="{{ $coupon->id }}" {{ isset($user) && $user->discount_id == $coupon->id ? 'selected' : '' }}>

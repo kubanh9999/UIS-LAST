@@ -68,17 +68,7 @@ class AdminUserController extends Controller
     public function update(Request $request, $id)
     {
         $user = User::findOrFail($id); 
-        $user->name = $request->input('name');
-        $user->email = $request->input('email');
-    
-        if ($request->filled('password')) { 
-            $user->password = Hash::make($request->input('password'));
-        }
-    
-        $user->phone = $request->input('phone');
         $user->discount_id = $request->input('discount_id');
-        $user->street = $request->input('address');
-        $user->role = $request->input('role');
         $user->save();
     
         return redirect()->route('admin.users.index')->with('success', 'User đã được cập nhật thành công!');

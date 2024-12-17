@@ -7,11 +7,11 @@
                 <div class="page-title">
                     <h4>Danh sách tài khoản</h4>
                 </div>
-                <div class="page-btn">
+                <!-- <div class="page-btn">
                     <a href="{{ route('admin.users.create') }}" class="btn btn-success">
                         <i class="fa-solid fa-plus"></i>Thêm tài khoản
                     </a>
-                </div> 
+                </div>  -->
             </div>
             <script>
                 @if(session('success'))
