@@ -24,10 +24,10 @@ class DiscountController extends Controller
     {
         Discount::create([
             'code' => $request->input('code'),
-            'discount_percent' => $request->input('discount_percent'), 
-            'quantity' => $request->input('quantity'), 
+            'discount_percent' => $request->input('discount_percent'),
+            'quantity' => $request->input('quantity'),  
             'description' => $request->input('description'),
-           'valid_form' => $request->input('valid_form'), 
+            'valid_form' => $request->input('valid_form'), 
             'valid_end' => $request->input('valid_end'), 
             'is_active' => true, // Có thể tự động đánh dấu là hoạt động
         ]);

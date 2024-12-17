@@ -13,7 +13,7 @@
                 <div class="card-body">
                     <div class="mb-3">
                         <h5>ID Bình Luận: <span class="text-primary">{{ $comment->id }}</span></h5>
-                        <p><strong>Tên Người Dùng:</strong> {{ $comment->user?->name ?? 'Chưa có tên' }}</p>
+                        {{-- <p><strong>Tên Người Dùng:</strong> {{ $item->user->name ?? null }}</p> --}}
                         <p><strong>Nội Dung:</strong> {{ $comment->content }}</p>
                         <p><strong>Trạng Thái:</strong> 
                             @if ($comment->status == 0) <span class="badge bg-warning">Chưa duyệt</span>
@@ -33,7 +33,7 @@
                             @foreach ($comment->replies as $reply)
                                 <li class="list-group-item">
                                     <div class="d-flex justify-content-between align-items-center">
-                                        <strong>{{ $reply->user->name }}</strong>
+                                        <strong>{{ $reply->user->name ?? 'Người dùng cũ' }}</strong>
                                         <small class="text-muted">{{ $reply->created_at->format('Y-m-d H:i:s') }}</small>
                                     </div>
                                     <p class="mb-1">{{ $reply->content }}</p>

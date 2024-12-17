@@ -260,7 +260,7 @@ $shippingCost = $shippingCost ?? 0;
         Mail::to($order->email)->send(new OrderMail($order));
         session()->forget(['cart', 'discounted_total']);
 
-        return view('pages.checkoutSuccess' );
+        return view('pages.checkoutSuccess',compact('order') );
     }
 
 

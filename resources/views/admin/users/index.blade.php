@@ -5,7 +5,7 @@
         <div class="content">
             <div class="page-header">
                 <div class="page-title">
-                    <h4>Danh sách tài khoản</h4>
+                    <h4>QUẢN LÝ TÀI KHOẢN</h4>
                 </div>
                 <!-- <div class="page-btn">
                     <a href="{{ route('admin.users.create') }}" class="btn btn-success">
