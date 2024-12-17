@@ -22,7 +22,7 @@ class AdminPostController extends Controller
     public function index()
     {
         $category = PostCategory::all();
-        $post = Post::all();
+        $post = Post::with('category')->get();
 
         return view('admin.posts.index', compact('post', 'category'));
     }

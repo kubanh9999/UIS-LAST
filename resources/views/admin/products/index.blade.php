@@ -159,7 +159,7 @@
                                                 <img src="{{ asset('layouts/img/'.$item->image) }}" alt="Ảnh sản phẩm" width="100">
                                             @endif
                                         </td>
-                                        <td>{{ $item->category_id }}</td>
+                                        <td>{{ $item->category->name ?? 'Chưa có danh mục' }}</td>
                                         <td contenteditable="true" class="editable-field" data-id="{{ $item->id }}" data-field="price">{{ number_format($item->price, 0) }} VND</td>
                                         <td contenteditable="true" class="editable-field" data-id="{{ $item->id }}" data-field="stock">{{ $item->stock }}</td>
                                         <td>

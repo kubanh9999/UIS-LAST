@@ -124,7 +124,7 @@
                                         @endif
                                     </td>
                                     <td>{{ $item->title }}</td>
-                                    <td>{{ $item->category_id }}</td>
+                                    <td>{{ $item->category->name ?? 'Chưa có danh mục' }}</td>
                                     <td>{{ $item->created_at }}</td>
                                     <td>
                                         <!-- Edit button -->

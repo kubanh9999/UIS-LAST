@@ -12,7 +12,7 @@ class OrderController extends Controller
 
     $pdf = app('dompdf.wrapper');
     // Chỉ truyền nội dung cần in
-    $html = view('pages.account-order-detail', compact('orders'))->render();
+    $html = view('pages.order-detail', compact('orders'))->render();
     $pdf->loadHTML($html);
 
     // Cài đặt một số tùy chọn cho PDF để định dạng tốt hơn
