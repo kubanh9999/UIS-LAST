@@ -69,6 +69,12 @@
                                     </div>
                                 </div>
 
+                                <div class="col-lg-6 col-sm-6 col-12">
+                                    <div class="form-group">
+                                        <label for="author">Tác giả</label>
+                                        <input type="text" id="author" name="author" value="{{ old('title', $post->author ?? '') }}" required class="form-control">
+                                    </div>
+                                </div>
 
                                 <!-- Ngày tạo -->
                                 <div class="col-lg-6 col-sm-6 col-12">

@@ -28,7 +28,7 @@
 
     <div id="overlay" style="display: none;"></div>
     <div id="welcome-banner" style="display: none;">
-        <img src="https://thuyanhfruits.com/wp-content/uploads/2021/03/z2380330537317_f546ae4d0b63d3153b9269e1dc860f58-scaled.jpg"
+        <img src="https://scontent.fsgn5-7.fna.fbcdn.net/v/t39.30808-6/469241208_441459309004653_7818753911142777380_n.jpg?stp=dst-jpg_s960x960_tt6&_nc_cat=103&ccb=1-7&_nc_sid=cc71e4&_nc_ohc=YrMgqDnc620Q7kNvgEO9rNn&_nc_zt=23&_nc_ht=scontent.fsgn5-7.fna&_nc_gid=AvauBm2Bl9FDw4p3ChgoAdj&oh=00_AYA0fZkVfyeN2Qob4NXxqCbmQwKsa9JpczGhIG3kv7k71g&oe=676590FE"
             alt="Welcome Banner" id="banner-image" />
         <button id="close-banner" class="btn-close" aria-label="Close"></button>
     </div>
@@ -331,15 +331,10 @@
                         <div class="inner-media">
                       {{--  --}}
                             <small>{{ $latestPost->created_at }}</small>
+                            <h6>Người đăng: {{ $latestPost->author }}</h6>
                         </div>
                         <div class="inner-text">
                             <p>
-                                <div style="
-                                display: -webkit-box;
-                                -webkit-line-clamp: 3;
-                                -webkit-box-orient: vertical;
-                                overflow: hidden;
-                                text-overflow: ellipsis;">
                                 @php
                                     // Loại bỏ các ký tự &nbsp; và thẻ <img>
                                     $clearBreakLineArrStr = \Illuminate\Support\Str::replace('&nbsp;', '', $latestPost->content);
@@ -352,7 +347,7 @@
                                         @break
                                     @endif
                                 @endforeach
-                            </div>
+                            
                             </p>
                         </div>
                     </div>
@@ -375,14 +370,9 @@
                                     <div class="inner-media">
                                         {{-- <h6>{{ $post->author }}</h6> --}}
                                         <small>{{ $post->created_at }}</small>
+                                        <h6>Người đăng: {{ $post->author }}</h6>
                                     </div>
-                                    <p> <a href="{{ route('post.show', ['id' => $post->id]) }}" style="
-
-                                        display: -webkit-box; 
-                                        -webkit-line-clamp: 2; 
-                                        -webkit-box-orient: vertical; 
-                                        overflow: hidden; 
-                                        text-overflow: ellipsis;">
+                                    <p class="text"> 
                                         @php
                                             // Loại bỏ các ký tự &nbsp; và thẻ <img>
                                             $clearBreakLineArrStr = \Illuminate\Support\Str::replace('&nbsp;', "", $post->content);
@@ -393,7 +383,8 @@
                                         @endphp
                                     
                                         {!! $cleanContent !!}
-                                    </a></p>
+                                    </p>
+                                    
                                 </div>
                             </div>
                         @endforeach

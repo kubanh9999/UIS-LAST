@@ -218,9 +218,9 @@
                                                 <i class="fa-solid fa-trash"></i> Hủy đơn hàng
                                             </a>
                                         @elseif ($item->status == 'Đang vận chuyển')
-                                            <a href="#" class="btn btn-warning btn-sm ">
+                                            {{-- <a href="#" class="btn btn-warning btn-sm ">
                                                 <i class="fa-solid fa-truck"></i> Đang vận chuyển
-                                            </a>
+                                            </a> --}}
                                         @elseif ($item->status == 'Đã giao')
                                             <a href="{{ route('order.confirm', $item->id) }}" 
                                                 class="btn btn-success btn-sm cancel-order" 
@@ -264,7 +264,7 @@
     </section>
 
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    
     <script>
         $(document).ready(function() {
             // Khi tỉnh thành thay đổi
