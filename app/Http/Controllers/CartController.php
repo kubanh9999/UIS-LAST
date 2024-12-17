@@ -13,6 +13,9 @@ class CartController extends Controller
     // Hiển thị giỏ hàng
     public function index()
     {
+        if (!Auth::check()) {
+            return redirect()->route('login')->with('error', 'Bạn cần đăng nhập để mua hàng.');
+        }
         $cart = Session::get('cart', []);
     /*     dd( $cart); */
         $total = $this->calculateTotal();
