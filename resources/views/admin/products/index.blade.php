@@ -4,7 +4,7 @@
         <div class="content">
             <div class="page-header">
                 <div class="page-title">
-                    <h4>Danh sách sản phẩm</h4>
+                    <h4>DANH SÁCH SẢN PHẨM</h4>
                     <h6>Quản lý sản phẩm của bạn</h6>
                 </div>
                 <div class="page-btn">
