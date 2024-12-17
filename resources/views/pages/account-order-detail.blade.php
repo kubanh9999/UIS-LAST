@@ -4,7 +4,7 @@
 
     <div class="container">
         <nav aria-label="breadcrumb">
-            <ol class="breadcrumb">
+            <ol class="breadcrumb bg-light p-2 rounded">
                 <li class="breadcrumb-item"><a href="#">Trang chủ</a></li>
                 <li class="breadcrumb-item"><a href="#">Quản lý tài khoản</a></li>
                 <li class="breadcrumb-item active" aria-current="page">Chi tiết đơn hàng</li>
@@ -12,181 +12,116 @@
         </nav>
     </div>
 
-    <section class="section-order-detail mb-2">
+    <section class="section-order-detail mb-5">
         <div class="container">
-            <div class="swapper">
-                <div class="order-details">
-                    <div class="inner-head">
-                        <h3>Hóa đơn</h3>
-                        <div class="print">
-                            <button onclick="printOrderDetails()">
-                                <i class="fa-solid fa-print"></i>
-                            </button>
-                        </div>
-                    </div>
-                    <table class="inner-content">
-                        <tbody>
-                            <tr>
-                                <th>Mã đơn hàng:</th>
-                                <td>{{ $orders->token }}</td>
-                            </tr>
+            <div class="card shadow p-4 bg-white rounded">
+                <div class="container">
+                    <div class="swapper shadow p-4 bg-white rounded">
+                        <div class="inner-head left" style="float: right;"> <button onclick="printOrderDetails()"
+                                class="btn" style="color: #74c26e;"> <i class="fa-solid fa-print me-2"></i> In hóa đơn
+                            </button> </div>
+                        <div class="clearfix"></div>
+                        <div class="order-details">
+                            <h3 class="fw-bold " style="color: #74c26e;text-align: center">HÓA ĐƠN</h3>
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    <strong>Mã đơn hàng:</strong> {{ $orders->token }}
+                                </div>
+                                <div class="col-md-6 text-md-end">
+                                    <strong>Ngày đặt:</strong>
+                                    {{ \Carbon\Carbon::parse($orders->order_date)->format('H:i:s - d/m/Y') }}
+                                </div>
+                            </div>
 
-                            <tr>
-                                <th>Tên người mua:</th>
-                                <td>{{ $orders->user ? $orders->user->name : 'Chưa có người dùng' }}</td>
-                            </tr>
-                            <tr>
-                                <th>Số điện thoại:</th>
-                                <td>{{ $orders->phone }}</td>
-                            </tr>
-                            <tr>
-                                <th>Địa chỉ:</th>
-                                <td>
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    <strong>Tên người mua:</strong>
+                                    {{ $orders->user ? $orders->user->name : 'Chưa có người dùng' }}
+                                </div>
+                                <div class="col-md-6 text-md-end">
+                                    <strong>Thanh toán:</strong> {{ $orders->payment_method }}
+                                </div>
+                            </div>
+
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    <strong>Số điện thoại:</strong> {{ $orders->phone }}
+                                </div>
+                                <div class="col-md-6 text-md-end">
+                                    <strong>Phí vận chuyển:</strong> 0đ
+                                </div>
+                            </div>
+
+                            <div class="row mb-3">
+                                <div class="col-md-12">
+                                    <strong>Địa chỉ:</strong>
                                     {{ $orders->street }},
                                     {{ $orders->ward->name }},
                                     {{ $orders->district->name }},
                                     {{ $orders->province->name }}
-                                </td>
-                            </tr>
-                            <tr>
-                                <th>Thanh toán:</th>
-                                <td>{{ $orders->payment_method }}</td>
-                            </tr>
-                            <tr>
-                                <th>Ngày đặt:</th>
-                                <td>{{ \Carbon\Carbon::parse($orders->order_date)->timezone('Asia/Ho_Chi_Minh')->format('H:i:s - d/m/Y') }}
-                                </td>
-                            </tr>
+                                </div>
+                            </div>
 
-                            @php $displayedGiftIds = []; @endphp
-                            @foreach ($orders->orderDetails as $item)
-                                @if ($item->gift_id && $item->product_id && !in_array($item->gift_id, $displayedGiftIds))
-                                    <tr>
-                                        <th>Tên sản phẩm:</th>
-                                        <td>{{ $item->gift->name }}</td>
-                                    </tr>
-                                    <tr>
-                                        <th>Hình ảnh:</th>
-                                        <td>
-                                            @if ($item->gift && $item->gift->image)
-                                                @php
-                                                    $imagePath = $item->gift->image;
-                                                    if (strpos($imagePath, 'uploads/products') === false) {
-                                                        $imagePath = 'layouts/img/' . $item->gift->image; // Nếu không chứa, thêm 'layouts/img'
-                                                    }
-                                                @endphp
-                                                <img src="{{ asset($imagePath) }}" class="img-thumbnail"
-                                                    style="width: 50px; height: 50px;">
-                                            @else
-                                                <span>Hình ảnh không có sẵn</span>
-                                            @endif
-                                        </td>
-                                    </tr>
+                            <div class="row mb-4">
+                                <div class="col-md-12">
+                                    <strong>Tổng giá đơn hàng:</strong>
+                                    <h4 class="fw-bold text-danger">{{ number_format($orders->total_amount, 0, ',', '.') }}đ
+                                    </h4>
+                                </div>
+                            </div>
 
+                            <h5 class="fw-bold mb-3">Chi tiết sản phẩm</h5>
+                            <table class="table table-bordered table-striped table-hover">
+                                <thead>
                                     <tr>
-                                        <th>Sản phẩm trong quà tặng:</th>
-                                        <td colspan="4">
-                                            <ul style="list-style: none; padding: 0;">
-                                                @php $customGiftTotal = 0; @endphp
-                                                @foreach ($orders->orderDetails->where('gift_id', $item->gift_id) as $giftItem)
-                                                    @if ($giftItem->product)
-                                                        <li>
-                                                            @php
-                                                                $imagePath = $giftItem->product->image;
-                                                                if (strpos($imagePath, 'uploads/products') === false) {
-                                                                    $imagePath =
-                                                                        'layouts/img/' . $giftItem->product->image; // Nếu không chứa, thêm 'layouts/img'
-                                                                }
-                                                            @endphp
-                                                            <img style="width: 40px;" src="{{ asset($imagePath) }}"
-                                                                alt="">
-                                                            {{ $giftItem->product->name }} x
-                                                            {{ $giftItem->quantity . 'kg' }}
-                                                            @php $customGiftTotal += $giftItem->price * $giftItem->quantity; @endphp
-                                                        </li>
-                                                    @endif
-                                                @endforeach
-                                            </ul>
-                                        </td>
+                                        <th class="text-center">Sản phẩm</th>
+                                        <th class="text-center">Số lượng</th>
+                                        <th class="text-center">Giá</th>
                                     </tr>
-                                    @php $displayedGiftIds[] = $item->gift_id; @endphp
-                                @elseif ($item->gift_id && !$item->product_id)
-                                    <tr>
-                                        <th>Tên sản phẩm:</th>
-                                        <td>{{ $item->gift->name }}</td>
-                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach ($orders->orderDetails as $item)
+                                        <tr>
+                                            <td>
+                                                @if ($item->gift_id && !$item->product_id)
+                                                    <img src="{{ asset('uploads/products/' . $item->gift->image) }}"
+                                                        alt="{{ $item->gift->name }}" class="img-thumbnail"
+                                                        style="width: 60px;">
+                                                    Quà tặng: <span class="fw-bold">{{ $item->gift->name }}</span>
+                                                @elseif ($item->product_id)
+                                                    <img src="{{ asset('uploads/products/' . $item->product->image) }}"
+                                                        alt="{{ $item->product->name }}" class="img-thumbnail"
+                                                        style="width: 60px;">
+                                                    Sản phẩm: <span class="fw-bold">{{ $item->product->name }}</span>
+                                                @endif
+                                            </td>
+                                            <td class="text-center">{{ $item->quantity }} kg</td>
+                                            <td class="text-center">{{ number_format($item->price, 0, ',', '.') }}đ</td>
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
 
-                                    <tr>
-                                        <th>Hình ảnh:</th>
-                                        @php
-                                            $imagePath = $item->gift->image;
-                                            // Nếu đường dẫn ảnh chứa 'uploads/products', không cần thêm 'layouts/img'
-                                            if (strpos($imagePath, 'uploads/products') === false) {
-                                                $imagePath = 'layouts/img/' . $item->gift->image; // Nếu không chứa, thêm 'layouts/img'
-                                            }
-                                        @endphp
-                                        <td><img src="{{ asset($imagePath) }}" class="img-thumbnail" style="width: 50px">
-                                        </td>
-                                    </tr>
-
-                                    <tr>
-                                        <th>Số lượng</th>
-                                        <td>{{ $item->quantity }}</td>
-                                    </tr>
-                                @elseif ($item->product_id && !$item->gift_id)
-                                    <tr>
-                                        <th>Tên sản phẩm</th>
-                                        <td>{{ $item->product->name }}</td>
-                                    </tr>
-
-                                    <tr>
-                                        <th>Hình ảnh: </th>
-                                        @php
-                                            $imagePath = $item->product->image;
-                                            // Nếu đường dẫn ảnh chứa 'uploads/products', không cần thêm 'layouts/img'
-                                            if (strpos($imagePath, 'uploads/products') === false) {
-                                                $imagePath = 'layouts/img/' . $item->product->image; // Nếu không chứa, thêm 'layouts/img'
-                                            }
-                                        @endphp
-                                        <td>
-                                            <img src="{{ asset($imagePath) }}" class="img-thumbnail" style="width: 50px;">
-                                        </td>
-                                    </tr>
-
-                                    <tr>
-                                        <th>Số lượng:</th>
-                                        <td>{{ $item->quantity }}</td>
-                                    </tr>
-                                @endif
-                            @endforeach
-                            <tr>
-                                <th>Phí vận chuyển</th>
-                                <td>0đ</td>
-                            </tr>
-                            <tr>
-                                <th>Tổng giá đơn hàng:</th>
-                                <td >
-                                    <strong>{{ number_format($orders->total_amount, 0, ',', '.') }}đ</strong>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-
-                    <a href="/account/management" class="order-details-back-button mt-4">Quay lại danh sách đơn hàng</a>
+                           
+                        </div>
+                    </div>
+                    <a href="/account/management" class="btn btn-dark mt-4">
+                        <i class="fa-solid fa-arrow-left me-2"></i> Quay lại danh sách đơn hàng
+                    </a>
                 </div>
-            </div>
-        </div>
+             
     </section>
-    
+   
     <script type="text/javascript">
         function printOrderDetails() {
-            // Ẩn tất cả nội dung khác ngoại trừ chi tiết đơn hàng
-            var content = document.querySelector('.order-details').outerHTML; // Chọn div chứa chi tiết đơn hàng
-            var originalContent = document.body.innerHTML; // Lưu lại nội dung gốc của trang
+            var content = document.querySelector('.order-details').outerHTML;
+            var originalContent = document.body.innerHTML;
 
-            document.body.innerHTML = content; // Thay thế nội dung trang bằng chi tiết đơn hàng
-            window.print(); // In trang hiện tại (bây giờ chỉ có chi tiết đơn hàng)
-            document.body.innerHTML = originalContent; // Khôi phục lại nội dung gốc sau khi in
+            document.body.innerHTML = content;
+            window.print();
+            document.body.innerHTML = originalContent;
+            window.location.reload(); // Reload lại trang để tránh mất nội dung
         }
     </script>
+
 @endsection

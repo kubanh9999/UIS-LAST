@@ -331,7 +331,7 @@
                         <div class="inner-media">
                       {{--  --}}
                             <small>{{ $latestPost->created_at }}</small>
-                            <h6>Người đăng: {{ $latestPost->author }}</h6>
+                            {{-- <h6>Người đăng: {{ $latestPost->author }}</h6> --}}
                         </div>
                         <div class="inner-text">
                             <p>
@@ -370,7 +370,7 @@
                                     <div class="inner-media">
                                         {{-- <h6>{{ $post->author }}</h6> --}}
                                         <small>{{ $post->created_at }}</small>
-                                        <h6>Người đăng: {{ $post->author }}</h6>
+                                       {{--  <h6>Người đăng: {{ $post->author }}</h6> --}}
                                     </div>
                                     <p class="text"> 
                                         @php

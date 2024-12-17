@@ -2,61 +2,125 @@
 @section('title', 'Đăng nhập')
 
 @section('content')
+
+<!-- Custom CSS -->
 <style>
-    .service-img {
-        height: 250px; /* Thiết lập chiều cao cho hình ảnh */
-        object-fit: cover; /* Đảm bảo hình ảnh không bị méo */
-        border-radius: 5px; /* Tạo bo góc nhẹ cho ảnh */
+    /* --- Màu chủ đạo #74c26e --- */
+
+    /* 1. Màu chữ chính */
+   /*  .text-primary, a, a:hover {
+        color: #74c26e ;
+        text-decoration: none;
+    } */
+
+    /* 2. Màu nền nhấn mạnh */
+    .bg-primary {
+        background-color: #74c26e !important;
+        color: #fff !important;
     }
 
+    /* 3. Nút (Buttons) */
+    .btn-primary {
+        background-color: #74c26e;
+        border-color: #74c26e;
+    }
+
+    .btn-primary:hover, .btn-primary:focus {
+        background-color: #66af5f; /* Màu tối hơn khi hover */
+        border-color: #66af5f;
+    }
+
+    /* 4. Thẻ card */
     .card {
-        transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+        border: 1px solid #e0e6e3;
     }
 
-    .card:hover {
-        transform: scale(1.05); /* Hiệu ứng phóng to nhẹ khi hover */
-        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15); /* Bóng đổ lớn hơn khi hover */
+    .card-title, .card-text {
+        color: #4d774e;
     }
 
-    h2 {
-        font-size: 2rem;
+    .card-img-top {
+        border: 3px solid #74c26e;
+        border-radius: 50%;
     }
 
-    .card-title {
-        font-size: 1.2rem;
-        font-weight: 600;
+    /* 5. Màu nền phụ */
+    .bg-light {
+        background-color: #eaf7ed !important;
     }
 
-    .video-container {
-        position: relative; /* Đặt vị trí tương đối cho container */
-        text-align: center; /* Căn giữa nội dung bên trong */
-        margin-bottom: 20px; /* Khoảng cách dưới cùng */
+    /* 6. Tiêu đề và khoảng cách */
+    h1, h2, h3, h4, h5, h6 {
+        color: #74c26e;
     }
 
-    .video-container img {
-        width: 100%; /* Đặt chiều rộng của hình ảnh 100% */
-        height: auto; /* Đảm bảo chiều cao tự động điều chỉnh */
-        border-radius: 5px; /* Tạo bo góc nhẹ cho ảnh */
+    section {
+        padding: 50px 0;
     }
 
-    .video-container iframe {
-        position: absolute; /* Đặt vị trí tuyệt đối cho video */
-        top: 50%; /* Đặt vị trí ở giữa theo chiều dọc */
-        left: 50%; /* Đặt vị trí ở giữa theo chiều ngang */
-        transform: translate(-50%, -50%); /* Giúp video nằm chính giữa */
-        width: 560px; /* Đặt chiều rộng cho video */
-        height: 315px; /* Đặt chiều cao cho video */
-    }
+    /* 7. Căn chỉnh container */
+   /*  .container {
+        max-width: 1200px;
+    } */
+    .card-img-top {
+    width: 150px;
+    height: 150px;
+    object-fit: cover; /* Giúp ảnh không bị kéo dãn */
+}
 </style>
+
+<!-- Phần giới thiệu -->
 <section id="about" class="py-5">
+    <div class="container text-center">
+        <h2 class="fw-bold mb-4">
+            Chào mừng đến với <span  style="color: #66af5f">UIS Fruits</span>!
+        </h2>
+        <p class="lead">
+            Chúng tôi mang đến những loại hoa quả tươi ngon, an toàn và chất lượng nhất cho bạn và gia đình.
+        </p>
+    </div>
+</section>
+
+<!-- Phần sứ mệnh -->
+<section id="mission" class="py-5 bg-light">
+    <div class="container text-center">
+        <h2 class="fw-bold mb-4 " style="color: #66af5f">🎯 Sứ mệnh của chúng tôi</h2>
+        <p class="lead mx-auto" style="max-width: 800px;">
+            "UIS Fruits được tạo nên với mong muốn mang đến cho khách hàng những loại hoa quả tươi ngon, sạch và an toàn nhất. 
+            Chúng tôi tin rằng mỗi sản phẩm đều mang một câu chuyện - câu chuyện về sức khỏe, niềm vui và sự kết nối."
+        </p>
+    </div>
+</section>
+
+<!-- Phần đội ngũ thực hiện -->
+{{-- <section id="team" class="py-5">
     <div class="container">
-        <h2 class="text-center">Về Chúng Tôi</h2>
-        <p class="text-center">Chúng tôi là một công ty chuyên cung cấp các sản phẩm và dịch vụ tốt nhất cho khách hàng.</p>
-        <!-- Nhúng video vào đây -->
-        <div class="video-container">
-            <img src="https://png.pngtree.com/background/20210711/original/pngtree-fresh-literary-fruit-lemon-tea-fruit-tea-taobao-banner-picture-image_1126915.jpg" alt="Hình ảnh mô tả" class="video-img">
-            <iframe width="640" height="360" src="https://www.youtube.com/embed/KPP4Cfupzhs" title="Hey Bear Sensory - Smoothie Mix!- Fun Dance Video with music and animation !" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+        <h2 class="text-center fw-bold mb-5">🤝 Đội ngũ thực hiện</h2>
+        <div class="row g-4">
+            @php
+                $teamMembers = [
+                    ['name' => 'Nguyễn Đăng Duy', 'role' => 'Backend', 'image' => 'member1.jpg'],
+                    ['name' => 'Nguyễn Thanh Hào', 'role' => 'Backend', 'image' => 'member2.jpg'],
+                    ['name' => 'Đặng Thế Anh', 'role' => 'Quản lý dự án', 'image' => 'member1.jpg'],
+                    ['name' => 'Lại Thanh Hòa', 'role' => 'Full Stack', 'image' => 'member4.jpg'],
+                    ['name' => 'Bùi Văn Phúc', 'role' => 'Thiết kế UI/UX & Backend', 'image' => 'member5.jpg'],
+                ];
+            @endphp
+    
+            @foreach ($teamMembers as $member)
+                <div class="col-md-4 col-lg-2 mx-auto">
+                    <div class="card h-100 shadow-sm border-0">
+                        <!-- Thêm class để làm tròn ảnh -->
+                        <img src="{{ asset('uploads/member/' . $member['image']) }}" class="card-img-top rounded-circle p-3" alt="{{ $member['name'] }}">
+                        <div class="card-body text-center">
+                            <h5 class="card-title fw-bold">{{ $member['name'] }}</h5>
+                            <p class="card-text">{{ $member['role'] }}</p>
+                        </div>
+                    </div>
+                </div>
+            @endforeach
         </div>
     </div>
 </section>
+ --}}
 @endsection
