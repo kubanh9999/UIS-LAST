@@ -5,13 +5,13 @@
         <div class="content">
             <div class="page-header">
                 <div class="page-title">
-                    <h4>Danh sách tài khoản</h4>
+                    <h4>QUẢN LÝ TÀI KHOẢN</h4>
                 </div>
-                {{-- <div class="page-btn">
+                <!-- <div class="page-btn">
                     <a href="{{ route('admin.users.create') }}" class="btn btn-success">
                         <i class="fa-solid fa-plus"></i>Thêm tài khoản
                     </a>
-                </div> --}}
+                </div>  -->
             </div>
             <script>
                 @if(session('success'))
@@ -133,12 +133,13 @@
                                                 <button type="button" class="btn status-btn" data-id="{{ $item->id }}" data-status="{{ $item->status }}" onclick="toggleStatusq(this)">
                                                     <i class="fa-solid {{ $item->status == 0 ? 'fa-unlock' : 'fa-lock' }}"></i>
                                                 </button>
+                                                <a class="action-icon" href="{{ route('admin.users.edit', $item->id) }}">
+                                                    <i class="fa-solid fa-pen-to-square"></i>
+                                                </a>
                                             </div>
                                             
                                                 
-                                              {{--   <a class="action-icon" href="{{ route('admin.users.edit', $item->id) }}">
-                                                    <i class="fa-solid fa-pen-to-square"></i>
-                                                </a> --}}
+                                               
                                                {{--  <form id="delete-form-{{ $item->id }}" action="{{ route('admin.users.destroy', $item->id) }}" method="POST" style="display:inline;">
                                                     @csrf
                                                     @method('DELETE')

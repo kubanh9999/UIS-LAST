@@ -27,7 +27,14 @@ class AccountManagementController extends Controller
             ->where('user_id', $user->id)
             ->with(['orderDetails', 'orderDetails.product', 'orderDetails.gift', 'orderDetails.productInGift.product']) // Nạp dữ liệu liên quan
             ->get();
-        return view('pages.account-management2', compact('orders','provinces', 'user','districts','wards'));
+
+        $discount = null;
+
+        if ($user->discount_id != 0) {
+            $discount = DB::table('discounts')->where('id', $user->discount_id)->first();
+        }
+
+        return view('pages.account-management2', compact('orders','provinces', 'user','districts','wards','discount'));
     }
 
     public function changePassword()

@@ -12,6 +12,7 @@ class Discount extends Model
         'code',
         'discount_percent',
         'description',
+        'quantity',
         'valid_form',
         'valid_end'
     ];

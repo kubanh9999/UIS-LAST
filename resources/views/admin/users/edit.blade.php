@@ -1,5 +1,10 @@
 @extends('admin.layout')
 @section('content')
+<style>
+    select.form-control.giamgia {
+    width: 270px;
+}
+</style>
     <div class="page-wrapper">
         <div class="content">
             <div class="page-header">
@@ -15,15 +20,15 @@
                     @method('PUT') <!-- Thêm phương thức PUT cho cập nhật -->
                     <div class="card-body">
                         <div class="row">
-                            <div class="col-lg-3 col-sm-6 col-12">
+                            <!-- <div class="col-lg-3 col-sm-6 col-12">
                                 <div class="form-group">
-                                    <label>tên</label>
+                                    <label>Tên</label>
                                     <input type="text" name="name" value="{{ old('name', $user->name) }}" class="form-control" required>
                                 </div>
                             </div>
                             <div class="col-lg-3 col-sm-6 col-12">
                                 <div class="form-group">
-                                    <label>email</label>
+                                    <label>Email</label>
                                     <input type="text" name="email" value="{{ old('email', $user->email) }}" class="form-control" required>
                                 </div>
                             </div>
@@ -39,22 +44,35 @@
                             </div> --}}
                             <div class="col-lg-3 col-sm-6 col-12">
                                 <div class="form-group">
-                                    <label>số điện thoại</label>
+                                    <label>Số điện thoại</label>
                                     <input type="text" name="phone" value="{{ old('phone', $user->phone) }}" class="form-control" required>
                                 </div>
                             </div>
                             <div class="col-lg-3 col-sm-6 col-12">
                                 <div class="form-group">
-                                    <label>địa chỉ</label>
+                                    <label>Địa chỉ</label>
                                     <input type="email" name="address" value="{{ old('email', $user->email) }}" class="form-control" required>
                                 </div>
                             </div>
                             <div class="col-lg-3 col-sm-6 col-12">
                                 <div class="form-group">
                                     <label>Role</label>
-                                    <select name="role" required>
+                                    <select name="role" class="form-control" required>
                                         <option value="Owner" {{ $user->role == 'Owner' ? 'selected' : '' }}>Owner</option>
                                         <option value="User" {{ $user->role == 'User' ? 'selected' : '' }}>User</option>
+                                    </select>
+                                </div>
+                            </div> -->
+                            <div class="col-lg-3 col-sm-6 col-12">
+                                <div class="form-group">
+                                    <label>Mã giảm giá (Coupon)</label>
+                                    <select name="discount_id" class="form-control giamgia">
+                                        <option value="">Không có mã giảm giá</option>
+                                        @foreach($coupons as $coupon)
+                                            <option value="{{ $coupon->id }}" {{ isset($user) && $user->discount_id == $coupon->id ? 'selected' : '' }}>
+                                                {{ $coupon->code }} (Giảm {{ $coupon->discount_percent }}%)
+                                            </option>
+                                        @endforeach
                                     </select>
                                 </div>
                             </div>

@@ -107,10 +107,11 @@
                 </ul>
             </div>
             <div class="inner-cart">
-                <a href="{{ route('cart.index') }}" class="inner-main">
-                    <img src="{{asset('client/assets/icons/cart.svg')}}" alt="cart">
-                    <span class="translate-middle badge rounded-pill bg-danger"
-                        id="cart-count">{{ count(Session::get('cart', [])) }}</span>
+                <a href="{{ auth()->check() ? route('cart.index') : route('login') }}" class="inner-main">
+                    <img src="{{ asset('client/assets/icons/cart.svg') }}" alt="cart">
+                    <span class="translate-middle badge rounded-pill bg-danger" id="cart-count">
+                        {{ count(Session::get('cart', [])) }}
+                    </span>
                 </a>
             </div>
         </div>

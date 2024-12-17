@@ -39,6 +39,9 @@
                                 khẩu</a>
                         </li>
                         <li class="group-item">
+                            <a href="#" class="text-main" data-target="#khuyenmai">Khuyến mãi</a>
+                        </li>
+                        <li class="group-item">
                             <a href="#" class="text-main" data-target="#orders">Lịch sử mua
                                 hàng</a>
                         </li>
@@ -170,6 +173,17 @@
                             <button type="submit" class="btn-update">Cập nhật mật khẩu</button>
                         </form>
                     </div>
+
+                    <div id="khuyenmai" class="inner-content">
+                        <div class="input-group">
+                            <label for="">Voucher</label>
+                            <input disabled type="text" 
+                            value="{{ $discount && $discount->quantity > 0 ? 'Mã voucher giảm giá ' . number_format($discount->discount_percent, 0) . '%: ' . $discount->code : 'Không có mã giảm giá' }}"
+                                class="input-control" 
+                                placeholder="Không có voucher">
+                        </div>
+                    </div>
+
 
                     <div id="orders" class="inner-content">
                         @foreach ($orders as $item)

@@ -13,50 +13,66 @@
                 <div class="card">
                     <div class="card-body">
                         <div class="row">
-                            <!-- Category Name -->
+                            <!-- Mã giảm giá -->
                             <div class="col-lg-6 col-sm-6 col-12">
                                 <div class="form-group">
-                                    <label>mã giảm giá</label>
-                                    <input type="text" name="code" required class="form-control"> <!-- Thêm class và required -->
+                                    <label for="code">Mã giảm giá</label>
+                                    <input type="text" name="code" id="code" class="form-control" required>
                                 </div>
                             </div>
+            
+                            <!-- Phần trăm giảm giá -->
                             <div class="col-lg-6 col-sm-6 col-12">
                                 <div class="form-group">
-                                    <label>Phần trăm giảm giá</label>
-                                    <input type="number" name="discount_percent" required class="form-control" max="100" min="0" id="discountPercentInput"> <!-- Dùng input type number để hạn chế nhập -->
+                                    <label for="discountPercentInput">Phần trăm giảm giá</label>
+                                    <input type="number" name="discount_percent" id="discountPercentInput" 
+                                           class="form-control" min="0" max="100" required>
                                 </div>
-                                
                             </div>
+            
+                            <!-- Số lượng -->
                             <div class="col-lg-6 col-sm-6 col-12">
                                 <div class="form-group">
-                                    <label>mô tả</label>
-                                    <input type="text" name="description" required class="form-control"> <!-- Thêm class và required -->
+                                    <label for="quantity">Số lượng</label>
+                                    <input type="number" name="quantity" id="quantity" class="form-control" min="0" required>
                                 </div>
                             </div>
+            
+                            <!-- Mô tả -->
                             <div class="col-lg-6 col-sm-6 col-12">
                                 <div class="form-group">
-                                    <label>Ngày bắt đầu</label>
-                                    <input type="date" name="valid_form" required class="form-control">
-
+                                    <label for="description">Mô tả</label>
+                                    <input type="text" name="description" id="description" class="form-control" required>
                                 </div>
                             </div>
+            
+                            <!-- Ngày bắt đầu -->
                             <div class="col-lg-6 col-sm-6 col-12">
                                 <div class="form-group">
-                                    <label>Ngày kết thúc</label>
-                                    <input type="date" name="valid_end" required class="form-control">
+                                    <label for="validForm">Ngày bắt đầu</label>
+                                    <input type="date" name="valid_form" id="validForm" class="form-control" required>
                                 </div>
                             </div>
-                            <!-- Submit and Cancel Buttons -->
+            
+                            <!-- Ngày kết thúc -->
+                            <div class="col-lg-6 col-sm-6 col-12">
+                                <div class="form-group">
+                                    <label for="validEnd">Ngày kết thúc</label>
+                                    <input type="date" name="valid_end" id="validEnd" class="form-control" required>
+                                </div>
+                            </div>
+            
+                            <!-- Nút Submit và Cancel -->
                             <div class="col-lg-12">
-                          
-                                <a href="{{ route('admin.discount.create') }}" class="btn btn-secondary">Cancel</a> <!-- Cập nhật link đến route -->
-                                <button type="submit" class="btn btn-success me-2">Submit</button> <!-- Sử dụng button thay vì a -->
+                                <div class="form-group d-flex justify-content-end">
+                                    <a href="{{ route('admin.discount.index') }}" class="btn btn-secondary me-2">Cancel</a>
+                                    <button type="submit" class="btn btn-success">Submit</button>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </form>
-            
+            </form>            
         </div>
     </div>
     <script>

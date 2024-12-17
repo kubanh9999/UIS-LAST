@@ -4,7 +4,7 @@
         <div class="content">
             <div class="page-header">
                 <div class="page-title">
-                    <h4>DANH SÁCH MÃ GIẢM GIÁ </h4>
+                    <h4>QUẢN LÝ MÃ GIẢM GIÁ </h4>
                  {{--    <h6>View/Search product Category</h6> --}}
                 </div>
                 <div class="page-btn">
@@ -27,19 +27,13 @@
                 <div class="card-body">
                     <div class="table-top">
                         <div class="search-set">
-                            <div class="search-path">
-                                <a class="btn btn-success" id="filter_search">
-                                    <img src="{{ asset('assets/img/icons/filter.svg') }}" alt="img">
-                                    <span>{{-- <img src="assets/img/icons/closes.svg" alt="img"> --}}</span>
-                                </a>
-                            </div>
                             <div class="search-input">
                                 <a class="btn btn-searchset"><img src="{{ asset('assets/img/icons/search-white.svg') }}"
                                         alt="img"></a>
                             </div>
                         </div>
                         <div class="wordset">
-                            <ul>
+                            {{-- <ul>
                                 <li>
                                     <a data-bs-toggle="tooltip" data-bs-placement="top" title="pdf"><img
                                             src="{{ asset('assets/img/icons/pdf.svg') }}" alt="img"></a>
@@ -52,11 +46,11 @@
                                     <a data-bs-toggle="tooltip" data-bs-placement="top" title="print"><img
                                             src="{{ asset('assets/img/icons/printer.svg') }}" alt="img"></a>
                                 </li>
-                            </ul>
+                            </ul> --}}
                         </div>
                     </div>
 
-                    <div class="card" id="filter_inputs">
+                    {{-- <div class="card" id="filter_inputs">
                         <div class="card-body pb-0">
                             <div class="row">
                                 <div class="col-lg-2 col-sm-6 col-12">
@@ -91,7 +85,7 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </div> --}}
 
                     <div class="table-responsive">
                         <table class="table datanew">
@@ -103,9 +97,10 @@
                                             <span class="checkmarks"></span>
                                         </label>
                                     </th>
-                                    <th>id</th>
-                                    <th>mã giảm giá</th>
+                                    <th>#</th>
+                                    <th>Mã giảm giá</th>
                                     <th>Phần trăm giảm giá</th>
+                                    <th>Số lượng</th>
                                     <th>ngày bắt đầu</th>
                                     <th>ngày kết thúc</th>
                                     <th>Hành động</th>
@@ -123,6 +118,7 @@
                                     <td>{{$item->id}}</td>
                                     <td>{{$item->code}}</td>
                                     <td contenteditable="true" class="editable" data-column="discount_percent" data-id="{{ $item->id }}">{{$item->discount_percent}} %</td>
+                                    <td>{{$item->quantity}}</td>
                                     <td contenteditable="true" class="editable" data-column="valid_form" data-id="{{ $item->id }}">{{$item->valid_form}}</td>
                                     <td contenteditable="true" class="editable" data-column="valid_end" data-id="{{ $item->id }}">{{$item->valid_end}}</td>
                                     <td class="d-flex justify-content-center align-items-center">
@@ -160,9 +156,9 @@
             const column = cell.getAttribute('data-column');
             const value = cell.innerText;
             const id = cell.getAttribute('data-id');
-console.log('column',column);
-console.log('value',value);
-console.log('id',id);
+            console.log('column',column);
+            console.log('value',value);
+            console.log('id',id);
 
             if (value.trim() !== '') {
                 // AJAX Request to Update the Database

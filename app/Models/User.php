@@ -28,7 +28,8 @@ class User extends Authenticatable
         'street',         // Đường
         'wards_id',        // Phường/xã
         'district_id',    // Quận/huyện
-        'province_id',    // Tỉnh/thành phố
+        'province_id', 
+        'discount_id',
     ];
 
     /**

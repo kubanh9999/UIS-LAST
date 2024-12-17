@@ -20,6 +20,16 @@
     color: #721c24;
     border-color: #f5c6cb;
 }
+.discount-message {
+    color: green;
+    font-size: 14px;
+    background-color: #e6ffe6; /* Màu nền nhẹ để nổi bật */
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #4CAF50; /* Đường viền màu xanh lá */
+    margin: 10px 0; /* Khoảng cách trên và dưới */
+}
+
 </style>
 
     <div class="container">
@@ -38,6 +48,12 @@
                 <form id="discount-form" class="discount-form" action="{{ route('applyDiscount') }}" method="POST">
                     @csrf
                     <div class="inner-form-group">
+                        @if($discount && $discount->quantity > 0)
+                            <p class="discount-message">
+                                Bạn có mã giảm giá: <strong>{{ $discount->code }}</strong> 
+                                (Giảm {{ intval($discount->discount_percent) }}%)
+                            </p>
+                        @endif
                         <div class="input-group">
                             <input type="text"name="discount_code" id="discount_code"  placeholder="Nhập mã giảm giá"
                                 required>

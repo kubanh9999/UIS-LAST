@@ -24,10 +24,11 @@ class DiscountController extends Controller
     {
         Discount::create([
             'code' => $request->input('code'),
-            'discount_percent' => $request->input('discount_percent'), 
+            'discount_percent' => $request->input('discount_percent'),
+            'quantity' => $request->input('quantity'),  
             'description' => $request->input('description'),
-           'valid_form' => $request->input('valid_form'), 
-    'valid_end' => $request->input('valid_end'), 
+            'valid_form' => $request->input('valid_form'), 
+            'valid_end' => $request->input('valid_end'), 
             'is_active' => true, // Có thể tự động đánh dấu là hoạt động
         ]);
        /*  dd($request->all()); */
@@ -45,12 +46,13 @@ class DiscountController extends Controller
         $user = Discount::findOrFail($id); 
         $user->code = $request->input('code');
         $user->discount_percent = $request->input('discount_percent');
+        $user->quantity = $request->input('quantity');
         $user->description = $request->input('description');
         $user->valid_form = $request->input('valid_form');
         $user->valid_end = $request->input('valid_end');
         $user->save();
     
-        return redirect()->route('admin.discount.index')->with('success', 'User đã được cập nhật thành công!');
+        return redirect()->route('admin.discount.index')->with('success', 'Mã giảm giá đã được cập nhật thành công!');
     }
 
     public function destroy($id)

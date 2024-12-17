@@ -60,6 +60,20 @@
                                     </select>
                                 </div>
                             </div>
+                            <div class="col-lg-3 col-sm-6 col-12">
+                                <div class="form-group">
+                                    <label>Mã giảm giá (Coupon)</label>
+                                    <select name="discount_id" class="form-control">
+                                        <option value="">Chọn mã giảm giá</option>
+                                        @foreach($coupons as $coupon)
+                                            <option value="{{ $coupon->id }}" {{ isset($user) && $user->discount_id == $coupon->id ? 'selected' : '' }}>
+                                                {{ $coupon->code }} (Giảm {{ $coupon->discount_percent }}%)
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+
                             
                             <div class="col-lg-12">
                                 <button type="submit" class="btn btn-submit me-2">Submit</button>
