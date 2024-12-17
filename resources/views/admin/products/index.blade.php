@@ -159,14 +159,14 @@
                                                 <img src="{{ asset('layouts/img/'.$item->image) }}" alt="Ảnh sản phẩm" width="100">
                                             @endif
                                         </td>
-                                        <td>{{ $item->category_id }}</td>
+                                        <td>{{ $item->category->name ?? 'Chưa có danh mục' }}</td>
                                         <td contenteditable="true" class="editable-field" data-id="{{ $item->id }}" data-field="price">{{ number_format($item->price, 0) }} VND</td>
                                         <td contenteditable="true" class="editable-field" data-id="{{ $item->id }}" data-field="stock">{{ $item->stock }}</td>
                                         <td>
                                             <div class="d-flex justify-content-center align-items-center">
-                                                <a class="action-link me-3" href="{{ route('admin.products.show', $item->id) }}">
+                                                {{-- <a class="action-link me-3" href="{{ route('admin.products.show', $item->id) }}">
                                                     <img src="{{ asset('assets/img/icons/eye.svg') }}" alt="img" class="icon">
-                                                </a>
+                                                </a> --}}
                                                 <a class="action-link me-3" href="{{ route('admin.products.edit', $item->id) }}">
                                                     <i class="fa-solid fa-pen-to-square icon"></i>
                                                 </a>

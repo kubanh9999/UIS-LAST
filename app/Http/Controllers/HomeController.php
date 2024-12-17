@@ -147,7 +147,7 @@ class HomeController extends Controller
     public function introduction()
     {
 
-        return view('pages.introduction');
+        return view('pages.aboutus');
     }
 
     public function getProductsByCategory($categoryName)

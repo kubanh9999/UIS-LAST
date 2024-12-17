@@ -36,3 +36,17 @@ main {
     padding: 15px 0px;
     background:  var(--color-background);
 }
+
+.btn-close {
+    background-color: var(--color-background);
+    padding: 8px;
+    border-radius: 8px;
+    color: var(--color-second);
+}
+
+.btn-furits {
+    background-color: var(--color-first);
+    padding: 8px;
+    border-radius: 8px;
+    color: var(--color-three);
+}

@@ -57,10 +57,10 @@
 </style>
 
 @section('content')
-    <div class="container mt-5">
+    <div class="container">
         <div class="row justify-content-center">
             <div class="col-md-8">
-                <div class="card text-center shadow-lg card-main">
+                <div class="card text-center card-main">
                     <div class="card-body">
                         <!-- Thông báo thành công sẽ ẩn cho đến khi xe di chuyển xong -->
                         <div class="success-message" id="success-message">
@@ -95,6 +95,6 @@
         setTimeout(function() {
             // Chuyển hướng đến trang chủ sau 5 giây nữa (sau khi thông báo thành công)
             window.location.href = "{{ route('home.index') }}";  // Chuyển hướng đến trang chủ
-        }, 10000);  // Chờ 10 giây sau khi thông báo
+        }, 50000);  // Chờ 10 giây sau khi thông báo
     </script>
 @endsection

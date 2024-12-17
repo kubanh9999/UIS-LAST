@@ -76,7 +76,7 @@ class AccountManagementController extends Controller
             }
         ])->find($id);
 
-        return view('pages.account-order-detail', compact('orders','provinces', 'user','districts','wards'));
+        return view('pages.order-detail', compact('orders','provinces', 'user','districts','wards'));
     }
 
     public function cancelOrder($orderId)

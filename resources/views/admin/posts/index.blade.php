@@ -124,17 +124,12 @@
                                         @endif
                                     </td>
                                     <td>{{ $item->title }}</td>
-                                    <td>{{ $item->category_id }}</td>
+                                    <td>{{ $item->category->name ?? 'Chưa có danh mục' }}</td>
                                     <td>{{ $item->created_at }}</td>
                                     <td>
                                         <!-- Edit button -->
                                         <a href="{{ route('admin.post.edit', $item->id) }}" style="margin-left: 5px">
                                             <i class="fa-solid fa-pen-to-square"></i>
-                                        </a>
-                                    
-                                        <!-- View button -->
-                                        <a href="{{ route('admin.post.show', $item->id) }}" style="margin-left: 10px">
-                                            <i class="fa-solid fa-eye"></i>
                                         </a>
                                     
                                         <!-- Delete form -->
