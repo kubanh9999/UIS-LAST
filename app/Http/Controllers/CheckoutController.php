@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Symfony\Component\ErrorHandler\Debug;
+use App\Models\User;
 use App\Models\Province;
 use App\Models\District;
 use App\Models\Ward;
@@ -286,7 +287,14 @@ $shippingCost = $shippingCost ?? 0;
         $request->validate([
             'discount_code' => 'required|string|max:50',
         ]);
-    
+
+        $user = Auth::user(); 
+
+        if (empty($user->discount_id)) {
+            return response()->json([
+                'message' => 'Bạn không có mã giảm giá để áp dụng.',
+            ], 422);
+        }
         $discountCode = $request->input('discount_code');
     
         // Bước 2: Kiểm tra mã giảm giá trong cơ sở dữ liệu
