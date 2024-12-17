@@ -164,9 +164,9 @@
                                         <td contenteditable="true" class="editable-field" data-id="{{ $item->id }}" data-field="stock">{{ $item->stock }}</td>
                                         <td>
                                             <div class="d-flex justify-content-center align-items-center">
-                                                <a class="action-link me-3" href="{{ route('admin.products.show', $item->id) }}">
+                                                {{-- <a class="action-link me-3" href="{{ route('admin.products.show', $item->id) }}">
                                                     <img src="{{ asset('assets/img/icons/eye.svg') }}" alt="img" class="icon">
-                                                </a>
+                                                </a> --}}
                                                 <a class="action-link me-3" href="{{ route('admin.products.edit', $item->id) }}">
                                                     <i class="fa-solid fa-pen-to-square icon"></i>
                                                 </a>

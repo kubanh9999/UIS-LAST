@@ -83,7 +83,7 @@
                                         <input type="date" id="created_at" name="created_at" value="{{ old('created_at', $post->created_at->format('Y-m-d') ?? '') }}" required class="form-control">
                                     </div>
                                 </div>
-                                <div class="col-lg-6 col-sm-6 col-12">
+                                {{-- <div class="col-lg-6 col-sm-6 col-12">
                                     <div class="form-group">
                                         <label>Trạng thái</label>
                                         <select name="status" required class="form-control">
@@ -91,7 +91,7 @@
                                             <option value="0" {{ $post->status == 0 ? 'selected' : '' }}>Ẩn</option>
                                         </select>
                                     </div>
-                                </div>
+                                </div> --}}
                                 <!-- Submit and Cancel Buttons -->
                                 <div class="col-lg-12">
                                     <button type="submit" class="btn btn-submit me-2">Cập nhật</button>

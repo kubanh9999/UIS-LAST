@@ -132,11 +132,6 @@
                                             <i class="fa-solid fa-pen-to-square"></i>
                                         </a>
                                     
-                                        <!-- View button -->
-                                        <a href="{{ route('admin.post.show', $item->id) }}" style="margin-left: 10px">
-                                            <i class="fa-solid fa-eye"></i>
-                                        </a>
-                                    
                                         <!-- Delete form -->
                                         <form id="delete-form-{{ $item->id }}" action="{{ route('admin.post.destroy', $item->id) }}" method="POST" style="display:inline;">
                                             @csrf

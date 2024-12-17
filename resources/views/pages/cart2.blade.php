@@ -3,47 +3,7 @@
 @section('content')
 
     <style>
-        .row {
-            display: flex;
-            flex-wrap: wrap;
-            /* Để các sản phẩm tự động xuống hàng */
-        }
-
-        .product-card:hover {
-            transform: scale(1.05);
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-        }
-
-        .input-group {
-            display: flex;
-            align-items: center;
-        }
-
-        .input-group input {
-            border: 1px solid#ffffff;
-            border-radius: 4px 0 0 4px;
-            /* Bo tròn góc cho bên trái */
-            padding: 10px;
-            /* Thêm khoảng cách bên trong */
-        }
-
-        .input-group .input-group-text {
-            border: 1px solid #ffffff;
-            border-left: none;
-            /* Không có viền bên trái */
-            border-radius: 0 4px 4px 0;
-            /* Bo tròn góc cho bên phải */
-            padding: 6px;
-        }
-
-        .delete-cart-item {
-            color: red;
-        }
-
-        .continue .cart-not-item {
-            font-size: small;
-        }
-
+        
         .section-cart {
             height: auto;
         }
