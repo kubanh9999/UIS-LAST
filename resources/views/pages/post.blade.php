@@ -22,7 +22,7 @@
     </div>
 
 
-<section class="collection-section py-4">
+<section class="collection-section">
     <div class="container">
         <div class="row">
             <!-- Sidebar Section -->
