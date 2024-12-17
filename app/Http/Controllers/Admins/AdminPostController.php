@@ -185,7 +185,7 @@ function index_categories(){
         // Tạo danh mục mới
         DB::table('post_categories')->insert([
             'name' => $request->name,
-            'description' => $request->description ?? null, // Nếu không có giá trị description thì dùng giá trị mặc định
+            // 'description' => $request->description ?? null, // Nếu không có giá trị description thì dùng giá trị mặc định
             'created_at' => now(),
             'updated_at' => now(),
         ]);
@@ -225,7 +225,7 @@ public function updateCategory(Request $request, $id)
         ->where('id', $id)
         ->update([
             'name' => $request->name,
-            'description' => $request->description ?? null, // Nếu có description thì update, nếu không có thì giữ null
+            // 'description' => $request->description ?? null, // Nếu có description thì update, nếu không có thì giữ null
             'updated_at' => now(), // Cập nhật thời gian sửa
         ]);
 
