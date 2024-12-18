@@ -8,7 +8,7 @@
     padding: 15px;
     font-size: 14px;
     font-weight: bold;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    /* box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); */
 }
 .alert-success {
     background-color: #d4edda;
@@ -23,7 +23,7 @@
 .discount-message {
     color: green;
     font-size: 14px;
-    background-color: #e6ffe6; /* Màu nền nhẹ để nổi bật */
+    background-color: #101110; /* Màu nền nhẹ để nổi bật */
     padding: 10px;
     border-radius: 5px;
     border: 1px solid #4CAF50; /* Đường viền màu xanh lá */
@@ -41,10 +41,11 @@
             </ol>
         </nav>
     </div>
-    <div id="message" class="message mt-3"></div>
+    
     <section class="section-checkout">
         <div class="container">
             <div class="swapper">
+                <div id="message" class="message"></div>
                 <form id="discount-form" class="discount-form" action="{{ route('applyDiscount') }}" method="POST">
                     @csrf
                     <div class="inner-form-group">
