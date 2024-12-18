@@ -175,7 +175,7 @@ table.table-bordered tbody tr:hover {
 }
 
 .btn-success {
-    background-color: #28a745;
+    background-color: #74c36f;
     border: none;
 }
 
