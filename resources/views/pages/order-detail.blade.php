@@ -174,9 +174,23 @@
                                         @endif
                                     </tr>
                                 @endforeach
+                        
                                 <tr class="total-hd">
-                                    <td colspan="4" class="text-end">
-                                        <strong>Tổng cộng:</strong> {{ number_format($orders->total_amount, 0, ',', '.') }}đ </td>
+                                    @if ($discount === null)
+                                        <td colspan="4" class="text-end">
+                                            <strong>Tổng cộng:</strong> {{ number_format($orders->total_amount, 0, ',', '.') }}đ
+                                        </td>
+                                    @else
+                                        <td colspan="4" class="text-end">
+                                            <div class="giamgia-order-detail" style="margin-right: 50px;">
+                                                Giảm giá: {{ number_format($discount->discount_percent, 0, ',', '.') }}%
+                                            </div>
+                                            <br>
+                                            <strong>Tổng cộng:</strong> {{ number_format($orders->total_amount, 0, ',', '.') }}đ
+                                        </td>
+                                    @endif
+                                </tr>
+
                                 </tr>
                             </tbody>
                         </table>

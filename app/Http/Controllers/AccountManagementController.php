@@ -75,8 +75,12 @@ class AccountManagementController extends Controller
                 $query->with('product'); // eager load product trong productInGift
             }
         ])->find($id);
+        $discount = null;
 
-        return view('pages.order-detail', compact('orders','provinces', 'user','districts','wards'));
+        if ($orders->discounts_id != null) {
+            $discount = DB::table('discounts')->find($orders->discounts_id); // Lấy thông tin giảm giá từ discount_id trong đơn hàng
+        }
+        return view('pages.order-detail', compact('discount','orders','provinces', 'user','districts','wards'));
     }
 
     public function cancelOrder($orderId)

@@ -23,7 +23,7 @@
 .discount-message {
     color: green;
     font-size: 14px;
-    background-color: #101110; /* Màu nền nhẹ để nổi bật */
+    background-color: #d6e1d2; /* Màu nền nhẹ để nổi bật */
     padding: 10px;
     border-radius: 5px;
     border: 1px solid #4CAF50; /* Đường viền màu xanh lá */

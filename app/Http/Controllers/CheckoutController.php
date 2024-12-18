@@ -114,6 +114,7 @@ $shippingCost = $shippingCost ?? 0;
         $districts = District::where('province_id', $user->province_id)->get();
         $wards = Ward::where('district_id', $user->district_id)->get();
         $cart = session()->get('cart');
+        $discountId = session()->get('discount_id');
         if (!$cart) {
             return redirect()->back()->with('error', 'Giỏ hàng trống!');
         }
@@ -155,11 +156,13 @@ $shippingCost = $shippingCost ?? 0;
             'order_date' => now(),
             'user_id' => Auth::id(),
             'total_amount' => max(0, $totalAmount),
-            'province_id' => $request->province_id,  // Province ID
+            'province_id' => $request->province_id, 
+            'discounts_id' => $discountId,
             'district_id' => $request->district_id,  // District ID
             'wards_id' => $request->ward_id,
             'street' => $request->address ?? 'Chưa có địa chỉ',        // Ward ID
         ]);
+       
 
         // Kiểm tra mã giảm giá
         if ($request->has('discount_code')) {
@@ -383,6 +386,7 @@ $shippingCost = $shippingCost ?? 0;
         if (!$cart) {
             return redirect()->back()->with('error', 'Giỏ hàng trống!');
         }
+        $discountId = session()->get('discount_id');
 
         $totalAmount = session()->get('discounted_total', 0);
         if ($totalAmount === 0) {
@@ -487,7 +491,8 @@ $shippingCost = $shippingCost ?? 0;
             'order_date' => now(),
             'user_id' => Auth::id(),
             'total_amount' => max(0, $totalAmount),
-            'province_id' => $request->province_id,  // Province ID
+            'province_id' => $request->province_id, 
+            'discounts_id' => $discountId,
             'district_id' => $request->district_id,  // District ID
             'wards_id' => $request->ward_id,
             'street' => $request->address ?? 'Chưa có địa chỉ',         // Ward ID
@@ -595,7 +600,7 @@ $shippingCost = $shippingCost ?? 0;
         }
 
         $totalAmount = session()->get('discounted_total', 0);
-        
+        $discountId = session()->get('discount_id');
         if ($totalAmount === 0) {
             foreach ($cart as $item) {
                 if (isset($item['total'])) {
@@ -689,7 +694,8 @@ $shippingCost = $shippingCost ?? 0;
                     'order_date' => now(),
                     'user_id' => Auth::id(),
                     'total_amount' => max(0, $totalAmount),
-                    'province_id' => $request->province_id,  // Province ID
+                    'province_id' => $request->province_id,
+                    'discounts_id' => $discountId,  // Province ID
                     'district_id' => $request->district_id,  // District ID
                     'wards_id' => $request->ward_id,
                     'street' => $request->address ?? 'Chưa có địa chỉ',         // Ward ID
