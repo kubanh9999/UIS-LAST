@@ -94,9 +94,10 @@
                                 </div> --}}
                                 <!-- Submit and Cancel Buttons -->
                                 <div class="col-lg-12">
-                                    <button type="submit" class="btn btn-submit me-2">Cập nhật</button>
-                                    <a href="{{ route('admin.post.index') }}" class="btn btn-cancel">Hủy bỏ</a>
+                                    <button type="submit" class="btn btn-success me-2">Cập nhật</button>
+                                    <a href="{{ route('admin.post.index') }}" class="btn btn-warning">Hủy bỏ</a>
                                 </div>
+                                
                             </div>
                         </div>
                     </div>

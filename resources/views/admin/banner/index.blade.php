@@ -51,10 +51,10 @@
                                     <td>{{ $banner->link }}</td>
                                     <td>{{ $banner->position }}</td>
                                     <td>
-                                        <a href="{{ route('admin.banners.edit', $banner->id) }}" class="btn btn-sm btn-primary">Sửa</a>
+                                        <a href="{{ route('admin.banners.edit', $banner->id) }}" class="btn btn-sm">   <i class="fa-solid fa-pen-to-square"></i></a>
                                         <form action="{{ route('admin.banners.destroy', $banner->id) }}" method="POST" style="display:inline-block;">
                                             @csrf @method('DELETE')
-                                            <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Bạn có chắc muốn xóa banner này?')">Xóa</button>
+                                            <button type="submit" class="btn btn-sm " onclick="return confirm('Bạn có chắc muốn xóa banner này?')"><i class="fas fa-trash-alt"></i></button>
                                         </form>
                                     </td>
                                 </tr>
@@ -88,10 +88,10 @@
                                     <td>{{ $banner->link }}</td>
                                     <td>{{ $banner->position }}</td>
                                     <td>
-                                        <a href="{{ route('admin.banners.edit', $banner->id) }}" class="btn btn-sm btn-primary">Sửa</a>
+                                        <a href="{{ route('admin.banners.edit', $banner->id) }}" class="btn btn-sm ">   <i class="fa-solid fa-pen-to-square"></i></a>
                                         <form action="{{ route('admin.banners.destroy', $banner->id) }}" method="POST" style="display:inline-block;">
                                             @csrf @method('DELETE')
-                                            <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Bạn có chắc muốn xóa banner này?')">Xóa</button>
+                                            <button type="submit" class="btn btn-sm " onclick="return confirm('Bạn có chắc muốn xóa banner này?')"><i class="fas fa-trash-alt"></i></button>
                                         </form>
                                     </td>
                                 </tr>
@@ -125,10 +125,10 @@
                                     <td>{{ $banner->link }}</td>
                                     <td>{{ $banner->position }}</td>
                                     <td>
-                                        <a href="{{ route('admin.banners.edit', $banner->id) }}" class="btn btn-sm btn-primary">Sửa</a>
+                                        <a href="{{ route('admin.banners.edit', $banner->id) }}" class="btn btn-sm ">   <i class="fa-solid fa-pen-to-square"></i></a>
                                         <form action="{{ route('admin.banners.destroy', $banner->id) }}" method="POST" style="display:inline-block;">
                                             @csrf @method('DELETE')
-                                            <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Bạn có chắc muốn xóa banner này?')">Xóa</button>
+                                            <button type="submit" class="btn btn-sm " onclick="return confirm('Bạn có chắc muốn xóa banner này?')"><i class="fas fa-trash-alt"></i></button>
                                         </form>
                                     </td>
                                 </tr>

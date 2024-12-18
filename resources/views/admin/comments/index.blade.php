@@ -65,7 +65,7 @@
                                     <td>{{ $item->created_at->format('Y-m-d') }}</td>
                                     <td>{{ $item->product->name ?? null }}</td>
                                     <td>
-                                        <a href="javascript:void(0);" onclick="confirmDelete({{ $item->id }})" class="btn btn-danger btn-sm">Xóa</a>
+                                        <a href="javascript:void(0);" onclick="confirmDelete({{ $item->id }})" class="btn  btn-sm">  <i class="fa-solid fa-pen-to-square"></i></a>
                                         <form id="delete-form-{{ $item->id }}" action="{{ route('admin.comments.delete', $item->id) }}" method="POST" style="display:none;">
                                             @csrf
                                             @method('DELETE')
@@ -76,7 +76,7 @@
                                         @endif
                                         
                                         @if($item->status == 1) <!-- Hiện nút ẩn nếu bình luận đã duyệt -->
-                                            <a href="javascript:void(0);" onclick="confirmHide({{ $item->id }})" class="btn btn-warning btn-sm">Ẩn</a>
+                                            <a href="javascript:void(0);" onclick="confirmHide({{ $item->id }})" class="btn  btn-sm"><i class="fa-solid fa-eye-slash"></i></a>
                                             <form id="hide-form-{{ $item->id }}" action="{{ route('admin.comments.hide', $item->id) }}" method="POST" style="display:none;">
                                                 @csrf
                                                 @method('PUT')
@@ -90,7 +90,7 @@
                                                 @method('POST') 
                                             </form>
                                         @endif
-                                        <a href="{{ route('admin.comments.detail', $item->id) }}" class="btn btn-info btn-sm">Chi Tiết</a>
+                                        <a href="{{ route('admin.comments.detail', $item->id) }}" class="btn  btn-sm"><i class="fa-solid fa-circle-info"></i></a>
                                     </td>                                    
                                 </tr>    
                                 @endforeach
