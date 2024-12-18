@@ -70,7 +70,7 @@
                                 <div class="col-lg-12">
                                     <div class="form-group d-flex justify-content-end">
                                         <a href="{{ route('admin.discount.index') }}" class="btn btn-secondary me-2">Hủy</a>
-                                        <button type="submit" class="btn btn-success">Đồng ýý</button>
+                                        <button type="submit" class="btn btn-success">Đồng ý</button>
                                     </div>
                                 </div>
                             </div>

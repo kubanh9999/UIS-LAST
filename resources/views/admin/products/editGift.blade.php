@@ -69,9 +69,9 @@
                     </div>
                 </div>
 
-                <div class="col-lg-12 text-center">
-                    <button type="submit" class="btn btn-submit me-2">Đồng ý</button>
-                    <a href="{{ route('admin.products.index') }}" class="btn btn-cancel">Hủy</a>
+                <div class="col-lg-12">
+                    <button type="submit" class="btn btn-success me-2">Đồng ý</button>
+                    <a href="{{ route('admin.products.index') }}" class="btn btn-warning">Hủy bỏ</a>
                 </div>
             </div>
         </div>

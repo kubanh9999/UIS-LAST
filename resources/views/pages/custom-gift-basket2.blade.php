@@ -196,7 +196,13 @@
 
         // Kiểm tra giới hạn khối lượng (3kg)
         if (totalWeight > 3000) {
-            alert("Bạn không thể chọn quá 3kg tổng cộng!");
+            Swal.fire({
+    icon: 'error',
+    title: 'Lỗi',
+    text: 'Bạn không thể chọn quá 3kg tổng cộng!',
+    timer: 3000, // Đóng sau 3 giây
+    showConfirmButton: false // Không hiển thị nút
+});
             return false; // Dừng tính toán
         }
 
@@ -230,7 +236,28 @@
     calculateTotal();
 });
 
-    
+document.addEventListener("DOMContentLoaded", function () {
+    const form = document.querySelector("form"); // Lấy form
+    const checkboxes = document.querySelectorAll('input[type="checkbox"]'); // Lấy tất cả checkbox
+    const addToCartButton = document.querySelector(".btn-giftcart"); // Nút Thêm giỏ hàng
+
+    // Sự kiện khi nhấn nút Thêm giỏ hàng
+    addToCartButton.addEventListener("click", function (event) {
+        const checkedCheckboxes = Array.from(checkboxes).filter(checkbox => checkbox.checked);
+
+        if (checkedCheckboxes.length === 0) {
+            Swal.fire({
+    icon: 'error',
+    title: 'Lỗi',
+    text: 'Vui lòng chọn ít nhất một sản phẩm trước khi thêm vào giỏ hàng.',
+    timer: 3000, // Đóng sau 3 giây
+    showConfirmButton: false // Không hiển thị nút
+});
+            
+            event.preventDefault(); // Ngăn không cho gửi form
+        }
+    });
+});
     </script>
     
     
