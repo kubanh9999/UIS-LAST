@@ -232,7 +232,7 @@
                                             <a href="{{ route('account.management.order.detail', $item->id) }}" class="btn btn-success btn-sm">
                                                 <i class="fa-solid fa-eye"></i> Hoàn thành
                                             </a>          
-                                        @elseif ($item->status == 'Đã hủy' && ($item->payment_method == 'thanh toán VNPAY' || $item->payment_method == 'thanh toán MOMO'))
+                                        @elseif ($item->status == 'Đã hủy' && ($item->payment_method == 'Thanh toán VNPAY' || $item->payment_method == 'Thanh toán MOMO'))
                                             <div class="alert alert-info" role="alert">
                                                 <i class="fa-solid fa-info-circle"></i> 
                                                 Đơn hàng đã hủy. Liên hệ chúng tôi để hoàn tiền 

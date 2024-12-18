@@ -481,7 +481,7 @@ $shippingCost = $shippingCost ?? 0;
             'email' => $request->email,
             'phone' => $request->phone,
             // Cung cấp giá trị mặc định nếu không có dữ liệu
-            'payment_method' => "thanh toán VNPAY",
+            'payment_method' => "Thanh toán VNPAY",
             'status' => 'Đang xử lý',
             'token' => $vnp_TxnRef,
             'order_date' => now(),
@@ -683,7 +683,7 @@ $shippingCost = $shippingCost ?? 0;
                     'email' => $request->email,
                     'phone' => $request->phone,
                     // Cung cấp giá trị mặc định nếu không có dữ liệu
-                    'payment_method' => "thanh toán MOMO",
+                    'payment_method' => "Thanh toán MOMO",
                     'status' => 'Đang xử lý',
                     'token' => $vnp_TxnRef,
                     'order_date' => now(),
