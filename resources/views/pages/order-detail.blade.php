@@ -44,7 +44,7 @@
                             <li>Tên khách hàng:
                                 <span>{{ $orders->user ? $orders->user->name : 'Chưa có người dùng' }}</span>
                             </li>
-                            <li>Địa chỉ:
+                            <li>Địa chỉ giao hàng:
                                 <span>
                                     {{ $orders->street }},{{ $orders->ward->name }},{{ $orders->district->name }},{{ $orders->province->name }}</span>
                             </li>
