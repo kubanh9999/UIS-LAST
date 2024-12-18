@@ -247,7 +247,7 @@
                                                 </strong>.
                                             </div>
                                         @else
-                                            <button class="btn btn-close btn-sm" disabled>
+                                            <button class="btn btn-danger btn-sm" disabled>
                                                 <i class="fa-solid fa-trash"></i> Đã hủy
                                             </button>
                                         @endif

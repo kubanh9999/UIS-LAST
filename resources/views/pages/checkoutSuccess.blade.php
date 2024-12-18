@@ -95,6 +95,6 @@
         setTimeout(function() {
             // Chuyển hướng đến trang chủ sau 5 giây nữa (sau khi thông báo thành công)
             window.location.href = "{{ route('home.index') }}";  // Chuyển hướng đến trang chủ
-        }, 50000);  // Chờ 10 giây sau khi thông báo
+        }, 10000);  // Chờ 10 giây sau khi thông báo
     </script>
 @endsection
