@@ -87,7 +87,7 @@
                                         <p>Thêm vào giỏ để chọn tiếp</p>
                                     </button>
                                 @else
-                                    <button type="submit" name="action" class="btn-buy-now">
+                                    <button type="submit" name="action" value="buy_now" class="btn-buy-now">
                                         <span>Mua Ngay</span>
                                         <p>Giao hàng tận tay quý khách</p>
                                     </button>

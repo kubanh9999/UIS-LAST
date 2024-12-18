@@ -84,7 +84,8 @@
 
                             <div class="quantity">
                                 <b>Số lượng:</b>
-                                <input type="number" name="quantity-display" id="quantity" value="1" readonly>
+                                <input type="number" name="quantity-display" id="quantity" value="1" min="1"
+                                    class="quantity-input-sl">
                                 <input type="hidden" id="quantity-hidden" name="quantity" value="1">
                                 <input type="hidden" name="basket[id]" value="{{ $basket->id }}">
                                 <input type="hidden" name="basket[name]" value="{{ $basket->name }}">
@@ -97,7 +98,7 @@
                             </div>
 <br>
                             <div class="purchase-options">
-                                <button type="submit" name="action" class="btn-buy-now">
+                                <button type="submit" name="action" value="buy_now" class="btn-buy-now">
                                     <span>Mua Ngay</span>
                                     <p>Giao hàng tận tay quý khách</p>
                                 </button>
@@ -233,36 +234,23 @@
     </section>
 
     <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            // Lấy các phần tử nút và input
-            const decreaseBtn = document.getElementById('decrease-btn');
-            const increaseBtn = document.getElementById('increase-btn');
+          document.addEventListener("DOMContentLoaded", function() {
             const quantityDisplay = document.getElementById('quantity');
             const quantityHidden = document.getElementById('quantity-hidden');
 
-            // Hàm giảm số lượng
-            const decreaseQuantity = () => {
+            // Cập nhật giá trị khi người dùng nhập số lượng
+            const updateQuantity = () => {
                 let currentQuantity = parseInt(quantityDisplay.value);
-                if (currentQuantity > 1) {
-                    currentQuantity--;
-                    quantityDisplay.value = currentQuantity;
-                    quantityHidden.value = currentQuantity; // Cập nhật input ẩn
+                if (currentQuantity < 1) {
+                    quantityDisplay.value = 1; // Đảm bảo số lượng không nhỏ hơn 1
+                    currentQuantity = 1;
                 }
-                console.log("Giảm số lượng: ", currentQuantity);
-            };
-
-            // Hàm tăng số lượng
-            const increaseQuantity = () => {
-                let currentQuantity = parseInt(quantityDisplay.value);
-                currentQuantity++;
-                quantityDisplay.value = currentQuantity;
                 quantityHidden.value = currentQuantity; // Cập nhật input ẩn
-                console.log("Tăng số lượng: ", currentQuantity);
+                console.log("Cập nhật số lượng: ", currentQuantity);
             };
 
-            // Gắn sự kiện cho các nút
-            decreaseBtn.addEventListener("click", decreaseQuantity);
-            increaseBtn.addEventListener("click", increaseQuantity);
+            // Lắng nghe sự kiện thay đổi trên input
+            quantityDisplay.addEventListener("input", updateQuantity);
         });
 
         // Thay đổi trong xử lý trả lời bình luận

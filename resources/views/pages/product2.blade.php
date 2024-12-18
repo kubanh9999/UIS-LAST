@@ -10,6 +10,18 @@
             </ol>
         </nav>
     </div>
+    @if (session('success'))
+        <script>
+            toastr.success('{{ session('success') }}');
+        </script>
+    @endif
+
+    {{-- Hiển thị thông báo lỗi nếu có --}}
+    @if (session('error'))
+        <script>
+            toastr.error('{{ session('error') }}');
+        </script>
+    @endif
 
     <section class="section-product">
         <div class="container">
