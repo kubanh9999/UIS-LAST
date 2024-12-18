@@ -52,11 +52,12 @@ footer {
             <div class="inner-box">
                 <h5 class="title">Đăng ký nhận tin</h5>
                 <p>Nhận thông tin khuyến mãi</p>
-                <form class="input-group">
-                    <input type="email" class="form-control" placeholder="Email">
+                <form class="input-group" method="POST" action="{{ route('subscribe') }}">
+                    @csrf <!-- Token bảo mật của Laravel -->
+                    <input type="email" class="form-control" name="email" placeholder="Email" required>
                     <button class="btn" type="submit">Đăng ký</button>
                 </form>
-            </div>
+            </div>            
         </div>
     </div>
     <div class="copyright">
