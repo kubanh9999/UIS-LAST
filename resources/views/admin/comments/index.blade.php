@@ -65,7 +65,7 @@
                                     <td>{{ $item->created_at->format('Y-m-d') }}</td>
                                     <td>{{ $item->product->name ?? null }}</td>
                                     <td>
-                                        <a href="javascript:void(0);" onclick="confirmDelete({{ $item->id }})" class="btn  btn-sm">  <i class="fa-solid fa-pen-to-square"></i></a>
+                                        <a href="javascript:void(0);" onclick="confirmDelete({{ $item->id }})" class="btn  btn-sm"> <i class="fas fa-trash-alt"></i></a>
                                         <form id="delete-form-{{ $item->id }}" action="{{ route('admin.comments.delete', $item->id) }}" method="POST" style="display:none;">
                                             @csrf
                                             @method('DELETE')
@@ -84,7 +84,7 @@
                                         @endif
                                     
                                         @if($item->status == 2) <!-- Hiện nút hiện lại nếu bình luận đã ẩn -->
-                                            <a href="javascript:void(0);" onclick="unhideComment({{ $item->id }})" class="btn btn-success btn-sm">Hiện lại</a>
+                                            <a href="javascript:void(0);" onclick="unhideComment({{ $item->id }})" class="btn  btn-sm"><i class="fa-solid fa-eye"></i></a>
                                             <form id="unhide-form-{{ $item->id }}" action="{{ route('admin.comments.unhide', $item->id) }}" method="POST" style="display:none;">
                                                 @csrf
                                                 @method('POST') 
